@@ -3,6 +3,7 @@
 namespace andahrm\leave\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "leave_day_off".
@@ -33,9 +34,8 @@ class LeaveDayOff extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id'], 'required'],
-            [['id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['date_start', 'date_end'], 'safe'],
+            [['created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['title'], 'string', 'max' => 100],
             [['detail'], 'string', 'max' => 255],
         ];
@@ -58,4 +58,38 @@ class LeaveDayOff extends \yii\db\ActiveRecord
             'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
         ];
     }
+  
+  public static function getList(){
+//     return ArrayHelper::getColumn(self::find()->all(), function ($model) {
+//         return self::createDateRange($model->date_start,$model->date_end);
+//     });
+    $data = self::find()
+      ->select(['date_start','date_end'])
+      ->all();
+    $days = [];
+    foreach($data as $model){
+      $date_end = date('Y-m-d',strtotime($model->date_end."+1 days"));
+      echo $date_end;
+      $dateRange = self::createDateRange($model->date_start,$date_end);     
+      foreach($dateRange as $day) $days[] =  $day;
+    }    
+    return $days;
+  }
+  
+ public static function createDateRange($startDate, $endDate, $format = "Y-m-d")
+{
+    $begin = new \DateTime($startDate);
+    $end = new \DateTime($endDate);
+
+    $interval = new \DateInterval('P1D'); // 1 Day
+    $dateRange = new \DatePeriod($begin, $interval, $end);
+    
+    $range = [];
+    foreach ($dateRange as $date) {
+        $range[] = $date->format($format);
+    }    
+    return $range;
+}
+  
+  
 }

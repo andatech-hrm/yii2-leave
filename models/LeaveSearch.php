@@ -18,8 +18,8 @@ class LeaveSearch extends Leave
     public function rules()
     {
         return [
-            [['id', 'user_id', 'leave_type_id', 'start_part', 'end_part', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['date_start', 'date_end', 'reason'], 'safe'],
+            [['id', 'user_id', 'leave_type_id', 'start_part', 'end_part', 'acting_user_id', 'status', 'inspector_status', 'inspector_by', 'inspector_at', 'commander_status', 'commander_by', 'commanded_at', 'director_status', 'director_by', 'director_at', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['date_start', 'date_end', 'reason', 'inspector_comment', 'commander_comment', 'director_comment'], 'safe'],
         ];
     }
 
@@ -66,14 +66,27 @@ class LeaveSearch extends Leave
             'start_part' => $this->start_part,
             'date_end' => $this->date_end,
             'end_part' => $this->end_part,
+            'acting_user_id' => $this->acting_user_id,
             'status' => $this->status,
+            'inspector_status' => $this->inspector_status,
+            'inspector_by' => $this->inspector_by,
+            'inspector_at' => $this->inspector_at,
+            'commander_status' => $this->commander_status,
+            'commander_by' => $this->commander_by,
+            'commanded_at' => $this->commanded_at,
+            'director_status' => $this->director_status,
+            'director_by' => $this->director_by,
+            'director_at' => $this->director_at,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,
             'updated_at' => $this->updated_at,
             'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'reason', $this->reason]);
+        $query->andFilterWhere(['like', 'reason', $this->reason])
+            ->andFilterWhere(['like', 'inspector_comment', $this->inspector_comment])
+            ->andFilterWhere(['like', 'commander_comment', $this->commander_comment])
+            ->andFilterWhere(['like', 'director_comment', $this->director_comment]);
 
         return $dataProvider;
     }

@@ -4,27 +4,17 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model andahrm\leave\models\LeaveCondition */
+/* @var $model andahrm\leave\models\LeaveRelatedPerson */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="leave-condition-form">
+<div class="leave-related-person-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'user_id')->textInput() ?>
 
-    <?= $form->field($model, 'leave_type_id')->textInput() ?>
-
-    <?= $form->field($model, 'gov_service_status')->textInput() ?>
-
-    <?= $form->field($model, 'number_year')->textInput() ?>
-
-    <?= $form->field($model, 'per_annual_leave')->textInput() ?>
-
-    <?= $form->field($model, 'per_annual_leave_limit')->textInput() ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?= $form->field($model, 'leave_related_id')->textInput() ?>
 
     <?= $form->field($model, 'created_at')->textInput() ?>
 

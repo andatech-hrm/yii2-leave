@@ -31,7 +31,33 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'reason') ?>
 
+    <?php // echo $form->field($model, 'acting_user_id') ?>
+
     <?php // echo $form->field($model, 'status') ?>
+
+    <?php // echo $form->field($model, 'inspector_comment') ?>
+
+    <?php // echo $form->field($model, 'inspector_status') ?>
+
+    <?php // echo $form->field($model, 'inspector_by') ?>
+
+    <?php // echo $form->field($model, 'inspector_at') ?>
+
+    <?php // echo $form->field($model, 'commander_comment') ?>
+
+    <?php // echo $form->field($model, 'commander_status') ?>
+
+    <?php // echo $form->field($model, 'commander_by') ?>
+
+    <?php // echo $form->field($model, 'commanded_at') ?>
+
+    <?php // echo $form->field($model, 'director_comment') ?>
+
+    <?php // echo $form->field($model, 'director_status') ?>
+
+    <?php // echo $form->field($model, 'director_by') ?>
+
+    <?php // echo $form->field($model, 'director_at') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 

@@ -5,7 +5,7 @@ use yii\bootstrap\Nav;
 use dmstr\widgets\Menu;
 use mdm\admin\components\Helper;
 
- $this->beginContent('@app/views/layouts/main.php'); 
+ $this->beginContent('@andahrm/leave/views/layouts/main.php'); 
  $module = $this->context->module->id;
 ?>
 <div class="row hidden-print">
@@ -15,8 +15,14 @@ use mdm\admin\components\Helper;
                     $menuItems = [];
       
                     $menuItems[] =  [
-                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Leaves'),
+                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'History'),
                             'url' => ["/{$module}/default"],
+                     ];    
+                    
+      
+                    $menuItems[] =  [
+                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Offer'),
+                            'url' => ["/{$module}/default/offer"],
                      ];
       
       
@@ -28,24 +34,11 @@ use mdm\admin\components\Helper;
                     $menuItems[] =  [
                             'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Types'),
                             'url' => ["/{$module}/type"],
-                    ];
-      
-                  
-                       
+                    ];   
       
                     $menuItems[] =  [
                             'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Conditions'),
                             'url' => ["/{$module}/condition"],
-                     ];
-      
-                      $menuItems[] =  [
-                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Leave Permissions'),
-                            'url' => ["/{$module}/permission"],
-                     ];
-      
-                    $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Relateds'),
-                            'url' => ["/{$module}/related"],
                      ];
       
                     $menuItems = Helper::filter($menuItems);
@@ -64,8 +57,7 @@ use mdm\admin\components\Helper;
      
       
     </div>
-</div>
-<div class="row">
+
     <div class="col-md-12">
       
         <div class="x_panel tile">

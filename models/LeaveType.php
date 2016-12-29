@@ -3,6 +3,8 @@
 namespace andahrm\leave\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
 
 /**
  * This is the model class for table "leave_type".
@@ -28,6 +30,19 @@ class LeaveType extends \yii\db\ActiveRecord
     {
         return 'leave_type';
     }
+  
+  function behaviors()
+    {
+        return [ 
+          'timestamp' => [
+                'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+            ],
+        ];
+    }
+  
 
     /**
      * @inheritdoc

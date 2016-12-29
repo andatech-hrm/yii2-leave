@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model andahrm\leave\models\LeavePermissionSearch */
+/* @var $model andahrm\leave\models\LeaveRelatedPersonSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="leave-permission-search">
+<div class="leave-related-person-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,17 +17,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'user_id') ?>
 
-    <?= $form->field($model, 'leave_condition_id') ?>
-
-    <?= $form->field($model, 'year') ?>
-
-    <?= $form->field($model, 'number_day') ?>
+    <?= $form->field($model, 'leave_related_id') ?>
 
     <?= $form->field($model, 'created_at') ?>
 
-    <?php // echo $form->field($model, 'created_by') ?>
+    <?= $form->field($model, 'created_by') ?>
 
-    <?php // echo $form->field($model, 'updated_at') ?>
+    <?= $form->field($model, 'updated_at') ?>
 
     <?php // echo $form->field($model, 'updated_by') ?>
 

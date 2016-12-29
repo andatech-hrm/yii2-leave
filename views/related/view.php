@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model andahrm\leave\models\LeaveCondition */
+/* @var $model andahrm\leave\models\LeaveRelated */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leave Conditions'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leave Relateds'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="leave-condition-view">
+<div class="leave-related-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,12 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
-            'leave_type_id',
-            'gov_service_status',
-            'number_year',
-            'per_annual_leave',
-            'per_annual_leave_limit',
-            'status',
+            'inspector_by',
+            'commander_by',
+            'director_by',
             'created_at',
             'created_by',
             'updated_at',

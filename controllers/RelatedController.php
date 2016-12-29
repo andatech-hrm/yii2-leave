@@ -3,16 +3,16 @@
 namespace andahrm\leave\controllers;
 
 use Yii;
-use andahrm\leave\models\Leave;
-use andahrm\leave\models\LeaveSearch;
+use andahrm\leave\models\LeaveRelated;
+use andahrm\leave\models\LeaveRelatedSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * DefaultController implements the CRUD actions for Leave model.
+ * RelatedController implements the CRUD actions for LeaveRelated model.
  */
-class DefaultController extends Controller
+class RelatedController extends Controller
 {
     /**
      * @inheritdoc
@@ -28,19 +28,14 @@ class DefaultController extends Controller
             ],
         ];
     }
-  
-    public function actions()
-    {
-        $this->layout = 'menu-top';
-    }
 
     /**
-     * Lists all Leave models.
+     * Lists all LeaveRelated models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new LeaveSearch();
+        $searchModel = new LeaveRelatedSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -50,7 +45,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Displays a single Leave model.
+     * Displays a single LeaveRelated model.
      * @param integer $id
      * @return mixed
      */
@@ -62,13 +57,13 @@ class DefaultController extends Controller
     }
 
     /**
-     * Creates a new Leave model.
+     * Creates a new LeaveRelated model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Leave();
+        $model = new LeaveRelated();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -80,7 +75,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Updates an existing Leave model.
+     * Updates an existing LeaveRelated model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -99,7 +94,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Deletes an existing Leave model.
+     * Deletes an existing LeaveRelated model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -112,15 +107,15 @@ class DefaultController extends Controller
     }
 
     /**
-     * Finds the Leave model based on its primary key value.
+     * Finds the LeaveRelated model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Leave the loaded model
+     * @return LeaveRelated the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Leave::findOne($id)) !== null) {
+        if (($model = LeaveRelated::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

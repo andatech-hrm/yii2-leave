@@ -4,18 +4,18 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel andahrm\leave\models\LeaveConditionSearch */
+/* @var $searchModel andahrm\leave\models\LeaveRelatedSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('andahrm/leave', 'Leave Conditions');
+$this->title = Yii::t('andahrm/leave', 'Leave Relateds');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="leave-condition-index">
-   
+<div class="leave-related-index">
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('andahrm/leave', 'Create Leave Condition'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('andahrm/leave', 'Create Leave Related'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -25,12 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'title',
-            'leave_type_id',
-            'gov_service_status',
-            'number_year',
-            // 'per_annual_leave',
-            // 'per_annual_leave_limit',
-            // 'status',
+            'inspector_by',
+            'commander_by',
+            'director_by',
             // 'created_at',
             // 'created_by',
             // 'updated_at',

@@ -3,16 +3,16 @@
 namespace andahrm\leave\controllers;
 
 use Yii;
-use andahrm\leave\models\Leave;
-use andahrm\leave\models\LeaveSearch;
+use andahrm\leave\models\LeaveRelatedPerson;
+use andahrm\leave\models\LeaveRelatedPersonSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * DefaultController implements the CRUD actions for Leave model.
+ * RelatedPersonController implements the CRUD actions for LeaveRelatedPerson model.
  */
-class DefaultController extends Controller
+class RelatedPersonController extends Controller
 {
     /**
      * @inheritdoc
@@ -28,19 +28,14 @@ class DefaultController extends Controller
             ],
         ];
     }
-  
-    public function actions()
-    {
-        $this->layout = 'menu-top';
-    }
 
     /**
-     * Lists all Leave models.
+     * Lists all LeaveRelatedPerson models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new LeaveSearch();
+        $searchModel = new LeaveRelatedPersonSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -50,7 +45,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Displays a single Leave model.
+     * Displays a single LeaveRelatedPerson model.
      * @param integer $id
      * @return mixed
      */
@@ -62,16 +57,16 @@ class DefaultController extends Controller
     }
 
     /**
-     * Creates a new Leave model.
+     * Creates a new LeaveRelatedPerson model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Leave();
+        $model = new LeaveRelatedPerson();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->user_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -80,7 +75,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Updates an existing Leave model.
+     * Updates an existing LeaveRelatedPerson model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -90,7 +85,7 @@ class DefaultController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->user_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -99,7 +94,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Deletes an existing Leave model.
+     * Deletes an existing LeaveRelatedPerson model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -112,15 +107,15 @@ class DefaultController extends Controller
     }
 
     /**
-     * Finds the Leave model based on its primary key value.
+     * Finds the LeaveRelatedPerson model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Leave the loaded model
+     * @return LeaveRelatedPerson the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Leave::findOne($id)) !== null) {
+        if (($model = LeaveRelatedPerson::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

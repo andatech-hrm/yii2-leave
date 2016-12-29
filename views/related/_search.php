@@ -4,26 +4,28 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model andahrm\leave\models\LeavePermissionSearch */
+/* @var $model andahrm\leave\models\LeaveRelatedSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="leave-permission-search">
+<div class="leave-related-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'user_id') ?>
+    <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'leave_condition_id') ?>
+    <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'year') ?>
+    <?= $form->field($model, 'inspector_by') ?>
 
-    <?= $form->field($model, 'number_day') ?>
+    <?= $form->field($model, 'commander_by') ?>
 
-    <?= $form->field($model, 'created_at') ?>
+    <?= $form->field($model, 'director_by') ?>
+
+    <?php // echo $form->field($model, 'created_at') ?>
 
     <?php // echo $form->field($model, 'created_by') ?>
 

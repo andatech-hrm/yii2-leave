@@ -5,18 +5,24 @@ use yii\bootstrap\Nav;
 use dmstr\widgets\Menu;
 use mdm\admin\components\Helper;
 
- $this->beginContent('@app/views/layouts/main.php'); 
+ $this->beginContent('@andahrm/leave/views/layouts/main.php'); 
  $module = $this->context->module->id;
 ?>
 <div class="row hidden-print">
-    <div class="col-md-12"> 
+    <div class="col-md-3"> 
       
       <?php
                     $menuItems = [];
       
                     $menuItems[] =  [
-                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Leaves'),
+                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'History'),
                             'url' => ["/{$module}/default"],
+                     ];    
+                    
+      
+                    $menuItems[] =  [
+                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Offer'),
+                            'url' => ["/{$module}/default/offer"],
                      ];
       
       
@@ -28,31 +34,18 @@ use mdm\admin\components\Helper;
                     $menuItems[] =  [
                             'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Types'),
                             'url' => ["/{$module}/type"],
-                    ];
-      
-                  
-                       
+                    ];   
       
                     $menuItems[] =  [
                             'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Conditions'),
                             'url' => ["/{$module}/condition"],
                      ];
       
-                      $menuItems[] =  [
-                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Leave Permissions'),
-                            'url' => ["/{$module}/permission"],
-                     ];
-      
-                    $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Relateds'),
-                            'url' => ["/{$module}/related"],
-                     ];
-      
                     $menuItems = Helper::filter($menuItems);
                     
                     //$nav = new Navigate();
                     echo Menu::widget([
-                        'options' => ['class' => 'nav nav-tabs'],
+                        'options' => ['class' => 'nav nav-pills nav-stacked'],
                         'encodeLabels' => false,
                         //'activateParents' => true,
                         //'linkTemplate' =>'<a href="{url}">{icon} {label} {badge}</a>',
@@ -64,9 +57,8 @@ use mdm\admin\components\Helper;
      
       
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
+
+    <div class="col-md-9">
       
         <div class="x_panel tile">
             <div class="x_title">
