@@ -8,6 +8,8 @@ use mdm\admin\components\Helper;
  $this->beginContent('@app/views/layouts/main.php'); 
  $module = $this->context->module->id;
 ?>
+
+<?php if(Yii::$app->user->can('manager-leave')):?>
 <div class="row hidden-print">
     <div class="col-md-12"> 
       
@@ -16,40 +18,45 @@ use mdm\admin\components\Helper;
       
                     $menuItems[] =  [
                            'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Leaves'),
-                            'url' => ["/{$module}/default"],
+                            'url' => ["/{$module}/default/"],
                      ];
       
       
                     $menuItems[] =  [
                             'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Day Offs'),
-                            'url' => ["/{$module}/day-off"],
+                            'url' => ["/{$module}/day-off/"],
                      ];
       
                     $menuItems[] =  [
                             'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Types'),
-                            'url' => ["/{$module}/type"],
-                    ];
-      
-                  
+                            'url' => ["/{$module}/type/"],
+                    ];                 
                        
       
                     $menuItems[] =  [
                             'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Conditions'),
-                            'url' => ["/{$module}/condition"],
+                            'url' => ["/{$module}/condition/"],
                      ];
       
                       $menuItems[] =  [
                            'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Leave Permissions'),
-                            'url' => ["/{$module}/permission"],
+                            'url' => ["/{$module}/permission/"],
                      ];
       
                     $menuItems[] =  [
                             'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Relateds'),
-                            'url' => ["/{$module}/related"],
+                            'url' => ["/{$module}/related/"],
                      ];
-      
+                    //print_r($menuItems);
+                    //echo "<hr/>";
                     $menuItems = Helper::filter($menuItems);
-                    
+                    $newMenu = [];
+                    foreach($menuItems as $k=>$menu){
+                      $newMenu[$k]=$menu;
+                      $newMenu[$k]['url'][0] = rtrim($menu['url'][0], "/");
+                    }
+                    $menuItems=$newMenu;
+                    //print_r($menuItems);
                     //$nav = new Navigate();
                     echo Menu::widget([
                         'options' => ['class' => 'nav nav-tabs'],
@@ -65,6 +72,8 @@ use mdm\admin\components\Helper;
       
     </div>
 </div>
+<?php endif;?>
+
 <div class="row">
     <div class="col-md-12">
       
