@@ -1,19 +1,19 @@
 <?php
-
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
 use andahrm\leave\models\LeaveDayOff;
 
+
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
-/* @var $form yii\widgets\ActiveForm */
 
+$this->title = Yii::t('andahrm/leave', 'Create Leave Sick');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 
-$template = "user : {user} ";
+# Candidate
 $items=[];
-print_r(LeaveDayOff::getList());
-
 ?>
 
 <div class="leave-form">
@@ -22,9 +22,36 @@ print_r(LeaveDayOff::getList());
 
     <?php $items['user_id']=$form->field($model, 'user_id')->textInput(); ?>
 
-    <?php $items['leave_type_id']=$form->field($model, 'leave_type_id')->textInput() ?>
-
-    <?php $items['date_start']=$form->field($model, 'date_start')->widget(DatePicker::classname(), [
+    <?php $items['leave_type_id']=$form->field($model, 'leave_type_id')->textInput();
+  
+  $layout3 = <<< HTML
+    <span class="input-group-addon">From Date</span>
+    {input1}
+    <span class="input-group-addon">aft</span>
+    {separator}
+    <span class="input-group-addon">To Date</span
+    {input2}
+    <span class="input-group-addon kv-date-remove">
+        <i class="glyphicon glyphicon-remove"></i>
+    </span>
+HTML;
+  
+  
+  $items['date_start']= DatePicker::widget([
+    'type' => DatePicker::TYPE_RANGE,
+    'name' => 'dp_addon_3a',
+    'value' => '01-Jul-2015',
+    'name2' => 'dp_addon_3b',
+    'value2' => '18-Jul-2015',
+    'separator' => '<i class="glyphicon glyphicon-resize-horizontal"></i>',
+    'layout' => $layout3,
+    'pluginOptions' => [
+        'autoclose' => true,
+        'format' => 'dd-M-yyyy'
+    ]
+]);
+  
+  $items['date_start']=$form->field($model, 'date_start')->widget(DatePicker::classname(), [
     'options' => ['placeholder' => 'Enter birth date ...'],
     'pluginOptions' => [
         'autoclose'=>true,
@@ -84,34 +111,7 @@ print_r(LeaveDayOff::getList());
 
     <?php $items['date_start']=$form->field($model, 'director_at')->textInput() */ ?>
  
-  $layout3 = <<< HTML
-    <span class="input-group-addon">From Date</span>
-    {input1}
-    <span class="input-group-addon">aft</span>
-    {separator}
-    <span class="input-group-addon">To Date</span
-    {input2}
-    <span class="input-group-addon kv-date-remove">
-        <i class="glyphicon glyphicon-remove"></i>
-    </span>
-HTML;
- 
-echo DatePicker::widget([
-    'type' => DatePicker::TYPE_RANGE,
-    'name' => 'dp_addon_3a',
-    'value' => '01-Jul-2015',
-    'name2' => 'dp_addon_3b',
-    'value2' => '18-Jul-2015',
-    'separator' => '<i class="glyphicon glyphicon-resize-horizontal"></i>',
-    'layout' => $layout3,
-    'pluginOptions' => [
-        'autoclose' => true,
-        'format' => 'dd-M-yyyy'
-    ]
-]);
-  
-  
-  
+
     <?=$this->render('template-sick',$items)?>
   
 
@@ -122,3 +122,4 @@ echo DatePicker::widget([
     <?php ActiveForm::end(); ?>
 
 </div>
+

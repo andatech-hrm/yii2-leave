@@ -16,6 +16,9 @@
             "role" : "Developer"
         }
     ],
+   "require" : {
+      "kartik-v/yii2-field-range" : "*"
+    },
     "autoload": {
         "psr-4": {
             "andahrm\\leave\\": ""

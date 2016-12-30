@@ -35,8 +35,8 @@ class LeaveRelated extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'title', 'commander_by', 'director_by'], 'required'],
-            [['id', 'inspector_by', 'commander_by', 'director_by', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['title', 'commander_by', 'director_by'], 'required'],
+            [['inspector_by', 'commander_by', 'director_by', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['title'], 'string', 'max' => 100],
         ];
     }
@@ -47,7 +47,7 @@ class LeaveRelated extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('andahrm/leave', 'ผู้ยื่นลา'),
+            'id' => Yii::t('andahrm/leave', 'ID'),
             'title' => Yii::t('andahrm/leave', 'ชื่อชุดผู้ที่เกี่ยวข้อง'),
             'inspector_by' => Yii::t('andahrm/leave', 'ผู้ตรวจสอบ'),
             'commander_by' => Yii::t('andahrm/leave', 'ผู้บังคับบัญชา'),
