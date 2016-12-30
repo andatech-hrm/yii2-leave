@@ -11,6 +11,14 @@ use mdm\admin\components\Helper;
 <div class="row hidden-print">
     <div class="col-md-3"> 
       
+      
+      
+<section class="panel">
+  <div class="x_title">
+    <?=Html::tag('h2','สำหรับเจ้าตัว')?>
+    <div class="clearfix"></div>
+  </div>
+  <div class="panel-body">
       <?php
                     $menuItems = [];
       
@@ -27,19 +35,10 @@ use mdm\admin\components\Helper;
       
       
                     $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Day Offs'),
+                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Result'),
                             'url' => ["/{$module}/day-off"],
-                     ];
-      
-                    $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Types'),
-                            'url' => ["/{$module}/type"],
-                    ];   
-      
-                    $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Conditions'),
-                            'url' => ["/{$module}/condition"],
-                     ];
+                     ];      
+                  
       
                     $menuItems = Helper::filter($menuItems);
                     
@@ -52,9 +51,127 @@ use mdm\admin\components\Helper;
                         'items' => $menuItems,
                     ]);
                     ?>
+        </div>
+</section>
+      
+
+      
+<section class="panel">
+  <div class="x_title">
+    <?=Html::tag('h2','สำหรับผู้บังคับบัญชา')?>
+    <div class="clearfix"></div>
+  </div>
+  <div class="panel-body">
+      <?php
+                    $menuItems = [];
+      
+                    $menuItems[] =  [
+                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'History'),
+                            'url' => ["/{$module}/default"],
+                     ];  
+      
+                    $menuItems[] =  [
+                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Offer'),
+                            'url' => ["/{$module}/default/offer"],
+                     ];
+    
+                    $menuItems[] =  [
+                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Result'),
+                            'url' => ["/{$module}/day-off"],
+                     ];      
+    
+                    $menuItems = Helper::filter($menuItems);
+                    
+                    //$nav = new Navigate();
+                    echo Menu::widget([
+                        'options' => ['class' => 'nav nav-pills nav-stacked'],
+                        'encodeLabels' => false,
+                        //'activateParents' => true,
+                        //'linkTemplate' =>'<a href="{url}">{icon} {label} {badge}</a>',
+                        'items' => $menuItems,
+                    ]);
+                    ?>
+        </div>
+</section>
+      
+           
+<section class="panel">
+  <div class="x_title">
+    <?=Html::tag('h2','สำหรับผู้ตรวจสอบ')?>
+    <div class="clearfix"></div>
+  </div>
+  <div class="panel-body">
+      <?php
+                    $menuItems = [];
+      
+                    $menuItems[] =  [
+                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'History'),
+                            'url' => ["/{$module}/default"],
+                     ];    
+      
+                    $menuItems[] =  [
+                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Offer'),
+                            'url' => ["/{$module}/default/offer"],
+                     ];
+      
+                    $menuItems[] =  [
+                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Result'),
+                            'url' => ["/{$module}/day-off"],
+                     ];     
+      
+                    $menuItems = Helper::filter($menuItems);
+                    
+                    //$nav = new Navigate();
+                    echo Menu::widget([
+                        'options' => ['class' => 'nav nav-pills nav-stacked'],
+                        'encodeLabels' => false,
+                        //'activateParents' => true,
+                        //'linkTemplate' =>'<a href="{url}">{icon} {label} {badge}</a>',
+                        'items' => $menuItems,
+                    ]);
+                    ?>
+        </div>
+</section>
       
       
-     
+<section class="panel">
+  <div class="x_title">
+    <?=Html::tag('h2','สำหรับผู้อำนวยการ')?>
+    <div class="clearfix"></div>
+  </div>
+  <div class="panel-body">
+      <?php
+                    $menuItems = [];
+      
+                    $menuItems[] =  [
+                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'History'),
+                            'url' => ["/{$module}/default"],
+                     ];    
+      
+                    $menuItems[] =  [
+                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Offer'),
+                            'url' => ["/{$module}/default/offer"],
+                     ];
+    
+                    $menuItems[] =  [
+                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Result'),
+                            'url' => ["/{$module}/day-off"],
+                     ];    
+      
+                    $menuItems = Helper::filter($menuItems);
+                    
+                    //$nav = new Navigate();
+                    echo Menu::widget([
+                        'options' => ['class' => 'nav nav-pills nav-stacked'],
+                        'encodeLabels' => false,
+                        //'activateParents' => true,
+                        //'linkTemplate' =>'<a href="{url}">{icon} {label} {badge}</a>',
+                        'items' => $menuItems,
+                    ]);
+                    ?>
+        </div>
+</section>
+      
       
     </div>
 

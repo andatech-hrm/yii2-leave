@@ -16,7 +16,11 @@
             "role" : "Developer"
         }
     ],
+<<<<<<< HEAD
      "require" : {
+=======
+   "require" : {
+>>>>>>> 51f85bc2c2b296345cf0572a95821fc641736e66
       "kartik-v/yii2-field-range" : "*"
     },
     "autoload": {
