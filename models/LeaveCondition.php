@@ -39,10 +39,12 @@ class LeaveCondition extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['title'], 'required'],
             [['leave_type_id', 'gov_service_status', 'per_annual_leave', 'per_annual_leave_limit', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['number_year'], 'number'],
             [['title'], 'string', 'max' => 100],
             [['leave_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveType::className(), 'targetAttribute' => ['leave_type_id' => 'id']],
+            ['leave_type_id' , 'default','value'=>4]
         ];
     }
 

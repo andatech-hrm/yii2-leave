@@ -4,6 +4,8 @@ namespace andahrm\leave\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
 
 /**
  * This is the model class for table "leave_day_off".
@@ -26,6 +28,19 @@ class LeaveDayOff extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'leave_day_off';
+    }
+  
+  
+    function behaviors()
+    {
+        return [ 
+          'timestamp' => [
+                'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+            ],
+        ];
     }
 
     /**
@@ -69,7 +84,7 @@ class LeaveDayOff extends \yii\db\ActiveRecord
     $days = [];
     foreach($data as $model){
       $date_end = date('Y-m-d',strtotime($model->date_end."+1 days"));
-      echo $date_end;
+      //echo $date_end;
       $dateRange = self::createDateRange($model->date_start,$date_end);     
       foreach($dateRange as $day) $days[] =  $day;
     }    

@@ -11,6 +11,11 @@ $this->title = Yii::t('andahrm/leave', 'Leave Day Offs');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="leave-day-off-index">
+   <p>
+        <?= Html::a(Yii::t('andahrm/leave', 'Create Leave Day Off'), ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+  
+  
 <?php Pjax::begin(); ?>   
   <?= GridView::widget([
         'dataProvider' => $dataProvider,

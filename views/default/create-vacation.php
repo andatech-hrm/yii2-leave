@@ -37,15 +37,24 @@ HTML;
   
   $items['date_range']= DatePicker::widget([
     'type' => DatePicker::TYPE_RANGE,
-    'name' => 'dp_addon_3a',
-    'value' => '01-Jul-2015',
-    'name2' => 'dp_addon_3b',
-    'value2' => '18-Jul-2015',
+    //'name' => 'dp_addon_3a',
+    'model' => $model,
+    'attribute' => 'date_start',
+    'attribute2' => 'date_end',
+    //'value' => '01-Jul-2015',
+    //'name2' => 'dp_addon_3b',
+    //'value2' => '18-Jul-2015',
     'separator' => '<i class="glyphicon glyphicon-resize-horizontal"></i>',
     'layout' => $layout3,
     'pluginOptions' => [
         'autoclose' => true,
-        'format' => 'dd-M-yyyy'
+        'datesDisabled' => LeaveDayOff::getList(),
+        'format' => 'yyyy-mm-dd',
+        'todayHighlight' => true,
+        'todayBtn' => true,
+        'startDate' => date('Y-m-d', strtotime("+4 day")),
+        //'calendarWeeks' => true,
+        'daysOfWeekDisabled' => [0, 6],
     ]
 ]);
   
@@ -110,7 +119,7 @@ HTML;
     <?php $items['date_start']=$form->field($model, 'director_at')->textInput() */ ?>
  
 
-    <?=$this->render('template-sick',$items)?>
+    <?=$this->render('template-vacation',$items)?>
   
 
     <div class="form-group">

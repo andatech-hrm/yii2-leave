@@ -42,10 +42,10 @@ use mdm\admin\components\Helper;
                     $menuItems=$newMenu;
 ?>
 
-<div class="row hidden-print">
+<div class="row ">
   <?php if(count($menuItems)>1):  
   ?>
-    <div class="col-md-12">  
+    <div class="col-md-12 hidden-print">  
           <?php
           //$nav = new Navigate();
           echo Menu::widget([
