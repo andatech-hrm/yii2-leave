@@ -48,6 +48,8 @@ class LeaveSearch extends Leave
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+      
+        $query->where(['created_by'=>Yii::$app->user->id]);
 
         $this->load($params);
 

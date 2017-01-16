@@ -4,6 +4,10 @@ namespace andahrm\leave\models;
 
 use Yii;
 use andahrm\person\models\Person;
+use yii\helpers\ArrayHelper;
+
+use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
 
 /**
  * This is the model class for table "leave".
@@ -56,14 +60,38 @@ class Leave extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'leave_type_id', 'start_part', 'end_part', 'acting_user_id', 'status', 'inspector_status', 'inspector_by', 'inspector_at', 'commander_status', 'commander_by', 'commanded_at', 'director_status', 'director_by', 'director_at', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['leave_type_id', 'date_start', 'date_end'], 'required'],
+            [[ 'date_start', 'date_end'], 'required'],
             [['date_start', 'date_end'], 'safe'],
             [['reason'], 'string'],
             [['inspector_comment', 'commander_comment', 'director_comment'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Person::className(), 'targetAttribute' => ['user_id' => 'user_id']],
             [['leave_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveType::className(), 'targetAttribute' => ['leave_type_id' => 'id']],
+            [['leave_type_id'] ,'default','value'=>4,'on'=>'create-vacation'],
+            ['status','default','value'=>0,'when'=>
+              function($model){ return $model->isNewRecord; }
+            ],
         ];
     }
+  
+    public function scenario(){
+      return [
+        'create-vacation' =>   ['user_id','leave_type_id','date_start', 'date_end','status'],
+        'create-vacation' =>   ['status'],
+      ];
+    }
+  
+  function behaviors()
+    {
+        return [ 
+          'timestamp' => [
+                'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+            ],
+        ];
+    }
+
 
     /**
      * @inheritdoc
@@ -99,13 +127,23 @@ class Leave extends \yii\db\ActiveRecord
             'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
         ];
     }
+  
+//       public function beforeSave($insert) {
+//         if ($insert) {
+//             $this->user_id = \Yii::$app->user->identity->id;
+//         } else {
+            
+//         }
+//         return parent::beforeSave($insert);
+//     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
     {
-        return $this->hasOne(Person::className(), ['user_id' => 'user_id']);
+//         return $this->hasOne(Person::className(), ['user_id' => 'user_id']);
+        return $this->hasOne(Yii::$app->user->identityClass, ['id' => 'user_id']);
     }
 
     /**
@@ -123,4 +161,13 @@ class Leave extends \yii\db\ActiveRecord
     {
         return $this->hasOne(LeaveCancel::className(), ['leave_id' => 'id']);
     }
+  
+    public static function getActingList()
+    {
+      $model = Person::find()->where(['!=','user_id',Yii::$app->user->id])->all();
+        return ArrayHelper::map($model,'user_id','fullname');
+    }
+  
+  
+  
 }

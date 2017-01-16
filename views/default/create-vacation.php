@@ -2,27 +2,32 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
+
+use andahrm\leave\models\Leave;
 use andahrm\leave\models\LeaveDayOff;
+
+use andahrm\person\models\Person;
 
 
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
-$this->title = Yii::t('andahrm/leave', 'Create Leave Sick');
+$this->title = Yii::t('andahrm/leave', 'Create Leave Vacation');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 # Candidate
 $items=[];
+$items['user'] = Person::findOne(Yii::$app->user->identity->id);
 ?>
 
 <div class="leave-form">
 
-    <?php $form = ActiveForm::begin(); ?>
-
-    <?php $items['user_id']=$form->field($model, 'user_id')->textInput(); ?>
-
-    <?php $items['leave_type_id']=$form->field($model, 'leave_type_id')->textInput();
+    <?php $form = ActiveForm::begin();
+  
+  $items['user_id']=$form->field($model, 'user_id')->textInput(); 
+  
+  $items['leave_type_id']=$form->field($model, 'leave_type_id')->textInput();
   
   $layout3 = <<< HTML
     <span class="input-group-addon">ตั้งแต่วันที่</span>
@@ -52,7 +57,8 @@ HTML;
         'format' => 'yyyy-mm-dd',
         'todayHighlight' => true,
         'todayBtn' => true,
-        'startDate' => date('Y-m-d', strtotime("+4 day")),
+        'startDate' => date('Y-m-d', strtotime("+1 day")),
+        //'endDate' => date('Y-m-d', strtotime("+4 day")),
         //'calendarWeeks' => true,
         'daysOfWeekDisabled' => [0, 6],
     ]
@@ -66,7 +72,7 @@ HTML;
         'format' => 'yyyy-mm-dd',
         'todayHighlight' => true,
         'todayBtn' => true,
-        'startDate' => date('Y-m-d', strtotime("+4 day")),
+        'startDate' => date('Y-m-d', strtotime("+1 day")),
         //'calendarWeeks' => true,
         'daysOfWeekDisabled' => [0, 6],
         
@@ -74,23 +80,18 @@ HTML;
     'pluginEvents'=>[
         
     ]
-    ]);?>
+    ]);
   
-  
-  
-  
-  
-  
+  ?>
 
-    <?php $items['date_start']=$form->field($model, 'start_part')->textInput() ?>
+    <?php $items['start_part']=$form->field($model, 'start_part')->textInput() ?>
 
-    <?php $items['date_start']=$form->field($model, 'date_end')->textInput() ?>
+    <?php $items['end_part']=$form->field($model, 'end_part')->textInput() ?>
 
-    <?php $items['date_start']=$form->field($model, 'end_part')->textInput() ?>
+    <?php $items['reason']=$form->field($model, 'reason')->textarea(['rows' => 6]) ?>
 
-    <?php $items['date_start']=$form->field($model, 'reason')->textarea(['rows' => 6]) ?>
-
-    <?php $items['date_start']=$form->field($model, 'acting_user_id')->textInput() ?>
+    <?php $items['acting_user_id'] = $form->field($model, 'acting_user_id')->dropdownList(Leave::getActingList(),[]) ?>
+  
 
     <?php /* $items['date_start']=$form->field($model, 'status')->textInput() ?>
 

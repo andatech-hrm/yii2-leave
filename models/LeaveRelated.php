@@ -4,6 +4,11 @@ namespace andahrm\leave\models;
 
 use Yii;
 
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
+
+use andahrm\person\models\Person;
 /**
  * This is the model class for table "leave_related".
  *
@@ -27,6 +32,18 @@ class LeaveRelated extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'leave_related';
+    }
+  
+   public function behaviors()
+    {
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+            ]
+        ];
     }
 
     /**
@@ -56,6 +73,7 @@ class LeaveRelated extends \yii\db\ActiveRecord
             'created_by' => Yii::t('andahrm/leave', 'Created By'),
             'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
             'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
+            'personห' => Yii::t('andahrm/leave', 'บุคลากร'),
         ];
     }
 
@@ -66,4 +84,34 @@ class LeaveRelated extends \yii\db\ActiveRecord
     {
         return $this->hasMany(LeaveRelatedPerson::className(), ['leave_related_id' => 'id']);
     }
+  
+    public static function getList(){
+      return ArrayHelper::map(self::find()->all(),'id','title');
+    } 
+  
+    public $persons;
+  
+    public function getPersonSelected()
+    {
+        return arrayHelper::index($this->leaveRelatedPeople,'user_id');
+    }
+  
+    public function getInspectorBy()
+    {
+        return $this->hasOne(Person::className(), ['user_id' => 'inspector_by']);
+    }  
+  
+    public function getCommanderBy()
+    {
+        return $this->hasOne(Person::className(), ['user_id' => 'commander_by']);
+    }
+  
+    public function getDirectorBy()
+    {
+        return $this->hasOne(Person::className(), ['user_id' => 'director_by']);
+    }
+  
+  
+    
+  
 }

@@ -5,6 +5,7 @@ namespace andahrm\leave\controllers;
 use Yii;
 use andahrm\leave\models\LeavePermission;
 use andahrm\leave\models\LeavePermissionSearch;
+use andahrm\leave\models\PersonSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -65,15 +66,48 @@ class PermissionController extends Controller
      */
     public function actionCreate()
     {
-        $model = new LeavePermission();
+        $model = new LeavePermission(['scenario'=>'create']);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'user_id' => $model->user_id, 'leave_condition_id' => $model->leave_condition_id, 'year' => $model->year]);
-        } else {
+        
+     
+        if ($model->load(Yii::$app->request->post())){
+          $post = Yii::$app->request->post();
+          $post = $post['LeavePermission'];
+//           print_r($post);
+//           exit();
+          $flag = true;
+          
+         foreach($post['user_id'] as $key => $item){
+           $newModel = [];
+           
+           if($newModel = LeavePermission::find()->where(['year'=>$model->year,'user_id'=>$item])->one()){
+             $newModel->number_day = $post['number_day'][$key];
+           }else{ 
+             $newModel = new LeavePermission(['scenario'=>'insert']);
+             $newModel->user_id = $item;
+             $newModel->year = $model->year;
+             $newModel->number_day = $post['number_day'][$key];
+           }
+            if(!$newModel->save()){
+              $flag = false;
+            }
+         }
+          
+          
+         if($flag)
+            return $this->redirect(['index']);          
+        }
+      
+        $searchModel = new PersonSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+      
             return $this->render('create', [
                 'model' => $model,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
             ]);
-        }
+        
     }
 
     /**

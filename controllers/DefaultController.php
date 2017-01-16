@@ -56,8 +56,33 @@ class DefaultController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+        ]);
+    }
+    /**
+     * Displays a single Leave model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionConfirm($id)
+    {
+      
+        $model = $this->findModel($id);
+        $model->scenario = 'confirm';
+
+        if ($model->load(Yii::$app->request->post())){
+            $model->status = 1;
+            if($model->save()) {
+              return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+              print_r($model->getErrors());
+            }
+        } 
+        return $this->render('confirm', [
+            'model' => $model,
         ]);
     }
   
@@ -80,23 +105,7 @@ class DefaultController extends Controller
         }
     }
 
-    /**
-     * Creates a new Leave model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreateSick()
-    {
-        $model = new Leave();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create-sick', [
-                'model' => $model,
-            ]);
-        }
-    }
+    
   
     /**
      * Creates a new Leave model.
@@ -105,15 +114,19 @@ class DefaultController extends Controller
      */
     public function actionCreateVacation()
     {
-        $model = new Leave();
+        $model = new Leave(['scenario'=>'create-vacation']);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+        if ($model->load(Yii::$app->request->post())){
+            if($model->save()) {
+              return $this->redirect(['confirm', 'id' => $model->id]);
+            }else{
+              print_r($model->getErrors());
+            }
+        } 
             return $this->render('create-vacation', [
                 'model' => $model,
             ]);
-        }
+        
     }
   
     /**
@@ -144,13 +157,17 @@ class DefaultController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+       if ($model->load(Yii::$app->request->post())){
+            if($model->save()) {
+              return $this->redirect(['confirm', 'id' => $model->id]);
+            }else{
+              print_r($model->getErrors());
+            }
+        } 
             return $this->render('update', [
                 'model' => $model,
             ]);
-        }
+        
     }
 
     /**

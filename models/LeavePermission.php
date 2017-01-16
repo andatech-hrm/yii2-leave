@@ -4,6 +4,11 @@ namespace andahrm\leave\models;
 
 use Yii;
 
+use yii\db\ActiveRecord;
+use andahrm\leave\base\YearConverter;
+  
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "leave_permission".
  *
@@ -18,7 +23,7 @@ use Yii;
  *
  * @property LeaveCondition $leaveCondition
  */
-class LeavePermission extends \yii\db\ActiveRecord
+class LeavePermission extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -27,6 +32,20 @@ class LeavePermission extends \yii\db\ActiveRecord
     {
         return 'leave_permission';
     }
+  
+  
+
+ public function behaviors()
+    {
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+            ]
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -34,13 +53,16 @@ class LeavePermission extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'leave_condition_id', 'year'], 'required'],
+            [['year'], 'required','on'=>'create'],
+            [['user_id', 'number_day', 'year'], 'required','on'=>'insert'],
             [['user_id', 'leave_condition_id', 'number_day', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['year'], 'safe'],
+          [['leave_condition_id'],'default','value'=>3],
             [['leave_condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveCondition::className(), 'targetAttribute' => ['leave_condition_id' => 'id']],
         ];
     }
 
+  public $person_type_id;
     /**
      * @inheritdoc
      */

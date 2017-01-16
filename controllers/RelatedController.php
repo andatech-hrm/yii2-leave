@@ -4,6 +4,7 @@ namespace andahrm\leave\controllers;
 
 use Yii;
 use andahrm\leave\models\LeaveRelated;
+use andahrm\leave\models\LeaveRelatedPerson;
 use andahrm\leave\models\LeaveRelatedSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -50,9 +51,28 @@ class RelatedController extends Controller
      * @return mixed
      */
     public function actionView($id)
-    {
+    {      
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) ){
+          $post = Yii::$app->request->post();
+//           print_r($post);
+//           exit();
+          LeaveRelatedPerson::deleteAll(['leave_related_id' => $model->id]);
+          foreach($post['LeaveRelated']['persons'] as $item){
+            $modelSelect = new LeaveRelatedPerson();
+            $modelSelect->leave_related_id = $model->id;
+            $modelSelect->user_id = $item;
+            $modelSelect->save();
+          }
+          //LeaveRelatedPerson::
+          
+          if($model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+          }
+        } 
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' =>   $model    ,
         ]);
     }
 

@@ -23,9 +23,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'user_id',
-            'leave_related_id',
+             [
+                'attribute' => 'leave_related_id',
+                'value' => function($model){
+                return  $model->leaveRelated->title;
+              }
+            ],
+            [
+                'attribute' => 'user_id',
+                'value' => function($model){
+                return  $model->user->fullname;
+              }
+            ],           
+  
             'created_at',
             'created_by',
             'updated_at',

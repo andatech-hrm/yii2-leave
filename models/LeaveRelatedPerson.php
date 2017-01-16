@@ -5,6 +5,8 @@ namespace andahrm\leave\models;
 use Yii;
 use andahrm\person\models\Person;
 
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "leave_related_person".
  *
@@ -26,6 +28,18 @@ class LeaveRelatedPerson extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'leave_related_person';
+    }
+  
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+            ]
+        ];
     }
 
     /**
@@ -71,4 +85,7 @@ class LeaveRelatedPerson extends \yii\db\ActiveRecord
     {
         return $this->hasOne(LeaveRelated::className(), ['id' => 'leave_related_id']);
     }
+  
+  
+  
 }

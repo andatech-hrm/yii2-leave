@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use andahrm\structure\models\FiscalYear;
 /* @var $this yii\web\View */
 /* @var $searchModel andahrm\leave\models\LeaveSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -45,16 +46,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'user_id',
-            'leave_type_id',
+            //'id',
+            //'user_id',
+						[
+							'attribute'=>'leave_type_id',
+						 'value'=>'leaveType.title'
+						],
+            //'leave_type_id',
             'date_start',
-            'start_part',
-            // 'date_end',
+            //'start_part',
+             'date_end',
             // 'end_part',
             // 'reason:ntext',
             // 'acting_user_id',
-            // 'status',
+             'status',
             // 'inspector_comment',
             // 'inspector_status',
             // 'inspector_by',

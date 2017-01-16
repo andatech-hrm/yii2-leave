@@ -9,7 +9,7 @@ use mdm\admin\components\Helper;
  $module = $this->context->module->id;
 ?>
 
-<?php if(Yii::$app->user->can('manager-leave')):?>
+<?php if(Yii::$app->user->can('manage-leave')):?>
 <div class="row hidden-print">
     <div class="col-md-12"> 
       
@@ -47,6 +47,11 @@ use mdm\admin\components\Helper;
                             'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Relateds'),
                             'url' => ["/{$module}/related/"],
                      ];
+      
+//                     $menuItems[] =  [
+//                             'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Related People'),
+//                             'url' => ["/{$module}/related-person/"],
+//                      ];
                     //print_r($menuItems);
                     //echo "<hr/>";
                     $menuItems = Helper::filter($menuItems);
@@ -59,7 +64,7 @@ use mdm\admin\components\Helper;
                     //print_r($menuItems);
                     //$nav = new Navigate();
                     echo Menu::widget([
-                        'options' => ['class' => 'nav nav-tabs'],
+                        'options' => ['class' => 'nav nav-tabs bar_tabs'],
                         'encodeLabels' => false,
                         //'activateParents' => true,
                         //'linkTemplate' =>'<a href="{url}">{icon} {label} {badge}</a>',
