@@ -6,7 +6,7 @@ use kartik\widgets\DatePicker;
 use andahrm\leave\models\Leave;
 use andahrm\leave\models\LeaveDayOff;
 
-use andahrm\person\models\Person;
+use andahrm\leave\models\PersonLeave;
 
 
 /* @var $this yii\web\View */
@@ -18,14 +18,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
 # Candidate
 $items=[];
-$items['user'] = Person::findOne(Yii::$app->user->identity->id);
+$personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
+$items['user'] = $personLeave;
+
+if($model->isNewRecord){
+  $model->to = $personLeave->leaveRelatedPerson->leaveRelated->directorBy->positionTitle;
+}
 ?>
 
 <div class="leave-form">
 
-    <?php $form = ActiveForm::begin();
+ <?php $form = ActiveForm::begin();
   
   $items['user_id']=$form->field($model, 'user_id')->textInput(); 
+  
+  $items['to']=$form->field($model, 'to')->textInput();
   
   $items['leave_type_id']=$form->field($model, 'leave_type_id')->textInput();
   

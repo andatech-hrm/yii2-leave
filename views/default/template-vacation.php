@@ -11,14 +11,21 @@
 		วันที่ .............. เดือน..........................พ.ศ..........
 	</p>
 
+	
+
 	<p class="text-left">
-		เรื่อง <span class="text-dashed">ขออนุญาลาพักผ่อน</span>
+		เรื่อง <span class="text-dashed">ขอลาพักผ่อน</span>
 	</p>
 
 	<p class="text-left">
-		เรียน <span class="text-dashed"><?=$user->leaveRelatedPerson->leaveRelated->directorBy->positionTitle?></span>
+		<div class="row">
+			<div class="col-sm-5">
+				<?=$to?>
+			</div>
+	</div>
 	</p>
 
+<br/>
 
 	<p class="p-form-indent">
     

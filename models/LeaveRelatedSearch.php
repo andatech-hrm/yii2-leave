@@ -18,7 +18,7 @@ class LeaveRelatedSearch extends LeaveRelated
     public function rules()
     {
         return [
-            [['id', 'inspector_by', 'commander_by', 'director_by', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['title'], 'safe'],
         ];
     }
@@ -60,9 +60,6 @@ class LeaveRelatedSearch extends LeaveRelated
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'inspector_by' => $this->inspector_by,
-            'commander_by' => $this->commander_by,
-            'director_by' => $this->director_by,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,
             'updated_at' => $this->updated_at,

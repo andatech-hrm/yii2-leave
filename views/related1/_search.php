@@ -19,11 +19,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'created_at') ?>
+    <?= $form->field($model, 'inspector_by') ?>
 
-    <?= $form->field($model, 'created_by') ?>
+    <?= $form->field($model, 'commander_by') ?>
 
-    <?= $form->field($model, 'updated_at') ?>
+    <?= $form->field($model, 'director_by') ?>
+
+    <?php // echo $form->field($model, 'created_at') ?>
+
+    <?php // echo $form->field($model, 'created_by') ?>
+
+    <?php // echo $form->field($model, 'updated_at') ?>
 
     <?php // echo $form->field($model, 'updated_by') ?>
 

@@ -12,47 +12,23 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="leave-related-index">
 
+    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a(Yii::t('andahrm/leave', 'Create Leave Related'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-<?php Pjax::begin(); ?>
-  <?= GridView::widget([
+<?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            //'id',
+            'id',
             'title',
-            [
-                'attribute' => 'inspector_by',
-                'value' => function($model){
-                return  $model->inspectorBy->fullname;
-              }
-            ],
-            [
-                'attribute' => 'commander_by',
-                'value' => function($model){
-                return  $model->commanderBy->fullname;
-              }
-            ],
-            [
-                'attribute' => 'director_by',
-                'value' => function($model){
-                return  $model->directorBy->fullname;
-              }
-            ],
-            [
-                'label' => 'จำนวนผู้เกี่ยวข้อง',
-                'value' => function($model){
-                return  count($model->leaveRelatedPeople);
-              }
-            ],
-            // 'created_at',
-            // 'created_by',
-            // 'updated_at',
+            'created_at',
+            'created_by',
+            'updated_at',
             // 'updated_by',
 
             ['class' => 'yii\grid\ActionColumn'],

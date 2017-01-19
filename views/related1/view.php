@@ -3,6 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
+use yii\widgets\ActiveForm;
+use softark\duallistbox\DualListbox;
+use andahrm\person\models\Person;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeaveRelated */
 
@@ -28,13 +31,41 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+            //'id',
             'title',
+            'inspector_by',
+            'commander_by',
+            'director_by',
             'created_at',
             'created_by',
             'updated_at',
             'updated_by',
         ],
     ]) ?>
+  
+  
+<?php $form = ActiveForm::begin(); ?>
+<?php
+    $options = [
+        'multiple' => true,
+        'size' => 20,
+    ];
+  
+    $model->persons = $model->personSelected;
+    echo $form->field($model, 'persons')->widget(DualListbox::className(),[
+        'items' => Person::getList(),
+        'options' => $options,
+        'clientOptions' => [
+            'moveOnSelect' => false,
+            'selectedListLabel' => 'Selected Items',
+            'nonSelectedListLabel' => 'Available Items',
+        ],
+    ]);
+?>
+   <div class="form-group">
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('andahrm/leave', 'Create') : Yii::t('andahrm/leave', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
 </div>

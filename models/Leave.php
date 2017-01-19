@@ -63,7 +63,7 @@ class Leave extends \yii\db\ActiveRecord
             [[ 'date_start', 'date_end'], 'required'],
             [['date_start', 'date_end'], 'safe'],
             [['reason'], 'string'],
-            [['inspector_comment', 'commander_comment', 'director_comment'], 'string', 'max' => 255],
+            [['to', 'inspector_comment', 'commander_comment', 'director_comment'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Person::className(), 'targetAttribute' => ['user_id' => 'user_id']],
             [['leave_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveType::className(), 'targetAttribute' => ['leave_type_id' => 'id']],
             [['leave_type_id'] ,'default','value'=>4,'on'=>'create-vacation'],
@@ -100,6 +100,7 @@ class Leave extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('andahrm/leave', 'ID'),
+            'to' => Yii::t('andahrm/structure', 'เรียน'),
             'user_id' => Yii::t('andahrm/leave', 'ผู้ยื่นลา'),
             'leave_type_id' => Yii::t('andahrm/leave', 'ประเภทการลา'),
             'date_start' => Yii::t('andahrm/leave', 'ตั้งแต่วันที่'),
