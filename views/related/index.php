@@ -18,20 +18,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('andahrm/leave', 'Create Leave Related'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+<?php Pjax::begin(); ?>   
+  <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'title',
-            'created_at',
-            'created_by',
-            'updated_at',
-            // 'updated_by',
+            [
+              'attribute' => 'persons',
+              'value' => function($model){
+                return count($model->leaveRelatedPeople).' คน';
+              }
+            ],
+            'updated_at:datetime',
+            'updated_by',
 
-            ['class' => 'yii\grid\ActionColumn'],
+           //['class' => 'yii\grid\ActionColumn'],
+   [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{assign} {view} {update} {delete}',
+                'buttons' => [
+                    'assign' => function ($url, $model, $key) {
+                        return Html::a('<i class="fa fa-user-plus"></i>',['related/assign', 'id' => $model->id], [
+                                    'title' => Yii::t('andahrm/leave', 'Assign'),
+                                    'data-pjax' => '0',
+                        ]);
+                    },
+                ]
+            ]
         ],
     ]); ?>
-<?php Pjax::end(); ?></div>
+<?php Pjax::end(); ?>
+</div>

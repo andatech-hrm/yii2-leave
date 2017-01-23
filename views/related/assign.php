@@ -3,9 +3,13 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
+use yii\widgets\ActiveForm;
+use softark\duallistbox\DualListbox;
+use andahrm\person\models\Person;
+
+use andahrm\leave\models\LeaveRelated;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeaveRelated */
 
@@ -13,6 +17,7 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leave Relateds'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div class="leave-related-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,8 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-           // 'id',
+            //'id',
             'title',
+            
             'created_at',
             'created_by',
             'updated_at',
@@ -39,8 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
   
-  
-   
+     
 <div class="x_panel tile">
             <div class="x_title">
                  <?=Html::tag('h2',$model->getAttributeLabel('approver'))?>
@@ -101,30 +106,49 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
   
-
-<div class="x_panel tile">
+  
+<?php $form = ActiveForm::begin(); ?>
+  
+  
+  
+  <div class="x_panel tile">
             <div class="x_title">
                  <?=Html::tag('h2',$model->getAttributeLabel('persons'))?>
-              <div class="panel_toolbox">
-                 <?= Html::a(Yii::t('andahrm/leave', 'Assign'), ['assign', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-              </div>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
+<?php
+    $options = [
+        'multiple' => true,
+        'size' => 20,
+        //'disabled' => ['1']
+    ];
+//   echo "<pre>";
+//   print_r($model->personSelected);
+//    echo "</pre>";
+               //print_r(LeaveRelated::getPerson());
+              //exit();
+    $model->persons = $model->personSelected;
+    echo $form->field($model, 'persons')->widget(DualListbox::className(),[
+        'items' => Person::getList(),
+        'options' => $options,
+        'clientOptions' => [
+           'moveOnSelect' => false,
+            'selectedListLabel' => 'Selected Items',
+            'nonSelectedListLabel' => 'Available Items',
+            //'nonSelectedFilter' => LeaveRelated::getPerson()
+        ],
+    ])->label(false);
+?>
               
-                  <?php Pjax::begin(); ?>   
-                  <?= GridView::widget([
-                        'dataProvider' => $personProvider,
-                        'columns' => [
-                            ['class' => 'yii\grid\SerialColumn'],
-                            [
-                            'attribute' => 'user_id',
-                            'value'=> 'user.fullname',
-                             ]
-                        ],
-                    ]); ?>
-                <?php Pjax::end(); ?>
-                
-          <div class="clearfix"></div>
+              <div class="clearfix"></div>
         </div>
     </div>
+  
+   <div class="form-group">
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('andahrm/leave', 'Create') : Yii::t('andahrm/leave', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+
+</div>

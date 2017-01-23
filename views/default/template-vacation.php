@@ -1,3 +1,5 @@
+
+
 <div class="font-thai-sarabun">
 
 
@@ -8,7 +10,7 @@
 	</p>
 
 	<p class="text-right">
-		วันที่ .............. เดือน..........................พ.ศ..........
+		<?=$created_at?>
 	</p>
 
 	
@@ -20,7 +22,7 @@
 	<p class="text-left">
 		<div class="row">
 			<div class="col-sm-5">
-				<?=$to?>
+			<?=$to?>
 			</div>
 	</div>
 	</p>
@@ -38,7 +40,7 @@
     
 		<?=$date_range?> 
 
-		มีกำหนด..............วัน ในระหว่างลาจะติดต่อข้าพเจ้าได้ที่.........................
+		มีกำหนด<span class="text-dashed"> <?=$countDays?> </span>วัน ในระหว่างลาจะติดต่อข้าพเจ้าได้ที่ <?=$contact?>
 
 	</p>
   
@@ -51,13 +53,18 @@
 
 	<div class="row">
 		<div class="col-sm-6 text-center">
-			ลงชื่อ ...................................ผู้รับมอบ<br/> 
-			(...........................................................)
+			<p>
+				ลงชื่อ ...................................ผู้รับมอบ<br/>
+			<?=$acting_user?>
+			</p>
 		</div>
 		<div class="col-sm-6 text-center">
 
-			ลงชื่อ .....................................<br/>
-			(...........................................................)
+			<p>
+				ลงชื่อ .....................................<br/>
+				(<span class="text-dashed"><?=$user->fullname?></span>)<br/>
+				ตำแหน่ง <span class="text-dashed"><?=$user->position->title?></span>
+			</p>
 		</div>
 	</div>
 	<br/>
@@ -92,11 +99,15 @@
 		<div class="col-sm-6 text-center">
 			<h4 class="text-left">
 				ความเห็นผู้บังคับบัญชา
-			</h4> 
+			</h4>
+			<p>
 				 ....................................................................<br/> 
-      ลงชื่อ <span class="text-dashed"><?=$user->leaveRelatedPerson->leaveRelated->commanderBy->fullname?></span> <br/>
-	    ตำแหน่ง <span class="text-dashed"><?=$user->leaveRelatedPerson->leaveRelated->commanderBy->position->title?></span><br/>
-			วันที่............/............................../..............
+			</p>
+			<p>
+					ลงชื่อ .....................................<br/>
+					<?=$commanders?><br/>
+					วันที่............/............................../..............
+			</p>
 		</div>
 	</div>
 
@@ -104,24 +115,21 @@
 
 	<div class="row">
 		<div class="col-sm-6 text-center">
-
-
-
-
-
-			ลงชื่อ <span class="text-dashed"><?=$user->leaveRelatedPerson->leaveRelated->inspectorBy->fullname?></span> ผู้ตรวจสอบ<br/>
-			ตำแหน่ง <span class="text-dashed"><?=$user->leaveRelatedPerson->leaveRelated->inspectorBy->position->title?></span><br/>
-	วันที่............./............................/................ 
-	
-
-	</div>
+			<p>
+				ลงชื่อ .....................................<br/>
+				<?=$inspectors?><br/>				
+				<?=$inspector_at?>
+			</p>
+		</div>
 		<div class="col-sm-6 text-center">
-	
-	
-	คำสั่ง อนุญาต ไม่อนุญาต <br/>
-      .................................................................... .................................................................... <br/>
-			ลงชื่อ <span class="text-dashed"><?=$user->leaveRelatedPerson->leaveRelated->directorBy->fullname?></span><br/>
-			ตำแหน่ง <span class="text-dashed"><?=$user->leaveRelatedPerson->leaveRelated->directorBy->positionTitle?></span><br/>
-	วันที่................/.............................../..........
+			<p>
+				คำสั่ง อนุญาต ไม่อนุญาต <br/>
+      .................................................................... .................................................................... 
+			</p>
+			<p>
+					ลงชื่อ  .....................................<br/>
+					<?=$directors?><br/>
+					วันที่................/.............................../..........
+			</p>
 			</div>
 	</div>

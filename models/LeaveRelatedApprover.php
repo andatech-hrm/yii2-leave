@@ -69,16 +69,17 @@ class LeaveRelatedApprover extends \yii\db\ActiveRecord
         return [
             'leave_related_id' => Yii::t('andahrm/leave', 'ชุดผู้เกี่ยวข้อง'),
             'inspector_by' => Yii::t('andahrm/leave', 'ผู้ตรวจสอบ'),
-            'inspector' => Yii::t('andahrm/leave', 'ผู้ตรวจสอบ'),
             'commander_by' => Yii::t('andahrm/leave', 'ผู้บังคับบัญชา'),
             'director_by' => Yii::t('andahrm/leave', 'ผู้ออกคำสั่ง'),
             'created_at' => Yii::t('andahrm/leave', 'Created At'),
             'created_by' => Yii::t('andahrm/leave', 'Created By'),
             'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
             'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
+            'inspectors' => Yii::t('andahrm/leave', 'ผู้ตรวจสอบ'),
         ];
     }
    public $inspector;
+   public $commander;
    public $director;
    public function getInspectorBy()
     {

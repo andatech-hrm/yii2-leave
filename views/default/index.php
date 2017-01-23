@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use andahrm\structure\models\FiscalYear;
+use andahrm\leave\models\Leave;
 /* @var $this yii\web\View */
 /* @var $searchModel andahrm\leave\models\LeaveSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -13,39 +14,26 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="leave-index">
   
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    
 
-    <div class="row">
-      <div class="col-xs-12 col-sm-4">
-          <?= Html::a('<i class="fa fa-edit"></i><br/>'.Yii::t('andahrm/leave', 'แบบฟอร์มขอลาป่วย ลากิจส่วนตัว และลาคลอด'), ['create-sick'], ['class' => 'btn btn-success btn-block']) ?>
-      </div>
-       <div class="col-xs-12 col-sm-8">
-         <font size="2" color="#990000"><b>ลาป่วย และลากิจส่วนตัว<font color="#0000FF"> ( Sick Leave and Business Leave )</font></b></font><br/>
-				<font size="2" color="#990000"> - ลาได้ไม่เกิน 9 ครั้ง (ภายในครึ่งปีงบประมาณ) <font color="#0000FF"> (Not more than 9 times (With in the first half of the fiscal year))</font></font><br/>
-         <font size="2" color="#990000"> - ลาได้ไม่เกิน 23 วัน (ภายในครึ่งปีงบประมาณ)  <font color="#0000FF"> (Not more than 23 days (With in the first half of the fiscal year))</font></font>
-       </div>
-    </div>
-  <hr/>
-  <div class="row">
-      <div class="col-xs-12 col-sm-4">
-          <?= Html::a('<i class="fa fa-edit"></i><br/>'.Yii::t('andahrm/leave', 'แบบฟอร์มขอลาพักผ่อน'), ['create-vacation'], ['class' => 'btn btn-success btn-block']) ?>
-      </div>
-       <div class="col-xs-12 col-sm-8">
-        <font size="2" color="#990000"><b>ลาพักผ่อน <font color="#0000FF">( Vacation Leave )</font></b></font><br/>
-         <font size="2" color="#990000"> - ลาได้ไม่เกิน จำนวนวันลาพักผ่อนสะสม <font color="#0000FF">(Not permitted in excess of total currently accumulated vacation Leave)</font></font><br/>
-         <font size="2" color="#990000"> - ไม่อนุญาตให้ลา กรณีที่อายุการทำงานไม่ถึง 6 เดือน   <font color="#0000FF">(Denied  if working duration is less than 6 months)</font></font></td>
-				
-       </div>
-    </div>
+     <?php echo $this->render('intro'); ?>
     <hr/>
   
+
+<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
 <?php Pjax::begin(); ?>    
   <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+            [
+								'class' => 'yii\grid\CheckboxColumn',
+								'checkboxOptions' => function ($model, $key, $index, $column) {
+											return ['value' => $model->id,'disabled'=>$model->status!=0?true:false];
+									}
+						],
             //'id',
             //'user_id',
 						[
@@ -53,13 +41,39 @@ $this->params['breadcrumbs'][] = $this->title;
 						 'value'=>'leaveType.title'
 						],
             //'leave_type_id',
-            'date_start',
+             'date_start:date',
             //'start_part',
-             'date_end',
+             'date_end:date',
             // 'end_part',
             // 'reason:ntext',
             // 'acting_user_id',
-             'status',
+						[
+							'attribute'=>'inspector_status',
+							'format'=>'html',
+							'filter'=>Leave::getItemInspactorStatus(),
+						 'value'=>'inspactorStatusLabel'
+						],
+						[
+							'attribute'=>'commander_status',
+							'format'=>'html',
+							'filter'=>Leave::getItemCommanderStatus(),
+						 'value'=>'commanderStatusLabel'
+						],
+						[
+							'label'=> Yii::t('andahrm/leave', 'ผู้ออกคำสั่ง'),
+							'attribute'=>'director_status',
+							'format'=>'html',
+							'filter'=>Leave::getItemDirectorStatus(),
+						 	'value'=>'directorStatusLabel'
+						],
+	
+						[
+							'attribute'=>'status',
+							'format'=>'html',
+							'filter'=>Leave::getItemStatus(),
+						 'value'=>'statusLabel'
+						],
+						
             // 'inspector_comment',
             // 'inspector_status',
             // 'inspector_by',
@@ -76,8 +90,18 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'created_by',
             // 'updated_at',
             // 'updated_by',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+								'class' => 'yii\grid\ActionColumn',
+								'template'=>'{update} {view}',
+								'buttons' => [
+											'update' => function($url,$model,$key){
+                        return $model->status==0?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url):'';
+                      },
+											'view' => function($url,$model,$key){
+                        return $model->status!=0?Html::a('<span class="glyphicon glyphicon-eye-open"></span>',$url):'';
+                      },
+										]
+						],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

@@ -11,11 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leave Rela
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="leave-related-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model
     ]) ?>
-
 </div>

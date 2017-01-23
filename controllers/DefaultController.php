@@ -72,7 +72,10 @@ class DefaultController extends Controller
       
         $model = $this->findModel($id);
         $model->scenario = 'confirm';
+        //$model->scenario
+        //print_r($model->getscenarios());
 
+        //exit();
         if ($model->load(Yii::$app->request->post())){
             $model->status = 1;
             if($model->save()) {
@@ -112,12 +115,27 @@ class DefaultController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreateVacation()
+    public function actionCreateVacation($id=null)
     {
-        $model = new Leave(['scenario'=>'create-vacation']);
+        $model=[];
+        if(!$model = Leave::findOne($id)){
+          $model = new Leave(['scenario'=>'create-vacation']);
+        }
 
         if ($model->load(Yii::$app->request->post())){
-            if($model->save()) {
+            $post = Yii::$app->request->post();
+          
+            if(!($model->start_part == 1 && $model->start_part == $model->end_part)){
+                if(!($model->start_part == 2 && $model->end_part == 1)){                   
+                  if(!($model->start_part == 3 && $model->end_part == 2)){                   
+                      $model->addError('end_part','คุณเลือกตัวเลือกที่ไม่เข้ากันอยู่');                  
+                  }
+                }
+            }
+//           print_r($model->getErrors());
+//            exit();
+          
+            if(!$model->hasErrors() && $model->save()) {
               return $this->redirect(['confirm', 'id' => $model->id]);
             }else{
               print_r($model->getErrors());
@@ -156,17 +174,17 @@ class DefaultController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-       if ($model->load(Yii::$app->request->post())){
-            if($model->save()) {
-              return $this->redirect(['confirm', 'id' => $model->id]);
-            }else{
-              print_r($model->getErrors());
-            }
-        } 
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        return $this->redirect(['create-'.(($model->leave_type_id==4)?'vacation':'sick'), 'id' => $model->id]);
+//        if ($model->load(Yii::$app->request->post())){
+//             if($model->save()) {
+//               return $this->redirect(['confirm', 'id' => $model->id]);
+//             }else{
+//               print_r($model->getErrors());
+//             }
+//         } 
+//             return $this->render('update', [
+//                 'model' => $model,
+//             ]);
         
     }
 

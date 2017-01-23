@@ -7,6 +7,8 @@ use mdm\admin\components\Helper;
 
  $this->beginContent('@app/views/layouts/main.php'); 
  $module = $this->context->module->id;
+$controller = Yii::$app->controller->id;
+
 ?>
 
 <?php if(Yii::$app->user->can('manage-leave')):?>
@@ -14,10 +16,22 @@ use mdm\admin\components\Helper;
     <div class="col-md-12"> 
       
       <?php
+      $active = false;
+      switch($controller){
+          case 'default':
+          case 'commander':
+          case 'inspactor':
+          case 'director':
+            $active = true;
+          break;
+      }
+      
                     $menuItems = [];
+      
       
                     $menuItems[] =  [
                            'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Leaves'),
+                            'active' => $active,
                             'url' => ["/{$module}/default/"],
                      ];
       

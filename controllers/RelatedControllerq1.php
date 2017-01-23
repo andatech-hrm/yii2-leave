@@ -58,7 +58,13 @@ class RelatedController extends Controller
           $post = Yii::$app->request->post();
 //           print_r($post);
 //           exit();
-          LeaveRelatedPerson::deleteAll(['leave_related_id' => $model->id]);
+          //LeaveRelatedPerson::deleteAll(['leave_related_id' => $model->id]);
+          foreach($post['LeaveRelated']['persons'] as $item){
+            $modelSelect = new LeaveRelatedPerson();
+            $modelSelect->leave_related_id = $model->id;
+            $modelSelect->user_id = $item;
+            $modelSelect->save();
+          }
           foreach($post['LeaveRelated']['persons'] as $item){
             $modelSelect = new LeaveRelatedPerson();
             $modelSelect->leave_related_id = $model->id;

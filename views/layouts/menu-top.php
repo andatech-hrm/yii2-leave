@@ -5,8 +5,13 @@ use yii\bootstrap\Nav;
 use dmstr\widgets\Menu;
 use mdm\admin\components\Helper;
 
+use andahrm\leave\models\LeaveInspactorSearch;
+use andahrm\leave\models\LeaveDirectorSearch;
+
  $this->beginContent('@andahrm/leave/views/layouts/main.php'); 
  $module = $this->context->module->id;
+
+
 
 
                     $menuItems = [];
@@ -22,14 +27,20 @@ use mdm\admin\components\Helper;
                             'url' => ["/{$module}/commander/"],
                      ];
       
-      
+        $searchModel = new LeaveInspactorSearch();
+        $dataInspactor = $searchModel->search(Yii::$app->request->queryParams);
+        $countInspactor = $dataInspactor->getCount()?' <span class="badge bg-red">'.$dataInspactor->getCount().'</span>':'';
+                    
                     $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Inspactor'),
+                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Inspactor').$countInspactor,
                             'url' => ["/{$module}/inspactor/"],
                      ];   
       
+        $searchModel = new LeaveDirectorSearch();
+        $dataDirector = $searchModel->search(Yii::$app->request->queryParams);
+        $countDirector = $dataDirector->getCount()?' <span class="badge bg-red">'.$dataDirector->getCount().'</span>':'';
                      $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Director'),
+                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Director').$countDirector,
                             'url' => ["/{$module}/director/"],
                      ];
       

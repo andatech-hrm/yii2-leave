@@ -91,20 +91,32 @@ class LeaveDayOff extends \yii\db\ActiveRecord
     return $days;
   }
   
- public static function createDateRange($startDate, $endDate, $format = "Y-m-d")
-{
-    $begin = new \DateTime($startDate);
-    $end = new \DateTime($endDate);
+  /**
+  * สร้างช่วงของวันที่
+  *
+  */
+       public static function createDateRange($startDate, $endDate, $format = "Y-m-d")
+      {
+          $begin = new \DateTime($startDate);
+          $end = new \DateTime($endDate);
 
-    $interval = new \DateInterval('P1D'); // 1 Day
-    $dateRange = new \DatePeriod($begin, $interval, $end);
-    
-    $range = [];
-    foreach ($dateRange as $date) {
-        $range[] = $date->format($format);
-    }    
-    return $range;
-}
+          $interval = new \DateInterval('P1D'); // 1 Day
+          $dateRange = new \DatePeriod($begin, $interval, $end);
+
+          $range = [];
+          foreach ($dateRange as $date) {
+              $range[] = $date->format($format);
+          }    
+          return $range;
+      }
   
+  /**
+  *  เช็ควันหยุดราชการ
+  *
+  */
+  public static function checkDayOff($date){
+    $data = self::getList();
+    return ArrayHelper::isIn($date,$data);
+  }
   
 }
