@@ -7,6 +7,7 @@ use andahrm\leave\models\Leave;
 use andahrm\leave\models\LeaveDayOff;
 
 use andahrm\leave\models\PersonLeave;
+use andahrm\structure\models\FiscalYear;
 
 
 /* @var $this yii\web\View */
@@ -27,7 +28,7 @@ if($model->isNewRecord){
 ?>
 
 <div class="leave-form">
-
+<?='ปีงบประมาณ '.FiscalYear::currentYear()?>
  <?php $form = ActiveForm::begin();
   
   $items['created_at']=$model->isNewRecord ?'วันที่ '.Yii::$app->formatter->asDate('now','d').' เดือน '.Yii::$app->formatter->asDate('now','MMMM').' พ.ศ '.Yii::$app->formatter->asDate('now','yyyy'):'วันที่ '.Yii::$app->formatter->asDate($model->created_at,'d').' เดือน '.Yii::$app->formatter->asDate($model->created_at,'MMMM').' พ.ศ. '.Yii::$app->formatter->asDate($model->created_at,'yyyy'); 
@@ -38,11 +39,17 @@ if($model->isNewRecord){
   
   $items['leave_type_id']=$form->field($model, 'leave_type_id')->textInput();
   
-  $part = [1=>'ทั้งวัน',2=>'ครี่งวันเช้า',3=>'ครึ่งวันบ่าย'];
+  #จำนวนวันที่ลาครั้งนี้
+  $items['number_day']=$model->number_day?$model->number_day:0;
+  
+  $items['collect']=Leave::getCollect();
+  
+  $items['total']=$items['collect']+$items['user']->leavePermission->number_day;
     
    $items['start_part']=$form->field($model, 'start_part')->dropdownList(Leave::getItemStartPart())->label(false)->error(false)->hint(false);
 
    $items['end_part']=$form->field($model, 'end_part')->dropdownList(Leave::getItemEndPart())->label(false)->hint(false)->error(false);
+  
   
   $layout3 = <<< HTML
     <span class="input-group-addon">ตั้งแต่วันที่</span>
@@ -56,37 +63,12 @@ if($model->isNewRecord){
     </span>
 HTML;
   
-  
-  /*$items['date_range']= DatePicker::widget([
-    'type' => DatePicker::TYPE_RANGE,
-    //'name' => 'dp_addon_3a',
-    'model' => $model,
-    'attribute' => 'date_start',
-    'attribute2' => 'date_end',
-    //'value' => '01-Jul-2015',
-    //'name2' => 'dp_addon_3b',
-    //'value2' => '18-Jul-2015',
-    'separator' => '<i class="glyphicon glyphicon-resize-horizontal"></i>',
-    'layout' => $layout3,
-    'pluginOptions' => [
-        'autoclose' => true,
-        'datesDisabled' => LeaveDayOff::getList(),
-        'format' => 'yyyy-mm-dd',
-        'todayHighlight' => true,
-        'todayBtn' => true,
-        'startDate' => date('Y-m-d', strtotime("+1 day")),
-        //'endDate' => date('Y-m-d', strtotime("+4 day")),
-        //'calendarWeeks' => true,
-        'daysOfWeekDisabled' => [0, 6],
-    ]
-]);*/
-
-  
+    
   $items['date_range']=$form->field($model, 'date_start')->widget(DatePicker::classname(), [
     'type' => DatePicker::TYPE_RANGE,
-    'options' => ['placeholder' => 'Enter birth date ...'],
+    'options' => ['placeholder' => $model->getAttributeLabel('date_start')],
     'attribute2' => 'date_end',
-    'options2' => ['placeholder' => 'Enter birth date ...'],
+    'options2' => ['placeholder' =>  $model->getAttributeLabel('date_end')],
      'separator' => '<i class="glyphicon glyphicon-resize-horizontal"></i>',
     'layout' => $layout3,
     'pluginOptions' => [
@@ -95,7 +77,7 @@ HTML;
         'format' => 'yyyy-mm-dd',
         'todayHighlight' => true,
         'todayBtn' => true,
-        'startDate' => date('Y-m-d', strtotime("+1 day")),
+        'startDate' => date('Y-m-d', strtotime("+3 day")),
         //'calendarWeeks' => true,
         'daysOfWeekDisabled' => [0, 6],
         
@@ -107,6 +89,8 @@ HTML;
  // $items['date_range'] .= $model->getFirstError('end_part');
   
     $items['contact']=$form->field($model, 'contact')->textInput(['placeholder'=>'ติดต่อข้าพเจ้าได้ที่']);
+  
+      $items['pastDay']=Leave::getPastDay();
 
     $items['reason']=$form->field($model, 'reason')->textarea(['rows' => 6]);
   
@@ -116,13 +100,24 @@ HTML;
   
       $items['acting_user'] = '(...........................................................)'; 
   
-      $items['inspectors'] = $form->field($model, 'inspector_by')->dropdownList($personLeave->inspectors,['prompt'=>'เลือกผู้ตรวจสอบ']);
-      $items['inspector_at'] = $model->inspector_at?'วันที่ <span class="text-dashed">'.Yii::$app->formatter->asDate($model->inspector_at,'d').' / '.Yii::$app->formatter->asDate($model->inspector_at,'MMMM').' / '.Yii::$app->formatter->asDate($model->inspector_at,'yyyy').'</span>':'วันที่............./............................/................ ' ; 
+       
+  $items['inspector_status'] = Leave::getWidgetStatus($model->inspector_status,Leave::getItemInspactorStatus());
+  $items['inspectors'] = $form->field($model, 'inspector_by')->dropdownList($personLeave->inspectors,['prompt'=>'เลือกผู้ตรวจสอบ']);
+   $items['inspector_comment'] = $model->inspector_comment?$model->inspector_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
+   $items['inspector_at'] = $model->inspector_at?$model->inspectorAt:'วันที่............./............................/................ ' ;
 
 
     $items['commanders'] = $form->field($model, 'commander_by')->dropdownList($personLeave->commanders,['prompt'=>'เลือกผู้บังคับบัญชา']);
-
+    $items['commander_status'] = Leave::getWidgetStatus($model->commander_status,Leave::getItemCommanderStatus());
+    $items['commander_comment'] = $model->commander_comment?$model->commander_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
+   $items['commander_at'] = $model->commander_at?$model->commanderAt:'วันที่............./............................/................ ' ; 
+  
+  
+  $items['director_status'] = Leave::getWidgetStatus($model->director_status,Leave::getItemDirectorStatus());
     $items['directors'] = $form->field($model, 'director_by')->dropdownList($personLeave->directors,['prompt'=>'เลือกผู้ออกคำสั่ง']);
+   $items['director_comment'] = $model->director_comment?$model->director_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
+   $items['director_at'] = $model->director_at?$model->directorAt:'วันที่............./............................/................ ' ; 
+
   
 ?>
  

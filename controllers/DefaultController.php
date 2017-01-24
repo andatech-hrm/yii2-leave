@@ -8,6 +8,7 @@ use andahrm\leave\models\LeaveSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use andahrm\structure\models\FiscalYear;
 
 /**
  * DefaultController implements the CRUD actions for Leave model.
@@ -77,7 +78,7 @@ class DefaultController extends Controller
 
         //exit();
         if ($model->load(Yii::$app->request->post())){
-            $model->status = 1;
+            $model->status = Leave::STATUS_OFFER;
             if($model->save()) {
               return $this->redirect(['view', 'id' => $model->id]);
             }else{
@@ -125,15 +126,19 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post())){
             $post = Yii::$app->request->post();
           
-            if(!($model->start_part == 1 && $model->start_part == $model->end_part)){
-                if(!($model->start_part == 2 && $model->end_part == 1)){                   
-                  if(!($model->start_part == 3 && $model->end_part == 2)){                   
+            print_r($post);
+            if(!($model->start_part == Leave::ALL_DAY && $model->start_part == $model->end_part)){
+              echo $model->start_part."-".$model->end_part;
+                if(!($model->start_part == Leave::HALF_DAY_MORNIG && $model->end_part == Leave::ALL_DAY)){                   
+                  if(!($model->start_part == Leave::LATE_AFTERNOON && $model->end_part == Leave::HALF_DAY_MORNIG)){                   
                       $model->addError('end_part','คุณเลือกตัวเลือกที่ไม่เข้ากันอยู่');                  
                   }
                 }
             }
+          $model->number_day = Leave::calCountDays($model->date_start,$model->date_end);
 //           print_r($model->getErrors());
 //            exit();
+            $model->year = FiscalYear::currentYear();
           
             if(!$model->hasErrors() && $model->save()) {
               return $this->redirect(['confirm', 'id' => $model->id]);

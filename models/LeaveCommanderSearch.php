@@ -8,9 +8,9 @@ use yii\data\ActiveDataProvider;
 use andahrm\leave\models\Leave;
 
 /**
- * LeaveSearch represents the model behind the search form about `andahrm\leave\models\Leave`.
+ * LeaveDirectorSearch represents the model behind the search form about `andahrm\leave\models\Leave`.
  */
-class LeaveSearch extends Leave
+class LeaveCommanderSearch extends Leave
 {
     /**
      * @inheritdoc
@@ -19,8 +19,7 @@ class LeaveSearch extends Leave
     {
         return [
             [['id', 'user_id', 'leave_type_id', 'start_part', 'end_part', 'acting_user_id', 'status', 'inspector_status', 'inspector_by', 'inspector_at', 'commander_status', 'commander_by', 'commander_at', 'director_status', 'director_by', 'director_at', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['year', 'to', 'contact', 'date_start', 'date_end', 'reason', 'inspector_comment', 'commander_comment', 'director_comment'], 'safe'],
-           [['number_day'], 'number'],
+            [['to', 'contact', 'date_start', 'date_end', 'reason', 'inspector_comment', 'commander_comment', 'director_comment'], 'safe'],
         ];
     }
 
@@ -43,14 +42,18 @@ class LeaveSearch extends Leave
     public function search($params)
     {
         $query = Leave::find();
+      
+        $query->where([
+          'commander_by'=>Yii::$app->user->id,
+          'commander_at'=>null,
+          'status' => [1]
+        ]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-      
-        $query->where(['created_by'=>Yii::$app->user->id]);
 
         $this->load($params);
 
@@ -64,13 +67,11 @@ class LeaveSearch extends Leave
         $query->andFilterWhere([
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'year' => $this->year, 
             'leave_type_id' => $this->leave_type_id,
             'date_start' => $this->date_start,
             'start_part' => $this->start_part,
             'date_end' => $this->date_end,
-            'end_part' => $this->end_part,            
-            'number_day' => $this->number_day,
+            'end_part' => $this->end_part,
             'acting_user_id' => $this->acting_user_id,
             'status' => $this->status,
             'inspector_status' => $this->inspector_status,
@@ -88,7 +89,7 @@ class LeaveSearch extends Leave
             'updated_by' => $this->updated_by,
         ]);
 
-         $query->andFilterWhere(['like', 'to', $this->to])
+        $query->andFilterWhere(['like', 'to', $this->to])
             ->andFilterWhere(['like', 'contact', $this->contact])
             ->andFilterWhere(['like', 'reason', $this->reason])
             ->andFilterWhere(['like', 'inspector_comment', $this->inspector_comment])

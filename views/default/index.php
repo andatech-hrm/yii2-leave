@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use andahrm\structure\models\FiscalYear;
 use andahrm\leave\models\Leave;
 /* @var $this yii\web\View */
 /* @var $searchModel andahrm\leave\models\LeaveSearch */
@@ -20,12 +19,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr/>
   
 
-<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
 <?php Pjax::begin(); ?>    
   <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+				'showFooter' =>true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
@@ -44,7 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
              'date_start:date',
             //'start_part',
              'date_end:date',
-            // 'end_part',
+             'number_day',
+						[
+							'attribute'=>'number_day',
+							'value'=>'number_day',
+							'footer' => count($dataProvider->getModels())
+						],
             // 'reason:ntext',
             // 'acting_user_id',
 						[

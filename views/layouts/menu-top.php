@@ -5,6 +5,7 @@ use yii\bootstrap\Nav;
 use dmstr\widgets\Menu;
 use mdm\admin\components\Helper;
 
+use andahrm\leave\models\LeaveCommanderSearch;
 use andahrm\leave\models\LeaveInspactorSearch;
 use andahrm\leave\models\LeaveDirectorSearch;
 
@@ -21,9 +22,11 @@ use andahrm\leave\models\LeaveDirectorSearch;
                             'url' => ["/{$module}/default/"],
                      ]; 
                     
-      
+        $searchModel = new LeaveCommanderSearch();
+        $dataCommander = $searchModel->search(Yii::$app->request->queryParams);
+        $countCommander = $dataCommander->getCount()?' <span class="badge bg-red">'.$dataCommander->getCount().'</span>':'';
                     $menuItems[] =  [
-                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Commander').' <span class="badge bg-red">6</span>',
+                           'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Commander').$countCommander,
                             'url' => ["/{$module}/commander/"],
                      ];
       

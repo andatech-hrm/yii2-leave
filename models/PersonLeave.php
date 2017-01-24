@@ -69,5 +69,28 @@ class PersonLeave extends \andahrm\person\models\Person
 //         return $relate?$relate->leaveRelated:null;
 //     }
 
+  /**
+  *  Create by mad
+  * ข้อมูลสิทธิลา
+  */
+  public function getLeavePermission()
+    {
+        return $this->hasOne(LeavePermission::className(), ['user_id' => 'user_id'])
+          ->orderBy(['year'=>SORT_DESC]);
+    } 
+  
+   /**
+  *  Create by mad
+  * ข้อมูลสิทธิลา
+  */
+   public function getLeavePermissionByYear()
+    {
+        $year = date('Y');
+      $get = Yii::$app->request->get();
+      $year=isset($get['PersonSearch']['year'])?$get['PersonSearch']['year']:$year;
+        return $this->hasOne(LeavePermission::className(), ['user_id' => 'user_id'])
+          ->where('leave_permission.year = :year', [':year' => $year]);
+          //->orderBy('leave_permission.year');
+    } 
    
 }

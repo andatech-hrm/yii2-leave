@@ -24,6 +24,9 @@ $this->params['breadcrumbs'][] = Yii::t('andahrm/leave', 'Update');
     <?php $form = ActiveForm::begin();
   echo $form->field($model, 'status')->hiddenInput()->label(false)->hint(false);
       ?>
+  
+      <?=$form->field($model, 'director_comment')->textInput(['maxlength' => true]) ?>
+  
       <div class="form-group">
         
         <?= Html::submitButton(Yii::t('andahrm/leave', 'Allow'), ['class' => 'btn btn-primary','name'=>'allow']) ?>

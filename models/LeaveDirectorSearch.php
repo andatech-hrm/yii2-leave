@@ -18,7 +18,7 @@ class LeaveDirectorSearch extends Leave
     public function rules()
     {
         return [
-            [['id', 'user_id', 'leave_type_id', 'start_part', 'end_part', 'acting_user_id', 'status', 'inspector_status', 'inspector_by', 'inspector_at', 'commander_status', 'commander_by', 'commanded_at', 'director_status', 'director_by', 'director_at', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['id', 'user_id', 'leave_type_id', 'start_part', 'end_part', 'acting_user_id', 'status', 'inspector_status', 'inspector_by', 'inspector_at', 'commander_status', 'commander_by', 'commander_at', 'director_status', 'director_by', 'director_at', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['to', 'contact', 'date_start', 'date_end', 'reason', 'inspector_comment', 'commander_comment', 'director_comment'], 'safe'],
         ];
     }
@@ -79,7 +79,7 @@ class LeaveDirectorSearch extends Leave
             'inspector_at' => $this->inspector_at,
             'commander_status' => $this->commander_status,
             'commander_by' => $this->commander_by,
-            'commanded_at' => $this->commanded_at,
+            'commander_at' => $this->commander_at,
             'director_status' => $this->director_status,
             'director_by' => $this->director_by,
             'director_at' => $this->director_at,

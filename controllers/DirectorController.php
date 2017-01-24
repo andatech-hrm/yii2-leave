@@ -61,25 +61,28 @@ class DirectorController extends Controller
         ]);
     }
   
+  
     public function actionConsider($id)
     {
         $model = $this->findModel($id);
-        $model->scenario = 'inspector';
+        $model->scenario = 'director';
 
         if ($model->load(Yii::$app->request->post())){
               $post = Yii::$app->request->post();
           
               if(isset($post['allow'])){
-                $model->inspector_status = 1;
-                $model->status = 2; #พิจารณา
+                $model->director_status = 1;
+                $model->status = Leave::STATUS_ALLOW; #พิจารณา
               }elseif(isset($post['disallow'])){
-                $model->inspector_status = 0;
+                $model->director_status = 0;
+                $model->status = Leave::STATUS_DISALLOW; #ไม่อนุมัติ
               }
               
-              $model->inspector_at= time();
+              $model->director_at= time();
           
           if($model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
           } 
         } 
       
