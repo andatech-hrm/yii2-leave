@@ -2,40 +2,35 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use andahrm\structure\models\FiscalYear;
 /* @var $this yii\web\View */
-/* @var $model andahrm\leave\models\LeavePermissionSearch */
+/* @var $model andahrm\leave\models\LeaveSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="leave-permission-search">
+<div class="leave-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
         'options' => ['data-pjax' => true ]
     ]); ?>
-
-    <?= $form->field($model, 'user_id') ?>
-
-    <?= $form->field($model, 'leave_condition_id') ?>
-
-    <?= $form->field($model, 'year') ?>
-
-    <?= $form->field($model, 'number_day') ?>
-
-    <?= $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'created_by') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <?php // echo $form->field($model, 'updated_by') ?>
-
+  
+  
+<div class="row">
+  <div class="col-sm-3">
+    <?= $form->field($model, 'year')->dropDownList(FiscalYear::getList(),[]) ?>
+  </div>
+  <div class="col-sm-3">
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('andahrm/leave', 'Search'), ['class' => 'btn btn-primary']) ?>
+      <?= Html::submitButton(Yii::t('andahrm/leave', 'Search'), ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton(Yii::t('andahrm/leave', 'Reset'), ['class' => 'btn btn-default']) ?>
     </div>
+  </div>
+
+</div>
+
+    
 
     <?php ActiveForm::end(); ?>
 

@@ -12,11 +12,13 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="leave-permission-index">
     
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a(Yii::t('andahrm/leave', 'Create Leave Permission'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    
 <?php Pjax::begin(); ?>   
   <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -24,12 +26,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'user_id',
-            'leave_condition_id',
-            'year',
+            [
+                'attribute'=> 'user_id',
+                'format' => 'html',
+                'value' => 'user.infoMedia'
+            ],
+            //'leave_condition_id',
+            //'year',
             'number_day',
             'created_at',
-            // 'created_by',
+            'created_by',
             // 'updated_at',
             // 'updated_by',
 

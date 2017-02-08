@@ -54,6 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							'filter'=>Leave::getItemInspactorStatus(),
 						 'value'=>'inspactorStatusLabel'
 						],
+						'number_day',
 						
 
             [

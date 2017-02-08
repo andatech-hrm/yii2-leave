@@ -18,16 +18,18 @@ use andahrm\leave\models\LeaveDirectorSearch;
                     $menuItems = [];
       
                     $menuItems[] =  [
-                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Self'),
+                           'label' => Yii::t('andahrm/leave', 'Self'),
                             'url' => ["/{$module}/default/"],
+                            'icon'=> 'fa fa-sitemap'
                      ]; 
                     
         $searchModel = new LeaveCommanderSearch();
         $dataCommander = $searchModel->search(Yii::$app->request->queryParams);
         $countCommander = $dataCommander->getCount()?' <span class="badge bg-red">'.$dataCommander->getCount().'</span>':'';
                     $menuItems[] =  [
-                           'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Commander').$countCommander,
+                           'label' => Yii::t('andahrm/leave', 'Commander').$countCommander,
                             'url' => ["/{$module}/commander/"],
+                            'icon'=> 'fa fa-sitemap'
                      ];
       
         $searchModel = new LeaveInspactorSearch();
@@ -35,16 +37,18 @@ use andahrm\leave\models\LeaveDirectorSearch;
         $countInspactor = $dataInspactor->getCount()?' <span class="badge bg-red">'.$dataInspactor->getCount().'</span>':'';
                     
                     $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Inspactor').$countInspactor,
+                            'label' => Yii::t('andahrm/leave', 'Inspactor').$countInspactor,
                             'url' => ["/{$module}/inspactor/"],
+                            'icon'=> 'fa fa-sitemap'
                      ];   
       
         $searchModel = new LeaveDirectorSearch();
         $dataDirector = $searchModel->search(Yii::$app->request->queryParams);
         $countDirector = $dataDirector->getCount()?' <span class="badge bg-red">'.$dataDirector->getCount().'</span>':'';
                      $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Director').$countDirector,
+                            'label' => Yii::t('andahrm/leave', 'Director').$countDirector,
                             'url' => ["/{$module}/director/"],
+                            'icon'=> 'fa fa-inbox'
                      ];
       
                     $menuItems = Helper::filter($menuItems);
@@ -63,7 +67,7 @@ use andahrm\leave\models\LeaveDirectorSearch;
           <?php
           //$nav = new Navigate();
           echo Menu::widget([
-              'options' => ['class' => 'nav nav-tabs'],
+              'options' => ['class' => 'nav nav-tabs bar_tabs'],
               'encodeLabels' => false,
               //'activateParents' => true,
               //'linkTemplate' =>'<a href="{url}">{icon} {label} {badge}</a>',

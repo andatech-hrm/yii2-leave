@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use andahrm\leave\models\Leave;
+use andahrm\structure\models\FiscalYear;
 
 /**
  * LeaveSearch represents the model behind the search form about `andahrm\leave\models\Leave`.
@@ -59,6 +60,8 @@ class LeaveSearch extends Leave
             // $query->where('0=1');
             return $dataProvider;
         }
+        
+        $this->year=$this->year?$this->year:FiscalYear::currentYear();
 
         // grid filtering conditions
         $query->andFilterWhere([

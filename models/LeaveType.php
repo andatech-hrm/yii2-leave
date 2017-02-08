@@ -88,4 +88,17 @@ class LeaveType extends \yii\db\ActiveRecord
     {
         return $this->hasMany(LeaveCondition::className(), ['leave_type_id' => 'id']);
     }
+    
+    public function getData(){
+        $searchModel = new LeaveSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['leave_type_id'=>$this->id]);
+        $dataProvider->sort->defaultOrder = [
+            'leave_type_id' => SORT_DESC,
+            'created_at' => SORT_ASC
+        ];
+        
+        
+        return $dataProvider->getModels()?$dataProvider:null;
+    }
 }

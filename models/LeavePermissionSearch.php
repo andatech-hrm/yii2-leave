@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use andahrm\leave\models\LeavePermission;
+use andahrm\structure\models\FiscalYear;
 
 /**
  * LeavePermissionSearch represents the model behind the search form about `andahrm\leave\models\LeavePermission`.
@@ -56,6 +57,7 @@ class LeavePermissionSearch extends LeavePermission
             // $query->where('0=1');
             return $dataProvider;
         }
+        $this->year=$this->year?$this->year:FiscalYear::currentYear();
 
         // grid filtering conditions
         $query->andFilterWhere([

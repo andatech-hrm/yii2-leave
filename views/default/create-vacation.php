@@ -77,7 +77,7 @@ HTML;
         'format' => 'yyyy-mm-dd',
         'todayHighlight' => true,
         'todayBtn' => true,
-        'startDate' => date('Y-m-d', strtotime("+3 day")),
+        'startDate' => date('Y-m-d', strtotime("+1 day")),
         //'calendarWeeks' => true,
         'daysOfWeekDisabled' => [0, 6],
         
@@ -141,3 +141,78 @@ HTML;
 
 </div>
 
+<?php
+
+
+$js = '<!--
+
+function ValidForm(){
+
+	var PartIn = document.Absent.StartPart.value;
+	var PartOut  = document.Absent.EndPart.value;
+	
+	var NumRest = document.Absent.NumRest.value;
+
+	var gStartDate = document.Absent.StartDate.value;
+	arrStartDate = gStartDate.split("/");
+	StartDay = arrStartDate[0];
+	StartMonth = arrStartDate[1];
+	StartYear = arrStartDate[2];
+	cmpStartDate = StartYear + StartMonth + StartDay;
+
+	var gEndDate = document.Absent.EndDate.value;
+	arrEndDate = gEndDate.split("/");
+	EndDay = arrEndDate[0];
+	EndMonth = arrEndDate[1];
+	EndYear = arrEndDate[2];
+	cmpEndDate = EndYear + EndMonth + EndDay;
+
+	if(NumRest == ""){
+		alert("ท่านยังไม่มีวันลาพักผ่อนสะสม ไม่สามารถลาพักผ่อนได้      \n\nกรุณาติดต่อเจ้าหน้าที่ระบบการลาหรือกจ. **ของหน่วยงานตนเอง** ");
+		return false;
+	}
+	if(gStartDate == "" || gEndDate == ""){
+		alert("กรุณาระบุวันลา !");
+		return false;
+	}
+	if(cmpStartDate > cmpEndDate){
+		alert("ระบุวันลาผิด กรุณาระบุใหม่ !");
+		return false;
+	}
+	if((cmpStartDate == cmpEndDate) && (PartIn !== PartOut)){
+		alert("ระบุวันลาผิด กรุณาระบุใหม่ !");
+		return false;
+	}
+	if((cmpStartDate < cmpEndDate) && ((PartIn == "02") || (PartOut == "03"))){
+		alert("ระบุวันลาผิด กรุณาระบุใหม่ !");
+		return false;
+	}
+	if(document.Absent.AbsentSpecial.checked == 1){
+			 if(document.getElementById("NumDay").value == "" || document.getElementById("NumDayAll").value == ""){
+				alert("กรุณาระบุจำนวนวันลา  มีกำหนด?วัน เป็นวันทำการ?วัน");
+				return false;
+			}
+	}
+
+	// **********lock การลาข้ามปีงบประมาณ********************
+	
+	
+	if(cmpStartDate > "25600930" || cmpEndDate > "25600930"){
+		alert("ระบบยังไม่อนุญาตให้ทำใบลาของปีงบประมาณหน้า! \n\n เนื่องจากระบบต้องประมวลผลวันลา ณ สิ้นปีงบนี้ก่อน \n\n หากต้องการลา  กรุณาส่งใบลาด้วยกระดาษ");
+		return false;
+	}
+	if(document.Absent.Header.value == "" || document.Absent.Permittee.value == ""){
+		alert("กรุณาเลือกผู้มีอำนาจอนุมัติเอกสาร !");
+		return false;
+	}
+	if(document.Absent.DeputyID.value == ""){
+		if(confirm("ท่านไม่ได้เลือกผู้ปฎิบัติหน้าที่แทน ! ต้องการส่งเอกสารหรือไม่ ? ")){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	return true;
+}
+//-->';
+$this->registerJs($js);

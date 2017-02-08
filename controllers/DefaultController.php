@@ -4,11 +4,14 @@ namespace andahrm\leave\controllers;
 
 use Yii;
 use andahrm\leave\models\Leave;
+use andahrm\leave\models\LeaveType;
 use andahrm\leave\models\LeaveSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use andahrm\structure\models\FiscalYear;
+use yii\helpers\ArrayHelper;
+use yii\data\ActiveDataProvider;
 
 /**
  * DefaultController implements the CRUD actions for Leave model.
@@ -42,11 +45,57 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $searchModel = new LeaveSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
+        $leaveType = LeaveType::find()->all();
+        
+        // foreach($leaveType as $k=> $type){
+        //     $leaveType[$k]['data'] = null;
+        //     $searchModel = new LeaveSearch();
+        //     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //     $dataProvider->query->where(['leave_type_id'=>$type->id]);
+        //     $dataProvider->sort->defaultOrder = [
+        //         'leave_type_id' => SORT_ASC,
+        //         'created_at' => SORT_ASC
+        //     ];
+            
+            
+        //     $leaveType[$k]['data'] = $dataProvider;
+        // }
+        
+        
+        
+        
+        // $year=$year?$year:FiscalYear::currentYear();
+        // $query = Leave::find()
+        //     ->where([
+        //         'created_by' => Yii::$app->user->id,
+        //     ])
+        //     ->andFilterWhere(['year' => $year]);
+        //     //->all();
+        
+        
+        // //$model = ArrayHelper::index($model,'leave_type_id');
+        // //print_r($model);
+        
+        // $leaveProvider = new ActiveDataProvider([
+        //     'query' => $query,
+        //     // 'pagination' => [
+        //     //     'pageSize' => 10,
+        //     // ],
+        //     // 'sort' => [
+        //     //     'defaultOrder' => [
+        //     //         'created_at' => SORT_DESC,
+        //     //         'title' => SORT_ASC, 
+        //     //     ]
+        //     // ],
+        //     ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            //'modelLeave'=>$model
+            'leaveType' => $leaveType
         ]);
     }
 
@@ -126,16 +175,28 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post())){
             $post = Yii::$app->request->post();
           
-            print_r($post);
-            if(!($model->start_part == Leave::ALL_DAY && $model->start_part == $model->end_part)){
+            //print_r($post);
+            /*if(!($model->start_part == Leave::ALL_DAY && $model->start_part == $model->end_part)){
               echo $model->start_part."-".$model->end_part;
                 if(!($model->start_part == Leave::HALF_DAY_MORNIG && $model->end_part == Leave::ALL_DAY)){                   
                   if(!($model->start_part == Leave::LATE_AFTERNOON && $model->end_part == Leave::HALF_DAY_MORNIG)){                   
                       $model->addError('end_part','คุณเลือกตัวเลือกที่ไม่เข้ากันอยู่');                  
                   }
                 }
+            }*/
+            
+            if(($model->date_start == $model->date_end) && ($model->start_part !== $model->end_part)){                   
+                $model->addError('end_part',Yii::t('app','Not match! 1'));                  
             }
-          $model->number_day = Leave::calCountDays($model->date_start,$model->date_end);
+            
+            if($model->date_start < $model->date_end){
+                if(($model->start_part == Leave::HALF_DAY_MORNIG) || ($model->end_part ==  Leave::LATE_AFTERNOON)){                   
+                 $model->addError('end_part',Yii::t('app','Not match! 2'));
+                }
+            }
+            
+            
+            $model->number_day = Leave::calCountDays($model->date_start,$model->date_end,$model->start_part,$model->end_part);
 //           print_r($model->getErrors());
 //            exit();
             $model->year = FiscalYear::currentYear();

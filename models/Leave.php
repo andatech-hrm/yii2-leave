@@ -80,7 +80,7 @@ class Leave extends \yii\db\ActiveRecord
     public function scenarios(){
       $scenarios = parent::scenarios();
       
-      $scenarios['create-vacation'] = ['to', 'user_id','leave_type_id','acting_user_id','contact', 'date_start', 'date_end','status','inspector_by','director_by','commander_by','start_part','end_part','contact','number_day','year'];
+      $scenarios['create-vacation'] = ['to','year', 'user_id','leave_type_id','acting_user_id','contact', 'date_start', 'date_end','status','inspector_by','director_by','commander_by','start_part','end_part','contact','number_day','year'];
       
       $scenarios['confirm'] = ['status'];
       
@@ -414,10 +414,10 @@ class Leave extends \yii\db\ActiveRecord
             if(!($this->date_start && $this->date_end)){
               return null;
             }
-          return self::calCountDays($this->date_start,$this->date_end);
+          return self::calCountDays($this->date_start,$this->date_end,$this->start_part,$this->end_part);
     }
   
-    public static function calCountDays($star,$end){
+    public static function calCountDays($star,$end,$start_part,$end_part){
             $strStartDate = $star;
             $strEndDate =  $end;
 
@@ -442,6 +442,14 @@ class Leave extends \yii\db\ActiveRecord
 //             echo "<br>Total Day = $intTotalDay";
 //             echo "<br>Work Day = $intWorkDay";
 //             echo "<br>Holiday = $intHoliday";
+         if($start_part == self::LATE_AFTERNOON){
+            $intWorkDay -= 0.5;
+         }
+         
+         if($end_part == self::HALF_DAY_MORNIG){
+           $intWorkDay -= 0.5;  
+         }
+
           return $intWorkDay;
    }
   

@@ -9,6 +9,9 @@ use andahrm\leave\base\YearConverter;
   
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+
+
+use andahrm\person\models\Person;
 /**
  * This is the model class for table "leave_permission".
  *
@@ -86,5 +89,14 @@ class LeavePermission extends ActiveRecord
     public function getLeaveCondition()
     {
         return $this->hasOne(LeaveCondition::className(), ['id' => 'leave_condition_id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+//         return $this->hasOne(Person::className(), ['user_id' => 'user_id']);
+        return $this->hasOne(Person::className(), ['user_id' => 'user_id']);
     }
 }
