@@ -30,36 +30,42 @@ $controller = Yii::$app->controller->id;
       
       
                     $menuItems[] =  [
-                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Leaves'),
+                           'label' => Yii::t('andahrm/leave', 'Leaves'),
                             'active' => $active,
                             'url' => ["/{$module}/default/"],
+                            'icon' => 'fa fa-sitemap'
                      ];
       
       
                     $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Day Offs'),
+                            'label' => Yii::t('andahrm/leave', 'Leave Day Offs'),
                             'url' => ["/{$module}/day-off/"],
+                            'icon' => 'fa fa-sitemap'
                      ];
       
                     $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Types'),
+                            'label' =>  Yii::t('andahrm/leave', 'Leave Types'),
                             'url' => ["/{$module}/type/"],
+                            'icon' => 'fa fa-sitemap'
                     ];                 
                        
       
                     $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Conditions'),
+                            'label' => Yii::t('andahrm/leave', 'Leave Conditions'),
                             'url' => ["/{$module}/condition/"],
+                            'icon' => 'fa fa-sitemap'
                      ];
       
                       $menuItems[] =  [
-                           'label' => '<i class="fa fa-sitemap"></i> ' . Yii::t('andahrm/leave', 'Leave Permissions'),
+                           'label' => Yii::t('andahrm/leave', 'Leave Permissions'),
                             'url' => ["/{$module}/permission/"],
+                            'icon' => 'fa fa-sitemap'
                      ];
       
                     $menuItems[] =  [
-                            'label' => Html::icon('inbox') . ' ' . Yii::t('andahrm/leave', 'Leave Relateds'),
+                            'label' =>  Yii::t('andahrm/leave', 'Leave Relateds'),
                             'url' => ["/{$module}/related/"],
+                            'icon' => 'fa fa-sitemap'
                      ];
       
 //                     $menuItems[] =  [

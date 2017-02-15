@@ -2,9 +2,13 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
+
+use andahrm\leave\models\Leave;
+use andahrm\leave\models\LeaveType;
 use andahrm\leave\models\LeaveDayOff;
 
-
+use andahrm\leave\models\PersonLeave;
+use andahrm\structure\models\FiscalYear;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
@@ -14,15 +18,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
 # Candidate
 $items=[];
+$personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
+$items['user'] = $personLeave;
+
+if($model->isNewRecord){
+  $model->to = $personLeave->toDirector;
+}
 ?>
 
 <div class="leave-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?php $items['user_id']=$form->field($model, 'user_id')->textInput(); ?>
-
-    <?php $items['leave_type_id']=$form->field($model, 'leave_type_id')->textInput();
+    <?php 
+    
+    $items['created_at']=$model->isNewRecord ?'วันที่ '.Yii::$app->formatter->asDate('now','d').' เดือน '.Yii::$app->formatter->asDate('now','MMMM').' พ.ศ '.Yii::$app->formatter->asDate('now','yyyy'):'วันที่ '.Yii::$app->formatter->asDate($model->created_at,'d').' เดือน '.Yii::$app->formatter->asDate($model->created_at,'MMMM').' พ.ศ. '.Yii::$app->formatter->asDate($model->created_at,'yyyy'); 
+  
+    $items['user_id']=$form->field($model, 'user_id')->textInput(); 
+    
+    $items['to']=$form->field($model, 'to')->textInput(['placeholder'=>'เรียน']);
+    
+    $items['leave_type_id']=$form->field($model, 'leave_type_id')->radioList(LeaveType::getList());
   
   $layout3 = <<< HTML
     <span class="input-group-addon">ตั้งแต่วันที่</span>
@@ -74,7 +90,42 @@ HTML;
     'pluginEvents'=>[
         
     ]
-    ]);?>
+    ]);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+         
+  $items['inspector_status'] = Leave::getWidgetStatus($model->inspector_status,Leave::getItemInspactorStatus());
+  $items['inspectors'] = $form->field($model, 'inspector_by')->dropdownList($personLeave->inspectors,['prompt'=>'เลือกผู้ตรวจสอบ']);
+   $items['inspector_comment'] = $model->inspector_comment?$model->inspector_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
+   $items['inspector_at'] = $model->inspector_at?$model->inspectorAt:'วันที่............./............................/................ ' ;
+
+
+    $items['commanders'] = $form->field($model, 'commander_by')->dropdownList($personLeave->commanders,['prompt'=>'เลือกผู้บังคับบัญชา']);
+    $items['commander_status'] = Leave::getWidgetStatus($model->commander_status,Leave::getItemCommanderStatus());
+    $items['commander_comment'] = $model->commander_comment?$model->commander_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
+   $items['commander_at'] = $model->commander_at?$model->commanderAt:'วันที่............./............................/................ ' ; 
+  
+  
+  $items['director_status'] = Leave::getWidgetStatus($model->director_status,Leave::getItemDirectorStatus());
+    $items['directors'] = $form->field($model, 'director_by')->dropdownList($personLeave->directors,['prompt'=>'เลือกผู้ออกคำสั่ง']);
+   $items['director_comment'] = $model->director_comment?$model->director_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
+   $items['director_at'] = $model->director_at?$model->directorAt:'วันที่............./............................/................ ' ; 
+
+  
+    
+    
+    ?>
   
   
   
@@ -92,31 +143,7 @@ HTML;
 
     <?php $items['date_start']=$form->field($model, 'acting_user_id')->textInput() ?>
 
-    <?php /* $items['date_start']=$form->field($model, 'status')->textInput() ?>
-
-    <?php $items['date_start']=$form->field($model, 'inspector_comment')->textInput(['maxlength' => true]) ?>
-
-    <?php $items['date_start']=$form->field($model, 'inspector_status')->textInput() ?>
-
-    <?php $items['date_start']=$form->field($model, 'inspector_by')->textInput() ?>
-
-    <?php $items['date_start']=$form->field($model, 'inspector_at')->textInput() ?>
-
-    <?php $items['date_start']=$form->field($model, 'commander_comment')->textInput(['maxlength' => true]) ?>
-
-    <?php $items['date_start']=$form->field($model, 'commander_status')->textInput() ?>
-
-    <?php $items['date_start']=$form->field($model, 'commander_by')->textInput() ?>
-
-    <?php $items['date_start']=$form->field($model, 'commanded_at')->textInput() ?>
-
-    <?php $items['date_start']=$form->field($model, 'director_comment')->textInput(['maxlength' => true]) ?>
-
-    <?php $items['date_start']=$form->field($model, 'director_status')->textInput() ?>
-
-    <?php $items['date_start']=$form->field($model, 'director_by')->textInput() ?>
-
-    <?php $items['date_start']=$form->field($model, 'director_at')->textInput() */ ?>
+    
  
 
     <?=$this->render('template-sick',$items)?>

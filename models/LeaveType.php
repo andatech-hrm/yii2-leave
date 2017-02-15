@@ -5,6 +5,7 @@ namespace andahrm\leave\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "leave_type".
@@ -100,5 +101,9 @@ class LeaveType extends \yii\db\ActiveRecord
         
         
         return $dataProvider->getModels()?$dataProvider:null;
+    }
+    
+    public static function getList(){
+        return ArrayHelper::map(self::find()->where(['id'=>[1,2,3]])->all(),'id','title');
     }
 }

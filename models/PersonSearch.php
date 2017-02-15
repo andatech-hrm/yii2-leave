@@ -10,7 +10,7 @@ use andahrm\person\models\Person;
 /**
  * PersonSearch represents the model behind the search form about `andahrm\person\models\Person`.
  */
-class PersonSearch extends \andahrm\person\models\Person
+class PersonSearch extends PersonLeave
 {
     public $fullname;
     public $person_type_id;
@@ -47,7 +47,7 @@ class PersonSearch extends \andahrm\person\models\Person
      */
     public function search($params)
     {
-        $query = Person::find();
+        $query = PersonLeave::find();
 
         $query->joinWith('positionSalary.position', false, 'INNER JOIN');      
         //$query->joinWith('leavePermission');

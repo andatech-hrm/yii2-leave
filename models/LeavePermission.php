@@ -60,7 +60,7 @@ class LeavePermission extends ActiveRecord
             [['user_id', 'number_day', 'year'], 'required','on'=>'insert'],
             [['user_id', 'leave_condition_id', 'number_day', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['year'], 'safe'],
-          [['leave_condition_id'],'default','value'=>3],
+            [['leave_condition_id'],'default','value'=>2],
             [['leave_condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveCondition::className(), 'targetAttribute' => ['leave_condition_id' => 'id']],
         ];
     }
@@ -74,8 +74,8 @@ class LeavePermission extends ActiveRecord
         return [
             'user_id' => Yii::t('andahrm/leave', 'User ID'),
             'leave_condition_id' => Yii::t('andahrm/leave', 'Leave Condition ID'),
-            'year' => Yii::t('andahrm/leave', 'Year'),
-            'number_day' => Yii::t('andahrm/leave', 'Number Day'),
+            'year' => Yii::t('andahrm/leave', 'ปีงบประมาณ'),
+            'number_day' => Yii::t('andahrm/leave', 'จำนวนวัน'),
             'created_at' => Yii::t('andahrm/leave', 'Created At'),
             'created_by' => Yii::t('andahrm/leave', 'Created By'),
             'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
@@ -97,6 +97,6 @@ class LeavePermission extends ActiveRecord
     public function getUser()
     {
 //         return $this->hasOne(Person::className(), ['user_id' => 'user_id']);
-        return $this->hasOne(Person::className(), ['user_id' => 'user_id']);
+        return $this->hasOne(PersonLeave::className(), ['user_id' => 'user_id']);
     }
 }
