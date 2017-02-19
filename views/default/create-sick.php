@@ -38,7 +38,19 @@ if($model->isNewRecord){
     
     $items['to']=$form->field($model, 'to')->textInput(['placeholder'=>'เรียน']);
     
-    $items['leave_type_id']=$form->field($model, 'leave_type_id')->radioList(LeaveType::getList());
+    $items['leave_type_id']=$form->field($model, 'leave_type_id')->radioList(LeaveType::getList(),[
+            'item' => function($index, $label, $name, $checked, $value) {
+                $return = '<label class="modal-radio">';
+                $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" tabindex="3" '.($checked?'checked="checked"':'').' >';
+                $return .= ' <i class="fa fa-user"></i> ';
+                $return .= ' <span>' . ucwords($label) . '</span>';
+                $return .= '</label><br/>';
+
+                return $return;
+            }
+        ]);
+    
+    $items['reason']=$form->field($model, 'reason')->textInput();
   
   $layout3 = <<< HTML
     <span class="input-group-addon">ตั้งแต่วันที่</span>
@@ -93,15 +105,7 @@ HTML;
     ]);
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    $items['contact']=$form->field($model, 'contact')->textInput(['placeholder'=>'ติดต่อข้าพเจ้าได้ที่']);
     
     
          
@@ -150,7 +154,7 @@ HTML;
   
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('andahrm/leave', 'Create') : Yii::t('andahrm/leave', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('andahrm', 'Create') : Yii::t('andahrm', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

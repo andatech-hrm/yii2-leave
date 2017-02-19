@@ -6,12 +6,12 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
-$this->title = Yii::t('andahrm/leave', 'Update {modelClass}: ', [
+$this->title = Yii::t('andahrm', 'Update {modelClass}: ', [
     'modelClass' => 'Leave',
 ]) . $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('andahrm/leave', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('andahrm', 'Update');
 ?>
 <div class="leave-update">
 

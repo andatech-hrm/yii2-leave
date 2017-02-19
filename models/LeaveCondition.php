@@ -55,17 +55,17 @@ class LeaveCondition extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('andahrm/leave', 'ID'),
-            'title' => Yii::t('andahrm/leave', 'ชื่อเงื่อนไข'),
-            'leave_type_id' => Yii::t('andahrm/leave', 'Leave Type ID'),
-            'gov_service_status' => Yii::t('andahrm/leave', 'รับราชการไม่เกิน/น้อยกว่า'),
-            'number_year' => Yii::t('andahrm/leave', 'จำนวนปีที่รับราชาการ'),
-            'per_annual_leave' => Yii::t('andahrm/leave', 'สิทธิ์ลาพักผ่อนประจำปี'),
-            'per_annual_leave_limit' => Yii::t('andahrm/leave', 'สิทธิวันลาพักผ่อนรวมไม่เกิน'),
-            'status' => Yii::t('andahrm/leave', 'สถานะ'),
-            'created_at' => Yii::t('andahrm/leave', 'Created At'),
-            'created_by' => Yii::t('andahrm/leave', 'Created By'),
-            'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
-            'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
+            'title' => Yii::t('andahrm/leave', 'Title'),
+            'leave_type_id' => Yii::t('andahrm/leave', 'Leave Type'),
+            'gov_service_status' => Yii::t('andahrm/leave', 'Service Status'),
+            'number_year' => Yii::t('andahrm/leave', 'Number Year'),
+            'per_annual_leave' => Yii::t('andahrm/leave', 'Per Annual'),
+            'per_annual_leave_limit' => Yii::t('andahrm/leave', 'Per Annual Limit'),
+            'status' => Yii::t('andahrm/leave', 'Status'),
+            'created_at' => Yii::t('andahrm', 'Created At'),
+            'created_by' => Yii::t('andahrm', 'Created By'),
+            'updated_at' => Yii::t('andahrm', 'Updated At'),
+            'updated_by' => Yii::t('andahrm', 'Updated By'),
         ];
     }
 

@@ -5,12 +5,12 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeaveRelatedPerson */
 
-$this->title = Yii::t('andahrm/leave', 'Update {modelClass}: ', [
+$this->title = Yii::t('andahrm', 'Update {modelClass}: ', [
     'modelClass' => 'Leave Related Person',
 ]) . $model->user_id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leave Related People'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->user_id, 'url' => ['view', 'id' => $model->user_id]];
-$this->params['breadcrumbs'][] = Yii::t('andahrm/leave', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('andahrm', 'Update');
 ?>
 <div class="leave-related-person-update">
 

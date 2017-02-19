@@ -5,12 +5,12 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeaveCondition */
 
-$this->title = Yii::t('andahrm/leave', 'Update {modelClass}: ', [
+$this->title = Yii::t('andahrm', 'Update {modelClass}: ', [
     'modelClass' => 'Leave Condition',
 ]) . $model->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leave Conditions'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('andahrm/leave', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('andahrm', 'Update');
 ?>
 <div class="leave-condition-update">
 

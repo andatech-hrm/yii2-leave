@@ -134,7 +134,10 @@ class DefaultController extends Controller
               print_r($model->getErrors());
             }
         } 
-        return $this->render('confirm', [
+        
+        $confirm = $model->leave_type_id==4?'confirm':'confirm-sick';
+        
+        return $this->render($confirm, [
             'model' => $model,
         ]);
     }
@@ -145,17 +148,44 @@ class DefaultController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreateSick()
+    public function actionCreateSick($id=null)
     {
-        $model = new Leave();
+        $model=[];
+        if(!$model = Leave::findOne($id)){
+          $model = new Leave();
+        }
+        $model->scenario = 'create-sick';
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+        if ($model->load(Yii::$app->request->post())){
+            $post = Yii::$app->request->post();
+          
+            //print_r($post);
+            
+            if(($model->date_start == $model->date_end) && ($model->start_part !== $model->end_part)){                   
+                $model->addError('end_part',Yii::t('app','Not match! 1'));                  
+            }
+            
+            if($model->date_start < $model->date_end){
+                if(($model->start_part == Leave::HALF_DAY_MORNIG) || ($model->end_part ==  Leave::LATE_AFTERNOON)){                   
+                 $model->addError('end_part',Yii::t('app','Not match! 2'));
+                }
+            }
+            
+            
+            $model->number_day = Leave::calCountDays($model->date_start,$model->date_end,$model->start_part,$model->end_part);
+//           print_r($model->getErrors());
+//            exit();
+            $model->year = FiscalYear::currentYear();
+          
+            if(!$model->hasErrors() && $model->save()) {
+              return $this->redirect(['confirm', 'id' => $model->id]);
+            }else{
+              print_r($model->getErrors());
+            }
+        } 
             return $this->render('create-sick', [
                 'model' => $model,
             ]);
-        }
     }
 
     
@@ -169,8 +199,10 @@ class DefaultController extends Controller
     {
         $model=[];
         if(!$model = Leave::findOne($id)){
-          $model = new Leave(['scenario'=>'create-vacation']);
+          $model = new Leave();
         }
+        
+        $model->scenario = 'create-vacation';
 
         if ($model->load(Yii::$app->request->post())){
             $post = Yii::$app->request->post();

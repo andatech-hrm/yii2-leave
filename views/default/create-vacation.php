@@ -8,6 +8,7 @@ use andahrm\leave\models\LeaveDayOff;
 
 use andahrm\leave\models\PersonLeave;
 use andahrm\structure\models\FiscalYear;
+use andahrm\positionSalary\models\PersonPosition;
 
 
 /* @var $this yii\web\View */
@@ -19,8 +20,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 # Candidate
 $items=[];
-$personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
-$items['user'] = $personLeave;
+//$personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
+$personLeave = PersonPosition::findOne(Yii::$app->user->identity->id);
+//echo $personLeave->position->section->id;
+$personLeave = $personLeave->position->section->leaveRelatedSection;
+// print_r($personLeave);
+// exit();
+//$items['user'] = $personLeave;
 
 if($model->isNewRecord){
   $model->to = $personLeave->toDirector;
@@ -134,7 +140,7 @@ HTML;
   
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('andahrm/leave', 'Create') : Yii::t('andahrm/leave', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('andahrm', 'Create') : Yii::t('andahrm', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

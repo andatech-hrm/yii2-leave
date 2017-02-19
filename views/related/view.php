@@ -17,11 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('andahrm/leave', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('andahrm/leave', 'Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('andahrm', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('andahrm', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Yii::t('andahrm/leave', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('andahrm', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>
@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
            // 'id',
             'title',
+            'sections',
             'created_at',
             'created_by',
             'updated_at',
@@ -45,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="x_title">
                  <?=Html::tag('h2',$model->getAttributeLabel('approver'))?>
               <div class="panel_toolbox">
-                 <?= Html::a(Yii::t('andahrm/leave', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                 <?= Html::a(Yii::t('andahrm', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
               </div>
                 <div class="clearfix"></div>
             </div>
@@ -101,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
   
-
+<?php /* อาจารย์ให้ไปเลือกจาก section
 <div class="x_panel tile">
             <div class="x_title">
                  <?=Html::tag('h2',$model->getAttributeLabel('persons'))?>
@@ -128,3 +129,4 @@ $this->params['breadcrumbs'][] = $this->title;
           <div class="clearfix"></div>
         </div>
     </div>
+*/?>

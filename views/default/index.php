@@ -102,7 +102,7 @@ if($type->data):
 			 'value'=>'commanderStatusLabel'
 			],
 			[
-				'label'=> Yii::t('andahrm/leave', 'ผู้ออกคำสั่ง'),
+				'label'=> Yii::t('andahrm/leave', 'Directors'),
 				'attribute'=>'director_status',
 				'format'=>'html',
 				'filter'=>Leave::getItemDirectorStatus(),
@@ -211,7 +211,7 @@ if($type->data):
 			 'value'=>'commanderStatusLabel'
 			],
 			[
-				'label'=> Yii::t('andahrm/leave', 'ผู้ออกคำสั่ง'),
+				'label'=> Yii::t('andahrm/leave', 'Directors'),
 				'attribute'=>'director_status',
 				'format'=>'html',
 				'filter'=>Leave::getItemDirectorStatus(),

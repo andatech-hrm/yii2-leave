@@ -5,7 +5,7 @@ use yii\helpers\Html;
 
 <div class="row">
       <div class="col-xs-12 col-sm-4">
-          <?= Html::a('<i class="fa fa-edit"></i><br/>'.Yii::t('andahrm/leave', 'แบบฟอร์มขอลาป่วย ลากิจส่วนตัว และลาคลอด'), ['create-sick'], ['class' => 'btn btn-success btn-block']) ?>
+          <?= Html::a('<i class="fa fa-edit"></i><br/>'.Yii::t('andahrm/leave', 'Form sick leave, maternity leave, personal leave'), ['create-sick'], ['class' => 'btn btn-success btn-block']) ?>
       </div>
        <div class="col-xs-12 col-sm-8">
          <font size="2" color="#990000"><b>ลาป่วย และลากิจส่วนตัว<font color="#0000FF"> ( Sick Leave and Business Leave )</font></b></font><br/>
@@ -16,7 +16,7 @@ use yii\helpers\Html;
   <hr/>
   <div class="row">
       <div class="col-xs-12 col-sm-4">
-          <?= Html::a('<i class="fa fa-edit"></i><br/>'.Yii::t('andahrm/leave', 'แบบฟอร์มขอลาพักผ่อน'), ['create-vacation'], ['class' => 'btn btn-success btn-block']) ?>
+          <?= Html::a('<i class="fa fa-edit"></i><br/>'.Yii::t('andahrm/leave', 'Vacation Request Form'), ['create-vacation'], ['class' => 'btn btn-success btn-block']) ?>
       </div>
        <div class="col-xs-12 col-sm-8">
         <font size="2" color="#990000"><b>ลาพักผ่อน <font color="#0000FF">( Vacation Leave )</font></b></font><br/>

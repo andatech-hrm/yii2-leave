@@ -39,7 +39,8 @@
     
 		<?=$date_range?> 
 
-		มีกำหนด<span class="text-dashed"> <?=$number_day?> </span>วัน ในระหว่างลาจะติดต่อข้าพเจ้าได้ที่ <?=$contact?>
+		มีกำหนด<span class="text-dashed"> <?=$number_day?> </span>วัน ในระหว่างลาจะติดต่อข้าพเจ้าได้ที่
+		<?=$contact?>
 
 	</p>
   

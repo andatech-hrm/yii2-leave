@@ -64,13 +64,13 @@ class LeaveType extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('andahrm/leave', 'ID'),
-            'title' => Yii::t('andahrm/leave', 'ประเภทการลา'),
-            'limit' => Yii::t('andahrm/leave', 'จำกัดวัน'),
+            'title' => Yii::t('andahrm/leave', 'Title'),
+            'limit' => Yii::t('andahrm/leave', 'Limit'),
             'detail' => Yii::t('andahrm/leave', 'Detail'),
-            'created_at' => Yii::t('andahrm/leave', 'Created At'),
-            'created_by' => Yii::t('andahrm/leave', 'Created By'),
-            'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
-            'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
+            'created_at' => Yii::t('andahrm', 'Created At'),
+            'created_by' => Yii::t('andahrm', 'Created By'),
+            'updated_at' => Yii::t('andahrm', 'Updated At'),
+            'updated_by' => Yii::t('andahrm', 'Updated By'),
         ];
     }
 

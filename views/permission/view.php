@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('andahrm/leave', 'Update'), ['update', 'user_id' => $model->user_id, 'leave_condition_id' => $model->leave_condition_id, 'year' => $model->year], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('andahrm/leave', 'Delete'), ['delete', 'user_id' => $model->user_id, 'leave_condition_id' => $model->leave_condition_id, 'year' => $model->year], [
+        <?= Html::a(Yii::t('andahrm', 'Update'), ['update', 'user_id' => $model->user_id, 'leave_condition_id' => $model->leave_condition_id, 'year' => $model->year], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('andahrm', 'Delete'), ['delete', 'user_id' => $model->user_id, 'leave_condition_id' => $model->leave_condition_id, 'year' => $model->year], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Yii::t('andahrm/leave', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('andahrm', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>

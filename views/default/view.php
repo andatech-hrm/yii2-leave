@@ -13,10 +13,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
     <p>        
-        <?= Html::a(Yii::t('andahrm/leave', 'Cancel'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('andahrm', 'Cancel'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Yii::t('andahrm/leave', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('andahrm', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>

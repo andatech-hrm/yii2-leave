@@ -28,14 +28,20 @@ $this->params['breadcrumbs'][] = $this->title;
             //'id',
             'title',
             [
-              'attribute' => 'persons',
+              'attribute' => 'sections',
               'value' => function($model){
-                return count($model->leaveRelatedPeople).' คน';
+                return $model->sections;
               }
             ],
+            // [
+            //   'attribute' => 'persons',
+            //   'value' => function($model){
+            //     return count($model->leaveRelatedPeople).' คน';
+            //   }
+            // ],
             'updated_at:datetime',
             'updated_by',
-
+            
            //['class' => 'yii\grid\ActionColumn'],
    [
                 'class' => 'yii\grid\ActionColumn',

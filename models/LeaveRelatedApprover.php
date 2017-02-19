@@ -67,15 +67,15 @@ class LeaveRelatedApprover extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'leave_related_id' => Yii::t('andahrm/leave', 'ชุดผู้เกี่ยวข้อง'),
-            'inspector_by' => Yii::t('andahrm/leave', 'ผู้ตรวจสอบ'),
-            'commander_by' => Yii::t('andahrm/leave', 'ผู้บังคับบัญชา'),
-            'director_by' => Yii::t('andahrm/leave', 'ผู้ออกคำสั่ง'),
-            'created_at' => Yii::t('andahrm/leave', 'Created At'),
-            'created_by' => Yii::t('andahrm/leave', 'Created By'),
-            'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
-            'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
-            'inspectors' => Yii::t('andahrm/leave', 'ผู้ตรวจสอบ'),
+            'leave_related_id' => Yii::t('andahrm/leave', 'Leave Related'),
+            'inspector_by' => Yii::t('andahrm/leave', 'Inspectors'),
+            'commander_by' => Yii::t('andahrm/leave', 'Commanders'),
+            'director_by' => Yii::t('andahrm/leave', 'Directors'),
+            'created_at' => Yii::t('andahrm', 'Created At'),
+            'created_by' => Yii::t('andahrm', 'Created By'),
+            'updated_at' => Yii::t('andahrm', 'Updated At'),
+            'updated_by' => Yii::t('andahrm', 'Updated By'),
+            'inspectors' => Yii::t('andahrm/leave', 'Inspectors'),
         ];
     }
    public $inspector;

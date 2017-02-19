@@ -63,16 +63,17 @@ class LeaveRelated extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('andahrm/leave', 'ID'),
-            'title' => Yii::t('andahrm/leave', 'ชื่อชุดผู้ที่เกี่ยวข้อง'),
-            'created_at' => Yii::t('andahrm/leave', 'Created At'),
-            'created_by' => Yii::t('andahrm/leave', 'Created By'),
-            'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
-            'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
-             'approver' => Yii::t('andahrm/leave', 'ผู้มีอำนาจอนุมัติ'),
-             'inspectors' => Yii::t('andahrm/leave', 'ผู้ตรวจสอบ'),
-             'commanders' => Yii::t('andahrm/leave', 'ผู้บังคับบัญชา'),
-             'directors' => Yii::t('andahrm/leave', 'ผู้ออกคำสั่ง'),
-             'persons' => Yii::t('andahrm/leave', 'บุคลากร'),
+            'title' => Yii::t('andahrm/leave', 'Related Title'),
+            'created_at' => Yii::t('andahrm', 'Created At'),
+            'created_by' => Yii::t('andahrm', 'Created By'),
+            'updated_at' => Yii::t('andahrm', 'Updated At'),
+            'updated_by' => Yii::t('andahrm', 'Updated By'),
+             'approver' => Yii::t('andahrm/leave', 'Approver'),
+             'inspectors' => Yii::t('andahrm/leave', 'Inspectors'),
+             'commanders' => Yii::t('andahrm/leave', 'Commanders'),
+             'directors' => Yii::t('andahrm/leave', 'Directors'),
+             'persons' => Yii::t('andahrm/person', 'Person'),
+             'sections' => Yii::t('andahrm/leave', 'Use in section'),
         ];
     }
   
@@ -122,6 +123,17 @@ class LeaveRelated extends \yii\db\ActiveRecord
   public function getLeaveRelatedPeople()
     {
         return $this->hasMany(LeaveRelatedPerson::className(), ['leave_related_id' => 'id']);
+    }
+    
+    public function getLeaveRelatedSections()
+    {
+        return $this->hasMany(LeaveRelatedSection::className(), ['leave_related_id' => 'id']);
+    }
+    
+    public function getSections()
+    {
+        $model = ArrayHelper::getColumn($this->leaveRelatedSections,'section.title');
+        return $model?implode(', ',$model):null;
     }
   
   

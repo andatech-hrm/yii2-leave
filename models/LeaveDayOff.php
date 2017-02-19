@@ -67,10 +67,10 @@ class LeaveDayOff extends \yii\db\ActiveRecord
             'date_start' => Yii::t('andahrm/leave', 'Date Start'),
             'date_end' => Yii::t('andahrm/leave', 'Date End'),
             'detail' => Yii::t('andahrm/leave', 'Detail'),
-            'created_at' => Yii::t('andahrm/leave', 'Created At'),
-            'created_by' => Yii::t('andahrm/leave', 'Created By'),
-            'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
-            'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
+            'created_at' => Yii::t('andahrm', 'Created At'),
+            'created_by' => Yii::t('andahrm', 'Created By'),
+            'updated_at' => Yii::t('andahrm', 'Updated At'),
+            'updated_by' => Yii::t('andahrm', 'Updated By'),
         ];
     }
   

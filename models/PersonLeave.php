@@ -7,6 +7,7 @@ use andahrm\leave\models\Leave; #mad
 use andahrm\leave\models\LeavePermission; #mad
 use andahrm\positionSalary\models\PersonPositionSalary; #mad
 use andahrm\leave\models\LeaveRelatedPerson; #mad
+use andahrm\structure\models\Section; #mad
 
 
 class PersonLeave extends \andahrm\person\models\Person
@@ -28,34 +29,43 @@ class PersonLeave extends \andahrm\person\models\Person
         return $this->hasOne(LeaveRelatedPerson::className(), ['user_id' => 'user_id']);
     }
     
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    // public function getLeaveRelatedSection()
+    // {
+        
+    //     return $this->hasOne(LeaveRelatedSection::className(), ['section_id' => 'section_id'])->w;
+    // }
+    
     public function getUser()
     {
         return $this->hasOne(Yii::$app->user->identityClass, ['id' => 'user_id']);
     }
   
      
-  public function getInspectors()
-   {
-       return ArrayHelper::map($this->leaveRelatedPerson->leaveRelated->leaveRelatedInspectors,'user_id','user.fullname','user.positionTitle');
-   }
+//   public function getInspectors()
+//   {
+//       return ArrayHelper::map($this->leaveRelatedPerson->leaveRelated->leaveRelatedInspectors,'user_id','user.fullname','user.positionTitle');
+//   }
   
-  public function getCommanders()
-   {
-       return ArrayHelper::map($this->leaveRelatedPerson->leaveRelated->leaveRelatedCommanders,'user_id','user.fullname','user.positionTitle');
-   }
+//   public function getCommanders()
+//   {
+//       return ArrayHelper::map($this->leaveRelatedPerson->leaveRelated->leaveRelatedCommanders,'user_id','user.fullname','user.positionTitle');
+//   }
   
-  public function getDirectors()
-   {
-       return ArrayHelper::map($this->leaveRelatedPerson->leaveRelated->leaveRelatedDirectors,'user_id','user.fullname','user.positionTitle');
-   }
+//   public function getDirectors()
+//   {
+//       return ArrayHelper::map($this->leaveRelatedPerson->leaveRelated->leaveRelatedDirectors,'user_id','user.fullname','user.positionTitle');
+//   }
   
-  public function getToDirector()
-   {
-       $model = $this->leaveRelatedPerson
-         ->leaveRelated
-         ->leaveRelatedDirectors;
-       return $model?$model[0]->user->positionTitle:'';
-   }
+//   public function getToDirector()
+//   {
+//       $model = $this->leaveRelatedPerson
+//          ->leaveRelated
+//          ->leaveRelatedDirectors;
+//       return $model?$model[0]->user->positionTitle:'';
+//   }
   
   /**
   *  Create by mad

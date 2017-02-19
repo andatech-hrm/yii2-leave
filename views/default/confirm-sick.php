@@ -4,6 +4,7 @@ use yii\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
 
 use andahrm\leave\models\Leave;
+use andahrm\leave\models\LeaveType;
 use andahrm\leave\models\LeaveDayOff;
 
 use andahrm\leave\models\PersonLeave;
@@ -32,7 +33,15 @@ $items['user'] = PersonLeave::findOne(Yii::$app->user->identity->id);
   
   $items['to']='เรียน <span class="text-dashed">'.$model->to.'</span>'; 
   
-  $items['leave_type_id']=$model->leave_type_id;
+  $leave_type_id = "ขออนุญาติ ";
+  foreach(LeaveType::getList() as $k => $type){
+      $leave_type_id.=' <i class="fa fa-'.($k==$model->leave_type_id?'check-':'').'square-o"></i> '.$type."<br />";
+  }
+  
+  
+  $items['leave_type_id']=$leave_type_id;
+  
+  $items['reason']='เนื่องจาก '.$model->reason;
  
   $items['number_day']=$model->number_day;
   
@@ -40,18 +49,14 @@ $items['user'] = PersonLeave::findOne(Yii::$app->user->identity->id);
   
   $items['total']=$items['collect']+$items['user']->leavePermission->number_day;
   
-  $items['date_range']= '<span class="text-dashed">'.Yii::$app->formatter->asDate($model->date_start).'</span>'
+  $items['date_range']= 'ตั้งแต่วันที่ <span class="text-dashed">'.Yii::$app->formatter->asDate($model->date_start).'</span>'
     .'<span class="text-dashed">'.$model->startPartLabel.'</span> ถึง '
     .'<span class="text-dashed">'.Yii::$app->formatter->asDate($model->date_end).'</span>'
     .'<span class="text-dashed">'.$model->endPartLabel.'</span>';
   
-  $items['start_part']=$model->start_part;
+ 
   
-  $items['end_part']=$model->end_part;
   
-  $items['pastDay']=Leave::getPastDay();
-  
-  $items['reason']=$model->reason;
   
    $items['contact']=$model->contact;
     

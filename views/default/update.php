@@ -11,12 +11,12 @@ use andahrm\person\models\Person;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
-$this->title = Yii::t('andahrm/leave', 'Update {modelClass}: ', [
+$this->title = Yii::t('andahrm', 'Update {modelClass}: ', [
     'modelClass' => 'Leave',
 ]) . $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('andahrm/leave', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('andahrm', 'Update');
 
 
 # Candidate
@@ -100,7 +100,7 @@ HTML;
   
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('andahrm/leave', 'Update'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton(Yii::t('andahrm', 'Update'), ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

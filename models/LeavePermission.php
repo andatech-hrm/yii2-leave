@@ -73,13 +73,13 @@ class LeavePermission extends ActiveRecord
     {
         return [
             'user_id' => Yii::t('andahrm/leave', 'User ID'),
-            'leave_condition_id' => Yii::t('andahrm/leave', 'Leave Condition ID'),
-            'year' => Yii::t('andahrm/leave', 'ปีงบประมาณ'),
-            'number_day' => Yii::t('andahrm/leave', 'จำนวนวัน'),
-            'created_at' => Yii::t('andahrm/leave', 'Created At'),
-            'created_by' => Yii::t('andahrm/leave', 'Created By'),
-            'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
-            'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
+            'leave_condition_id' => Yii::t('andahrm/leave', 'Leave Condition'),
+            'year' => Yii::t('andahrm/leave', 'Year'),
+            'number_day' => Yii::t('andahrm/leave', 'Number Day'),
+            'created_at' => Yii::t('andahrm', 'Created At'),
+            'created_by' => Yii::t('andahrm', 'Created By'),
+            'updated_at' => Yii::t('andahrm', 'Updated At'),
+            'updated_by' => Yii::t('andahrm', 'Updated By'),
         ];
     }
 

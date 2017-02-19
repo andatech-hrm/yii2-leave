@@ -11,6 +11,17 @@ use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 
 use andahrm\structure\models\FiscalYear;
+function behaviors()
+    {
+        return [ 
+          'timestamp' => [
+                'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+            ],
+        ];
+    }
 
 /**
  * This is the model class for table "leave".
@@ -81,6 +92,7 @@ class Leave extends \yii\db\ActiveRecord
       $scenarios = parent::scenarios();
       
       $scenarios['create-vacation'] = ['to','year', 'user_id','leave_type_id','acting_user_id','contact', 'date_start', 'date_end','status','inspector_by','director_by','commander_by','start_part','end_part','contact','number_day','year'];
+      $scenarios['create-sick'] = ['to','year', 'user_id','leave_type_id','reason','contact', 'date_start', 'date_end','status','inspector_by','director_by','commander_by','contact','number_day','year'];
       
       $scenarios['confirm'] = ['status'];
       
@@ -111,35 +123,35 @@ class Leave extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('andahrm/leave', 'ID'),
-            'to' => Yii::t('andahrm/structure', 'เรียน'),
-            'year' => Yii::t('andahrm/structure', 'ปีงบประมาณ'),
-            'user_id' => Yii::t('andahrm/leave', 'ผู้ยื่นลา'),
-            'leave_type_id' => Yii::t('andahrm/leave', 'ประเภทการลา'),
-            'contact' => Yii::t('andahrm/leave', 'ติดต่อ'),
-            'date_start' => Yii::t('andahrm/leave', 'ตั้งแต่วันที่'),
-            'start_part' => Yii::t('andahrm/leave', 'เริ่มช่วง'),
-            'date_end' => Yii::t('andahrm/leave', 'ถึงวันที่'),
-            'end_part' => Yii::t('andahrm/leave', 'สิ้นสุดช่วง'),
-            'reason' => Yii::t('andahrm/leave', 'เหตุผล'),
-            'number_day' => Yii::t('andahrm/leave', 'จำนวนวันลา'),
-            'acting_user_id' => Yii::t('andahrm/leave', 'ผู้ปฎิบัติราชการแทน'),
-            'status' => Yii::t('andahrm/leave', 'สถานะ'),
-            'inspector_comment' => Yii::t('andahrm/leave', 'ความคิดเห็นผู้ตรวจสอบ'),
-            'inspector_status' => Yii::t('andahrm/leave', 'ผู้ตรวจสอบ'),
-            'inspector_by' => Yii::t('andahrm/leave', 'ผู้ตรวจสอบ'),
-            'inspector_at' => Yii::t('andahrm/leave', 'วันที่'),
-            'commander_comment' => Yii::t('andahrm/leave', 'ความคิดเห็นผู้บังคับบัญชา'),
-            'commander_status' => Yii::t('andahrm/leave','ผู้บังคับบัญชา'),
-            'commander_by' => Yii::t('andahrm/leave', 'ผู้บังคับบัญชา'),
-            'commander_at' => Yii::t('andahrm/leave', 'วันที่'),
-            'director_comment' => Yii::t('andahrm/leave', 'ความคิดเห็นผู้สั่งการ'),
-            'director_status' => Yii::t('andahrm/leave', 'คำสั่ง'),
-            'director_by' => Yii::t('andahrm/leave', 'ผู้ออกคำสั่ง'),
-            'director_at' => Yii::t('andahrm/leave', 'วันที่'),
-            'created_at' => Yii::t('andahrm/leave', 'Created At'),
-            'created_by' => Yii::t('andahrm/leave', 'ผู้ยื่นลา'),
-            'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
-            'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
+            'to' => Yii::t('andahrm/leave', 'To'),
+            'year' => Yii::t('andahrm/leave', 'Year'),
+            'user_id' => Yii::t('andahrm/leave', 'Sender'),
+            'leave_type_id' => Yii::t('andahrm/leave', 'Leave Type'),
+            'contact' => Yii::t('andahrm/leave', 'Contact'),
+            'date_start' => Yii::t('andahrm/leave', 'Date Start'),
+            'start_part' => Yii::t('andahrm/leave', 'Start Part'),
+            'date_end' => Yii::t('andahrm/leave', 'Date End'),
+            'end_part' => Yii::t('andahrm/leave', 'End Part'),
+            'reason' => Yii::t('andahrm/leave', 'Reason'),
+            'number_day' => Yii::t('andahrm/leave', 'Number Day'),
+            'acting_user_id' => Yii::t('andahrm/leave', 'Acting User'),
+            'status' => Yii::t('andahrm/leave', 'Status'),
+            'inspector_comment' => Yii::t('andahrm/leave', 'Inspector Comment'),
+            'inspector_status' => Yii::t('andahrm/leave', 'Inspector Status'),
+            'inspector_by' => Yii::t('andahrm/leave', 'Inspector by'),
+            'inspector_at' => Yii::t('andahrm/leave', 'Inspector At'),
+            'commander_comment' => Yii::t('andahrm/leave', 'Commander Comment'),
+            'commander_status' => Yii::t('andahrm/leave','Commander Status'),
+            'commander_by' => Yii::t('andahrm/leave', 'Commander By'),
+            'commander_at' => Yii::t('andahrm/leave', 'Commander At'),
+            'director_comment' => Yii::t('andahrm/leave', 'Director Comment'),
+            'director_status' => Yii::t('andahrm/leave', 'Director Status'),
+            'director_by' => Yii::t('andahrm/leave', 'Director By'),
+            'director_at' => Yii::t('andahrm/leave', 'Director At'),
+            'created_at' => Yii::t('andahrm', 'Created At'),
+            'created_by' => Yii::t('andahrm', 'Created By'),
+            'updated_at' => Yii::t('andahrm', 'Updated At'),
+            'updated_by' => Yii::t('andahrm', 'Updated By'),
         ];
     }
    const STATUS_DRAFT = 0;
@@ -159,34 +171,34 @@ class Leave extends \yii\db\ActiveRecord
   public static function itemsAlias($key) {
         $items = [
             'status' => [
-                self::STATUS_DRAFT => Yii::t('andahrm/leave', 'ร่าง'),
-                self::STATUS_OFFER => Yii::t('andahrm/leave', 'เสนอ'),
-                self::STATUS_CONSIDER => Yii::t('andahrm/leave', 'พิจารณา'),
-                self::STATUS_ALLOW => Yii::t('andahrm/leave', 'อนุมัติ'),
-                self::STATUS_DISALLOW => Yii::t('andahrm/leave', 'ไม่อนุมัติ'),
-                self::STATUS_CANCEL => Yii::t('andahrm/leave', 'ยกเลิก'),
+                self::STATUS_DRAFT => Yii::t('andahrm/leave', 'Draft'),
+                self::STATUS_OFFER => Yii::t('andahrm/leave', 'Offer'),
+                self::STATUS_CONSIDER => Yii::t('andahrm/leave', 'Consider'),
+                self::STATUS_ALLOW => Yii::t('andahrm/leave', 'Allow'),
+                self::STATUS_DISALLOW => Yii::t('andahrm/leave', 'Disallow'),
+                self::STATUS_CANCEL => Yii::t('andahrm/leave', 'Cancel'),
             ],
           'inspactor_status' => [
-                self::ALLOW => Yii::t('andahrm/leave', 'ผ่าน'),
-                self::DISALLOW => Yii::t('andahrm/leave', 'ไม่ผ่าน'),
+                self::ALLOW => Yii::t('andahrm/leave', 'Past'),
+                self::DISALLOW => Yii::t('andahrm/leave', 'Not Past'),
             ],
           'commander_status' => [
-                self::ALLOW => Yii::t('andahrm/leave', 'เห็นชอบ'),
-                self::DISALLOW => Yii::t('andahrm/leave', 'ไม่เห็นชอบ'),
+                self::ALLOW => Yii::t('andahrm/leave', 'Agree'),
+                self::DISALLOW => Yii::t('andahrm/leave', 'Disagree'),
             ],
           'director_status' => [
-                self::ALLOW => Yii::t('andahrm/leave', 'อนุญาต'),
-                self::DISALLOW => Yii::t('andahrm/leave', 'ไม่อนุญาต'),
+                self::ALLOW => Yii::t('andahrm/leave', 'Allow'),
+                self::DISALLOW => Yii::t('andahrm/leave', 'Disallow'),
             ],
             'start_part'=> [
-                self::ALL_DAY => Yii::t('andahrm/leave','ทั้งวัน'),
-                self::HALF_DAY_MORNIG => Yii::t('andahrm/leave','ครึ่งวันเช้า'),
-                self::LATE_AFTERNOON =>  Yii::t('andahrm/leave','ครึ่งวันบ่าย'),
+                self::ALL_DAY => Yii::t('andahrm/leave','All Day'),
+                self::HALF_DAY_MORNIG => Yii::t('andahrm/leave','Half-day morning'),
+                self::LATE_AFTERNOON =>  Yii::t('andahrm/leave','Half-day afternoon'),
             ],
             'end_part' => [
-                self::ALL_DAY => Yii::t('andahrm/leave','ทั้งวัน'),
-                self::HALF_DAY_MORNIG => Yii::t('andahrm/leave','ครึ่งวันเช้า'),
-                self::LATE_AFTERNOON =>  Yii::t('andahrm/leave','ครึ่งวันบ่าย'),
+                self::ALL_DAY => Yii::t('andahrm/leave','All Day'),
+                self::HALF_DAY_MORNIG => Yii::t('andahrm/leave','Half-day morning'),
+                self::LATE_AFTERNOON =>  Yii::t('andahrm/leave','Half-day afternoon'),
             ]
         ];
         return ArrayHelper::getValue($items, $key, []);

@@ -66,7 +66,7 @@ $positionList = ArrayHelper::map($data,'positionSalary.position.id','positionSal
     ]);
   ?>
   <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('andahrm/leave', 'Create') : Yii::t('andahrm/leave', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('andahrm', 'Create') : Yii::t('andahrm', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
   <?php ActiveForm::end(); ?>
   <?php

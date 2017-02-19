@@ -65,15 +65,15 @@ class LeaveRelated extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('andahrm/leave', 'ID'),
-            'title' => Yii::t('andahrm/leave', 'ชื่อชุดผู้ที่เกี่ยวข้อง'),
-            'inspector_by' => Yii::t('andahrm/leave', 'ผู้ตรวจสอบ'),
-            'commander_by' => Yii::t('andahrm/leave', 'ผู้บังคับบัญชา'),
-            'director_by' => Yii::t('andahrm/leave', 'ผู้ออกคำสั่ง'),
-            'created_at' => Yii::t('andahrm/leave', 'Created At'),
-            'created_by' => Yii::t('andahrm/leave', 'Created By'),
-            'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
-            'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
-            'personห' => Yii::t('andahrm/leave', 'บุคลากร'),
+            'title' => Yii::t('andahrm/leave', 'Related Title'),
+            'inspector_by' => Yii::t('andahrm/leave', 'Inspectors'),
+            'commander_by' => Yii::t('andahrm/leave', 'Commanders'),
+            'director_by' => Yii::t('andahrm/leave', 'Directors'),
+            'created_at' => Yii::t('andahrm', 'Created At'),
+            'created_by' => Yii::t('andahrm', 'Created By'),
+            'updated_at' => Yii::t('andahrm', 'Updated At'),
+            'updated_by' => Yii::t('andahrm', 'Updated By'),
+            'person' => Yii::t('andahrm/person', 'Person'),
         ];
     }
 

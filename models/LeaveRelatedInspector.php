@@ -56,12 +56,12 @@ class LeaveRelatedInspector extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id' => Yii::t('andahrm/leave', 'ผู้ยื่นลา'),
-            'leave_related_id' => Yii::t('andahrm/leave', 'ผู้ที่เกี่ยวข้อง'),
-            'created_at' => Yii::t('andahrm/leave', 'Created At'),
-            'created_by' => Yii::t('andahrm/leave', 'Created By'),
-            'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
-            'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
+            'user_id' => Yii::t('andahrm/leave', 'Sender'),
+            'leave_related_id' => Yii::t('andahrm/leave', 'Related'),
+            'created_at' => Yii::t('andahrm', 'Created At'),
+            'created_by' => Yii::t('andahrm', 'Created By'),
+            'updated_at' => Yii::t('andahrm', 'Updated At'),
+            'updated_by' => Yii::t('andahrm', 'Updated By'),
         ];
     }
   

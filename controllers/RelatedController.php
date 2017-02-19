@@ -9,6 +9,7 @@ use andahrm\leave\models\LeaveRelatedInspector;
 use andahrm\leave\models\LeaveRelatedCommander;
 use andahrm\leave\models\LeaveRelatedDirector;
 use andahrm\leave\models\LeaveRelatedPerson;
+use andahrm\leave\models\LeaveRelatedSection;
 use andahrm\leave\models\LeaveRelatedSearch;
 
 use yii\data\ActiveDataProvider;
@@ -196,6 +197,7 @@ class RelatedController extends Controller
 
     
         $model = new LeaveRelated(['scenario'=>'insert']);
+        $modelSection = new LeaveRelatedSection();
 
         if ($model->load(Yii::$app->request->post())){
           
@@ -242,6 +244,19 @@ class RelatedController extends Controller
                                 }
                            }
                    }
+                   
+                   if(isset($post['LeaveRelatedSection']['section_id'])){
+                        LeaveRelatedSection::deleteAll(['leave_related_id' => $model->id]);
+                        foreach($post['LeaveRelatedSection']['section_id'] as $item){
+                                $modelSelect = new LeaveRelatedSection();
+                                $modelSelect->leave_related_id = $model->id;
+                                $modelSelect->section_id = $item;
+                                if (($flag = $modelSelect->save(false)) === false) {
+                                    $transaction->rollBack();
+                                    break;
+                                }
+                           }
+                   }
                   
                   
                 }else{
@@ -251,7 +266,7 @@ class RelatedController extends Controller
               
                 if ($flag) {
                     $transaction->commit();
-                    return $this->redirect(['assign', 'id' => $model->id]);
+                    return $this->redirect(['view', 'id' => $model->id]);
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
@@ -261,6 +276,7 @@ class RelatedController extends Controller
       
         return $this->render('create', [
             'model' => $model,
+            'modelSection'=>$modelSection
         ]);
         
     }
@@ -277,6 +293,8 @@ class RelatedController extends Controller
     {
         $model = $this->findModel($id);
         $model->scenario = 'update';
+        
+        $modelSection = new LeaveRelatedSection();
       if ($model->load(Yii::$app->request->post())){
           
           $post = Yii::$app->request->post();
@@ -325,6 +343,18 @@ class RelatedController extends Controller
                            }
                    }
                   
+                  if(isset($post['LeaveRelatedSection']['section_id'])){
+                        LeaveRelatedSection::deleteAll(['leave_related_id' => $model->id]);
+                        foreach($post['LeaveRelatedSection']['section_id'] as $item){
+                                $modelSelect = new LeaveRelatedSection();
+                                $modelSelect->leave_related_id = $model->id;
+                                $modelSelect->section_id = $item;
+                                if (($flag = $modelSelect->save(false)) === false) {
+                                    $transaction->rollBack();
+                                    break;
+                                }
+                           }
+                   }
                   
                   
                 }else{
@@ -334,7 +364,7 @@ class RelatedController extends Controller
               
                 if ($flag) {
                     $transaction->commit();
-                    return $this->redirect(['assign', 'id' => $model->id]);
+                    return $this->redirect(['view', 'id' => $model->id]);
                 }
             } catch (Exception $e) {
                 $transaction->rollBack();
@@ -344,6 +374,7 @@ class RelatedController extends Controller
         
         return $this->render('update', [
             'model' => $model,
+            'modelSection'=>$modelSection
         ]);
         
     }

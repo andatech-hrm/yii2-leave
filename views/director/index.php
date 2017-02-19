@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						 'value'=>'commanderStatusLabel'
 						],
 						[
-							'label'=> Yii::t('andahrm/leave', 'ผู้ออกคำสั่ง'),
+							'label'=> Yii::t('andahrm/leave', 'Directors'),
 							'attribute'=>'director_status',
 							'format'=>'html',
 							'filter'=>Leave::getItemDirectorStatus(),
