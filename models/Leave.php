@@ -3,25 +3,30 @@
 namespace andahrm\leave\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use andahrm\person\models\Person;
 use andahrm\leave\models\PersonLeave;
 use yii\helpers\ArrayHelper;
 
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\AttributeBehavior;
+use andahrm\setting\models\Helper;
 
 use andahrm\structure\models\FiscalYear;
-function behaviors()
-    {
-        return [ 
-          'timestamp' => [
-                'class' => TimestampBehavior::className(),
-            ],
-            'blameable' => [
-                'class' => BlameableBehavior::className(),
-            ],
-        ];
-    }
+// function behaviors()
+//     {
+//         return [ 
+//           'timestamp' => [
+//                 'class' => TimestampBehavior::className(),
+//             ],
+//             'blameable' => [
+//                 'class' => BlameableBehavior::className(),
+//             ],
+//         ];
+//     }
 
 /**
  * This is the model class for table "leave".
@@ -57,7 +62,7 @@ function behaviors()
  * @property LeaveType $leaveType
  * @property LeaveCancel $leaveCancel
  */
-class Leave extends \yii\db\ActiveRecord
+class Leave extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -112,6 +117,36 @@ class Leave extends \yii\db\ActiveRecord
             'blameable' => [
                 'class' => BlameableBehavior::className(),
             ],
+            'user_id' =>[
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'user_id',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'user_id',
+                ],
+                'value' => function($event) {
+                    return Yii::$app->user->id;
+                },
+            ],
+            'date_start' =>[
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'date_start',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'date_start',
+                ],
+                'value' => function($event) {
+                    return Helper::dateUi2Db($this->date_start);
+                },
+            ],
+            'date_end' =>[
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'date_end',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'date_end',
+                ],
+                'value' => function($event) {
+                    return Helper::dateUi2Db($this->date_end);
+                },
+            ],
         ];
     }
 
@@ -128,6 +163,7 @@ class Leave extends \yii\db\ActiveRecord
             'user_id' => Yii::t('andahrm/leave', 'Sender'),
             'leave_type_id' => Yii::t('andahrm/leave', 'Leave Type'),
             'contact' => Yii::t('andahrm/leave', 'Contact'),
+            'date_range' => Yii::t('andahrm/leave', 'Date Range'),
             'date_start' => Yii::t('andahrm/leave', 'Date Start'),
             'start_part' => Yii::t('andahrm/leave', 'Start Part'),
             'date_end' => Yii::t('andahrm/leave', 'Date End'),
@@ -254,7 +290,7 @@ class Leave extends \yii\db\ActiveRecord
                 $str = $status;
                 break;
         }
-        $str= $this->inspector_at?$str.'<br/><small>'.Yii::$app->formatter->asDate($this->inspector_at)."</small>":$str;
+        $str= $this->inspector_at?$str.' <small>'.Yii::$app->formatter->asDate($this->inspector_at)."</small>":$str;
         return $str;
     }
     public function getCommanderStatusLabel() {
@@ -276,7 +312,7 @@ class Leave extends \yii\db\ActiveRecord
                 $str = $status;
                 break;
         }
-        $str= $this->commander_at?$str.'<br/><small>'.Yii::$app->formatter->asDate($this->commander_at)."</small>":$str;
+        $str= $this->commander_at?$str.' <small>'.Yii::$app->formatter->asDate($this->commander_at)."</small>":$str;
         return $str;
     }
   
@@ -299,7 +335,7 @@ class Leave extends \yii\db\ActiveRecord
                 $str = $status;
                 break;
         }
-        $str= $this->director_at?$str.'<br/><small>'.Yii::$app->formatter->asDate($this->director_at)."</small>":$str;
+        $str= $this->director_at?$str.' <small>'.Yii::$app->formatter->asDate($this->director_at)."</small>":$str;
         return $str;
     }
   
@@ -376,7 +412,27 @@ class Leave extends \yii\db\ActiveRecord
      */
     public function getLeaveCancel()
     {
-        return $this->hasOne(LeaveCancel::className(), ['leave_id' => 'id']);
+        return $this->hasMany(LeaveCancel::className(), ['leave_id' => 'id']);
+    }
+    
+    public function getLeaveCancelByField($field)
+    {
+        $model = $this->leaveCancel;
+        $item = [];
+    	foreach($model as $cancel){
+		 		$item[] = "<span class='text-danger'>".$cancel->$field."</div>" ;
+		 	} 
+		 	return $item?'<hr/>'.implode('<br/>',$item):'';
+    }
+    
+    public function getLeaveCancelButton()
+    {
+        $model = $this->leaveCancel;
+        $item = [];
+    	foreach($model as $cancel){
+		 		$item[] = Html::a('<span class="glyphicon glyphicon-eye-open"></span>',Url::to(['cancel-view','id'=>$cancel->id]),['class'=>'btn btn-xs btn-default']) ;
+		} 
+		 	return $item?'<hr style="margin:11px 0px 23px;"/>'.implode('<br/>',$item):'';
     }
   
     public function getCreatedBy(){      
@@ -421,7 +477,14 @@ class Leave extends \yii\db\ActiveRecord
         return  $this->director_at?'วันที่ <span class="text-dashed">'.Yii::$app->formatter->asDate($this->director_at,'d').' / '.Yii::$app->formatter->asDate($this->director_at,'MMMM').' / '.Yii::$app->formatter->asDate($this->director_at,'yyyy').'</span>':null;
     }
     
-  # จำนวนวันลาครั้งนี้
+    
+      #แสดงช่วงวัน
+      public function getDateRange(){
+          return Yii::$app->formatter->asDate($this->date_start).' - '.Yii::$app->formatter->asDate($this->date_end);
+      }
+  
+    #######################################
+    #จำนวนวันลาครั้งนี้
     public function getCountDays(){
             if(!($this->date_start && $this->date_end)){
               return null;
@@ -429,6 +492,7 @@ class Leave extends \yii\db\ActiveRecord
           return self::calCountDays($this->date_start,$this->date_end,$this->start_part,$this->end_part);
     }
   
+    #คำนวนหาจำนวนวัน
     public static function calCountDays($star,$end,$start_part,$end_part){
             $strStartDate = $star;
             $strEndDate =  $end;
@@ -464,44 +528,111 @@ class Leave extends \yii\db\ActiveRecord
 
           return $intWorkDay;
    }
+   
   
   #วันลาพักผ่อนสะสม
-  public static function getCollect($user_id = null,$year = null){
+  public static function getCollect($user_id = null,$year = null,$leave_type_id = 4){
     $year = $year?$year:date('Y');
     $user_id = $user_id?$user_id:Yii::$app->user->id;
-    $user = PersonLeave::findOne($user_id);
-    $userNumber = $user->leavePermission->number_day;
+    
+    
+    #จำนวนวันที่ได้โคต้า
+    $permissionAll = LeavePermission::getPermissionAll($user_id,$year);
+    //$userNumber = $user->leavePermission->number_day;
     //$rangeYear = FiscalYear::find()->where(['year'=>$year])->one();
-    $model = self::find()
-      ->where(['<','year',$year])
+    
+    #จำนวนวันทั้งหมด
+    $leaveAll = self::find()
+      ->where(['<=','year',$year])
 //       ->where(['>=','year',$rangeYear->date_start])
 //       ->andWhere(['<=','date_end',$rangeYear->date_end])
-      ->andWhere(['created_by'=>$user_id])
-      ->andWhere(['status'=>self::STATUS_ALLOW])
+      ->andWhere([
+           'created_by'=>$user_id,
+           'status'=>self::STATUS_ALLOW,
+           'leave_type_id'=>$leave_type_id
+           ])
       ->sum('number_day');
       //->one();
     
-    //print_r($model);
-    return $userNumber-$model;
+    //echo $permissionAll.'-'.$leaveAll;
+    return $permissionAll-$leaveAll;
   }
   
-  #ลามาแล้ว (วันทำการ)
-  public static function getPastDay($user_id = null,$year = null){
+  
+  
+  #ลามาแล้ว (วันทำการ)ในปีนั้นๆ
+  public static function getPastDay($user_id = null,$year = null,$leave_type_id = 4){
     $year = $year?$year:date('Y');
     $user_id = $user_id?$user_id:Yii::$app->user->id;
-    $rangeYear = FiscalYear::find()->where(['year'=>$year])->one();
+    //$rangeYear = FiscalYear::find()->where(['year'=>$year])->one();
+    
     $model = self::find()
-       ->where(['year'=>$year])
-//       ->where(['>=','year',$rangeYear->date_start])
-//       ->andWhere(['<=','date_end',$rangeYear->date_end])
-      ->andWhere(['created_by'=>$user_id])
-      ->andWhere(['status'=>self::STATUS_ALLOW])
+       ->where([
+           'year'=>$year,
+           'created_by'=>$user_id,
+           'status'=>self::STATUS_ALLOW,
+           'leave_type_id'=>$leave_type_id
+       ])
       ->sum('number_day');
       //->one();    
     //print_r($model);
-    return $model?$model:0;
+    return $model?$model-self::getCancelDay($user_id,$year,$leave_type_id):0;
   }
   
+  
+  #วันลาพักผ่อนสะสม คงเหลือ (วันลาพักผ่อน)
+  public static function getTotal($user_id = null,$year = null,$leave_type_id = 4){
+    $year = $year?$year:date('Y');
+    $user_id = $user_id?$user_id:Yii::$app->user->id;
+    
+    
+    #จำนวนวันที่ได้โคต้า
+    $permissionAll = LeavePermission::getPermissionAll($user_id,$year);
+    //$userNumber = $user->leavePermission->number_day;
+    //$rangeYear = FiscalYear::find()->where(['year'=>$year])->one();
+    
+    #จำนวนวันทั้งหมด
+    $leaveAll = self::getPastDay($user_id,$year);
+      //->one();
+    
+    //echo $permissionAll.'-'.$leaveAll;
+    return $permissionAll-$leaveAll;
+  }
+  
+  
+  #จำนวนวันยกเลิกลา
+  public static function getCancelDay($user_id = null,$year = null,$leave_type_id = 4){
+    $year = $year?$year:date('Y');
+    $user_id = $user_id?$user_id:Yii::$app->user->id;
+    
+   
+    #จำนวนวันทั้งหมด
+    $cancelDay = self::find()->joinWith('leaveCancel')
+                 ->where([
+           'leave.year'=>$year,
+           'leave.created_by'=>$user_id,
+           'leave.status'=>self::STATUS_ALLOW,
+           'leave.leave_type_id'=>$leave_type_id,
+           'leave_cancel.status'=>LeaveCancel::STATUS_ALLOW,
+       ])
+      ->sum('leave_cancel.number_day');
+      //->one();
+    
+    //echo $permissionAll.'-'.$leaveAll;
+    return $cancelDay?$cancelDay:0;
+  }
+  
+   public function getNumberDayTotal(){
+    
+    #จำนวนวันทั้งหมด
+    $cancelDay = LeaveCancel::find()
+                 ->where([
+           'leave_id'=>$this->id,
+       ])
+      ->select('leave_cancel.number_day');
+      
+    return $cancelDay?$this->number_day - $cancelDay:0;
+  }
   
   
   

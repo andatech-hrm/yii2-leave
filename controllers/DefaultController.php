@@ -4,6 +4,7 @@ namespace andahrm\leave\controllers;
 
 use Yii;
 use andahrm\leave\models\Leave;
+use andahrm\leave\models\LeaveCancel;
 use andahrm\leave\models\LeaveType;
 use andahrm\leave\models\LeaveSearch;
 use yii\web\Controller;
@@ -12,6 +13,8 @@ use yii\filters\VerbFilter;
 use andahrm\structure\models\FiscalYear;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
+use andahrm\leave\models\PersonLeave;
+use yii\helpers\Json;
 
 /**
  * DefaultController implements the CRUD actions for Leave model.
@@ -129,7 +132,11 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post())){
             $model->status = Leave::STATUS_OFFER;
             if($model->save()) {
-              return $this->redirect(['view', 'id' => $model->id]);
+                Yii::$app->getSession()->setFlash('saved',[
+                'type' => 'success',
+                'msg' => Yii::t('andahrm/leave', 'The system successfully sent.')
+            ]);
+              return $this->redirect(['index']);
             }else{
               print_r($model->getErrors());
             }
@@ -298,6 +305,38 @@ class DefaultController extends Controller
 
         return $this->redirect(['index']);
     }
+    
+    
+    public function actionCancel($id)
+    {
+      
+        $model = $this->findModel($id);
+        $modelCancel = new LeaveCancel();
+        //$model->scenario
+        //print_r($model->getscenarios());
+
+        //exit();
+        if ($modelCancel->load(Yii::$app->request->post())){
+            $modelCancel->status = LeaveCancel::STATUS_OFFER;
+            $modelCancel->number_day = Leave::calCountDays($modelCancel->date_start,$modelCancel->date_end,$modelCancel->start_part,$modelCancel->end_part);
+            if($modelCancel->save()) {
+            Yii::$app->getSession()->setFlash('saved',[
+                'type' => 'success',
+                'msg' => Yii::t('andahrm/leave', 'The system successfully sent.')
+            ]);
+              return $this->redirect(['index']);
+            }else{
+              print_r($modelCancel->getErrors());
+            }
+        } 
+        
+        $confirm = 'cancel-form';
+        
+        return $this->render($confirm, [
+            'model' => $model,
+            'modelCancel'=>$modelCancel
+        ]);
+    }
 
     /**
      * Finds the Leave model based on its primary key value.
@@ -309,6 +348,67 @@ class DefaultController extends Controller
     protected function findModel($id)
     {
         if (($model = Leave::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    
+    
+     public function actionPersonList($q = null) {
+        // $data = PersonLeave::find()
+        // ->where(['LIKE','firstname_th',$q])
+        // ->orWhere(['LIKE','lastname_th',$q])
+        // ->all();
+        // //print_r($data);
+        // $out = [];
+        // foreach ($data as $d) {
+        //     $out[] = [
+        //       'id'=>$d->user_id ,
+        //       'title' => $d->fullname
+        //     ];
+        // }
+        // echo Json::encode(['results'=>$out]);
+        
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $data = PersonLeave::find()
+                //->select(['user_id as id','fullname as title'])
+                ->where(['LIKE','firstname_th',$q])
+                ->orWhere(['LIKE','lastname_th',$q])
+                ->limit(20)
+                //->toArray()
+                ->all();
+                $new = [];
+                foreach ($data as $d) {
+                $new[] = [
+                  'id'=>$d->user_id ,
+                  'text' => $d->fullname
+                ];
+            }
+                
+            $out['results'] = $new;
+        }
+        return $out;
+    }
+    
+    
+    /**
+     * Displays a single Leave model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionCancelView($id)
+    {
+        return $this->render('cancel-view', [
+            'model' => $this->findCancleModel($id),
+        ]);
+    }
+    
+    protected function findCancleModel($id)
+    {
+        if (($model = LeaveCancel::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

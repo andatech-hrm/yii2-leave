@@ -99,4 +99,31 @@ class LeavePermission extends ActiveRecord
 //         return $this->hasOne(Person::className(), ['user_id' => 'user_id']);
         return $this->hasOne(PersonLeave::className(), ['user_id' => 'user_id']);
     }
+    
+    
+    
+    public static function getPermission($user_id = null,$year = null){
+        $year = $year?$year:date('Y');
+        $user_id = $user_id?$user_id:Yii::$app->user->id;
+        
+        $userNumber = self::find()
+            ->where(['year'=>$year])
+            ->andWhere(['user_id'=>$user_id])
+            ->one();
+        
+        return $userNumber?$userNumber->number_day:0;
+    }
+    
+    #วันสะสมทั้งหมด
+    public static function getPermissionAll($user_id = null,$year = null){
+        $year = $year?$year:date('Y');
+        $user_id = $user_id?$user_id:Yii::$app->user->id;
+        
+        $permissionAll = LeavePermission::find()
+        ->where(['<=','year',$year])
+        ->andWhere(['user_id'=>$user_id])
+        ->sum('number_day');
+        
+        return $permissionAll?$permissionAll:0;
+    }
 }

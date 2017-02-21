@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
+use kuakling\datepicker\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeaveDayOff */
@@ -14,9 +15,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'date_start')->textInput() ?>
+    <?= $form->field($model, 'date_start')->widget(DatePicker::className()); ?>
 
-    <?= $form->field($model, 'date_end')->textInput() ?>
+    <?= $form->field($model, 'date_end')->widget(DatePicker::className()); ?>
 
     <?= $form->field($model, 'detail')->textInput(['maxlength' => true]) ?>
 
@@ -27,3 +28,14 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$inputStartId = Html::getInputId($model, 'date_start');
+$inputEndId = Html::getInputId($model, 'date_end');
+$js[] = <<< JS
+$("#{$inputStartId}").datepicker().on('changeDate', function(e) { $("#{$inputEndId}").datepicker('setStartDate', $(this).val()); });
+$("#{$inputEndId}").datepicker().on('changeDate', function(e) { $("#{$inputStartId}").datepicker('setEndDate', $(this).val()); });
+JS;
+
+$js = array_filter($js);
+$this->registerJs(implode("\n", $js));

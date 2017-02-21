@@ -3,9 +3,12 @@
 namespace andahrm\leave\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\AttributeBehavior;
+use andahrm\setting\models\Helper;
 
 /**
  * This is the model class for table "leave_day_off".
@@ -39,6 +42,26 @@ class LeaveDayOff extends \yii\db\ActiveRecord
             ],
             'blameable' => [
                 'class' => BlameableBehavior::className(),
+            ],
+            'date_start' =>[
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'date_start',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'date_start',
+                ],
+                'value' => function($event) {
+                    return Helper::dateUi2Db($this->date_start);
+                },
+            ],
+            'date_end' =>[
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'date_end',
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'date_end',
+                ],
+                'value' => function($event) {
+                    return Helper::dateUi2Db($this->date_end);
+                },
             ],
         ];
     }

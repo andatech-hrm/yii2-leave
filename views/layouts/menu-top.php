@@ -6,8 +6,10 @@ use dmstr\widgets\Menu;
 use mdm\admin\components\Helper;
 
 use andahrm\leave\models\LeaveCommanderSearch;
+use andahrm\leave\models\LeaveCommanderCancelSearch;
 use andahrm\leave\models\LeaveInspactorSearch;
 use andahrm\leave\models\LeaveDirectorSearch;
+use andahrm\leave\models\LeaveDirectorCancelSearch;
 
  $this->beginContent('@andahrm/leave/views/layouts/main.php'); 
  $module = $this->context->module->id;
@@ -25,7 +27,13 @@ use andahrm\leave\models\LeaveDirectorSearch;
                     
         $searchModel = new LeaveCommanderSearch();
         $dataCommander = $searchModel->search(Yii::$app->request->queryParams);
-        $countCommander = $dataCommander->getCount()?' <span class="badge bg-red">'.$dataCommander->getCount().'</span>':'';
+        
+        $searchModel = new LeaveCommanderCancelSearch();
+        $dataCommanderCancel = $searchModel->search(Yii::$app->request->queryParams);
+        $totalCommand = $dataCommander->getCount() + $dataCommanderCancel->getCount();
+        
+        
+        $countCommander = $totalCommand?' <span class="badge bg-red">'.$totalCommand.'</span>':'';
                     $menuItems[] =  [
                            'label' => Yii::t('andahrm/leave', 'Commander').$countCommander,
                             'url' => ["/{$module}/commander/"],
@@ -42,9 +50,13 @@ use andahrm\leave\models\LeaveDirectorSearch;
                             'icon'=> 'fa fa-sitemap'
                      ];   
       
+      
         $searchModel = new LeaveDirectorSearch();
         $dataDirector = $searchModel->search(Yii::$app->request->queryParams);
-        $countDirector = $dataDirector->getCount()?' <span class="badge bg-red">'.$dataDirector->getCount().'</span>':'';
+        $searchModel = new LeaveDirectorCancelSearch();
+        $dataDirectorCancel = $searchModel->search(Yii::$app->request->queryParams);
+        $totalDirector= $dataDirector->getCount() + $dataDirectorCancel->getCount();
+        $countDirector = $totalDirector?' <span class="badge bg-red">'.$totalDirector.'</span>':'';
                      $menuItems[] =  [
                             'label' => Yii::t('andahrm/leave', 'Director').$countDirector,
                             'url' => ["/{$module}/director/"],

@@ -4,7 +4,9 @@ namespace andahrm\leave\controllers;
 
 use Yii;
 use andahrm\leave\models\Leave;
+use andahrm\leave\models\LeaveCancel;
 use andahrm\leave\models\LeaveDirectorSearch;
+use andahrm\leave\models\LeaveDirectorCancelSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -43,9 +45,16 @@ class DirectorController extends Controller
         $searchModel = new LeaveDirectorSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        
+        $searchModelCancel = new LeaveDirectorCancelSearch();
+        $dataProviderCancel = $searchModelCancel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            
+            'searchModelCancel' => $searchModelCancel,
+            'dataProviderCancel' => $dataProviderCancel,
         ]);
     }
 
@@ -104,6 +113,76 @@ class DirectorController extends Controller
     protected function findModel($id)
     {
         if (($model = Leave::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    
+    
+    
+    /**
+     * Displays a single Leave model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionCancelView($id)
+    {
+        return $this->render('cancel-view', [
+            'model' => $this->findCancleModel($id),
+        ]);
+    }
+
+    
+
+    /**
+     * Updates an existing Leave model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionCancelConsider($id)
+    {
+        $model = $this->findCancleModel($id);
+        $model->scenario = 'director';
+
+        if ($model->load(Yii::$app->request->post())){
+              $post = Yii::$app->request->post();
+            //   print_r($post);
+            //   exit();
+          
+              if(isset($post['allow'])){
+                  $model->director_status = LeaveCancel::ALLOW;
+                  $model->status = LeaveCancel::STATUS_ALLOW; #ส่งไปให้ผู้ตัวตรว
+              }elseif(isset($post['disallow'])){
+                  $model->director_status = LeaveCancel::DISALLOW;
+                  $model->status = LeaveCancel::STATUS_DISALLOW; #ไม่อนุมัติ
+              }
+              
+              $model->director_at= time();
+          
+          if($model->validate()&&$model->save()) {
+              //return $this->redirect(['view', 'id' => $model->id]);
+                  Yii::$app->getSession()->setFlash('saved',[
+                    'type' => 'success',
+                    'msg' => Yii::t('andahrm/leave', 'The system successfully sent.')
+                ]);
+              return $this->redirect(['index']);
+          }else{
+              print_r($model->getErrors());
+          } 
+        } 
+      
+            return $this->render('cancel-consider', [
+                'model' => $model,
+            ]);
+        
+    }
+    
+    
+     protected function findCancleModel($id)
+    {
+        if (($model = LeaveCancel::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

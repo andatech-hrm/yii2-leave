@@ -46,7 +46,7 @@ class LeaveCommanderSearch extends Leave
         $query->where([
           'commander_by'=>Yii::$app->user->id,
           'commander_at'=>null,
-          'status' => [1]
+          'status' => [Leave::STATUS_OFFER]
         ]);
 
         // add conditions that should always apply here

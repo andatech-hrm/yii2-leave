@@ -46,7 +46,8 @@ class LeaveInspactorSearch extends Leave
         $query->where([
           'inspector_by'=>Yii::$app->user->id,
           'inspector_at'=>null,
-          'status' => [1]
+          'status' => [Leave::STATUS_OFFER],
+          'commander_status'=>!null
         ]);
 
         // add conditions that should always apply here
