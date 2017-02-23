@@ -21,9 +21,9 @@ use andahrm\leave\models\LeavePermission;
         'fieldConfig' => [
         'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
         'horizontalCssClasses' => [
-            'label' => 'col-sm-4',
-            'offset' => 'col-sm-offset-4',
-            'wrapper' => 'col-sm-8',
+            'label' => 'col-sm-5',
+            'offset' => 'col-sm-offset-2',
+            'wrapper' => 'col-sm-7',
             'error' => '',
             'hint' => '',
         ],

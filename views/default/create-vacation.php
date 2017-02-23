@@ -24,13 +24,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 # Candidate
 $items=[];
-//$personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
-$personLeave = PersonPosition::findOne(Yii::$app->user->identity->id);
+$personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
+//$personLeave = PersonPosition::findOne(Yii::$app->user->identity->id);
 //echo $personLeave->position->section->id;
-$personLeave = $personLeave->position->section->leaveRelatedSection;
+
 // print_r($personLeave);
 // exit();
-//$items['user'] = $personLeave;
+$items['user'] = $personLeave;
+
+$personLeave = $personLeave->position->section->leaveRelatedSection;
 
 if($model->isNewRecord){
   $model->to = $personLeave->toDirector;
@@ -124,9 +126,6 @@ HTML;
     ])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => $datesDisabledTh]]);
     $items['date_range'] .= '<div style="width: 20%; float: left;"><label class="control-label">&nbsp;</label>' . $items['end_part'] . '</div>';
     $items['date_range'] .= '</div>';
-    
-    
-    // $items['date_range'] .= $form->field($model, 'date_end', ['options' => ['class' => 'form-group col-sm-6']])->widget(DatePicker::className());
     $items['date_range'] .= '</div>';
   
     $items['contact']=$form->field($model, 'contact')->textInput(['placeholder'=>'ติดต่อข้าพเจ้าได้ที่']);

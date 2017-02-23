@@ -12,6 +12,7 @@ use yii\behaviors\TimestampBehavior;
 
 
 use andahrm\person\models\Person;
+use andahrm\leave\models\PersonLeave;
 /**
  * This is the model class for table "leave_permission".
  *
@@ -98,6 +99,14 @@ class LeavePermission extends ActiveRecord
     {
 //         return $this->hasOne(Person::className(), ['user_id' => 'user_id']);
         return $this->hasOne(PersonLeave::className(), ['user_id' => 'user_id']);
+    }
+    
+    public function getCreatedBy(){      
+        return  $this->hasOne(PersonLeave::className(), ['user_id' => 'created_by']);
+    }
+    
+    public function getUpdatedBy(){      
+        return  $this->hasOne(PersonLeave::className(), ['user_id' => 'updated_by']);
     }
     
     

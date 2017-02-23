@@ -311,7 +311,12 @@ class DefaultController extends Controller
     {
       
         $model = $this->findModel($id);
-        $modelCancel = new LeaveCancel();
+        $modelCancel = new LeaveCancel([
+            'date_start' => $model->date_start,
+            'date_end' => $model->date_end,
+            'start_part' => $model->start_part,
+            'end_part' => $model->end_part,
+        ]);
         //$model->scenario
         //print_r($model->getscenarios());
 

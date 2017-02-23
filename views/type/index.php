@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel andahrm\leave\models\LeaveTypeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('andahrm/structure', 'Leave Types');
+$this->title = Yii::t('andahrm/leave', 'Leave Types');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="leave-type-index">
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('andahrm/structure', 'Create Leave Type'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('andahrm/leave', 'Create Leave Type'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -27,7 +27,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             'limit',
             'detail:ntext',
-            'created_at',
+            'created_at:datetime',
+            [
+                'attribute'=>'created_by',
+                'value' =>  'createdBy.fullname',
+            ],
             // 'created_by',
             // 'updated_at',
             // 'updated_by',

@@ -203,6 +203,8 @@ class Leave extends ActiveRecord
   
    const ALLOW = 1;
    const DISALLOW = 0;
+   
+   const LEAVE_VACATION = 1; #ลาพักผ่อน
   
   public static function itemsAlias($key) {
         $items = [
@@ -531,7 +533,7 @@ class Leave extends ActiveRecord
    
   
   #วันลาพักผ่อนสะสม
-  public static function getCollect($user_id = null,$year = null,$leave_type_id = 4){
+  public static function getCollect($user_id = null,$year = null,$leave_type_id = self::LEAVE_VACATION){
     $year = $year?$year:date('Y');
     $user_id = $user_id?$user_id:Yii::$app->user->id;
     
@@ -561,7 +563,7 @@ class Leave extends ActiveRecord
   
   
   #ลามาแล้ว (วันทำการ)ในปีนั้นๆ
-  public static function getPastDay($user_id = null,$year = null,$leave_type_id = 4){
+  public static function getPastDay($user_id = null,$year = null,$leave_type_id = self::LEAVE_VACATION){
     $year = $year?$year:date('Y');
     $user_id = $user_id?$user_id:Yii::$app->user->id;
     //$rangeYear = FiscalYear::find()->where(['year'=>$year])->one();
@@ -581,7 +583,7 @@ class Leave extends ActiveRecord
   
   
   #วันลาพักผ่อนสะสม คงเหลือ (วันลาพักผ่อน)
-  public static function getTotal($user_id = null,$year = null,$leave_type_id = 4){
+  public static function getTotal($user_id = null,$year = null,$leave_type_id = self::LEAVE_VACATION){
     $year = $year?$year:date('Y');
     $user_id = $user_id?$user_id:Yii::$app->user->id;
     
@@ -601,7 +603,7 @@ class Leave extends ActiveRecord
   
   
   #จำนวนวันยกเลิกลา
-  public static function getCancelDay($user_id = null,$year = null,$leave_type_id = 4){
+  public static function getCancelDay($user_id = null,$year = null,$leave_type_id = self::LEAVE_VACATION){
     $year = $year?$year:date('Y');
     $user_id = $user_id?$user_id:Yii::$app->user->id;
     

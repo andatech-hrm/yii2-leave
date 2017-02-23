@@ -90,6 +90,16 @@ class LeaveType extends \yii\db\ActiveRecord
         return $this->hasMany(LeaveCondition::className(), ['leave_type_id' => 'id']);
     }
     
+    
+     public function getCreatedBy(){      
+        return  $this->hasOne(PersonLeave::className(), ['user_id' => 'created_by']);
+    }
+    
+    public function getUpdatedBy(){      
+        return  $this->hasOne(PersonLeave::className(), ['user_id' => 'updated_by']);
+    }
+
+    
     public function getData(){
         $searchModel = new LeaveSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

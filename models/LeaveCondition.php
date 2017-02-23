@@ -4,6 +4,12 @@ namespace andahrm\leave\models;
 
 use Yii;
 
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
+
+use andahrm\person\models\Person;
+use andahrm\leave\models\PersonLeave;
 /**
  * This is the model class for table "leave_condition".
  *
@@ -32,6 +38,20 @@ class LeaveCondition extends \yii\db\ActiveRecord
     {
         return 'leave_condition';
     }
+    
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+            ],
+            [
+                'class' => TimestampBehavior::className(),
+            ]
+        ];
+    }
+    
+   
 
     /**
      * @inheritdoc
@@ -47,6 +67,8 @@ class LeaveCondition extends \yii\db\ActiveRecord
             ['leave_type_id' , 'default','value'=>4]
         ];
     }
+    
+   
 
     /**
      * @inheritdoc
@@ -68,6 +90,28 @@ class LeaveCondition extends \yii\db\ActiveRecord
             'updated_by' => Yii::t('andahrm', 'Updated By'),
         ];
     }
+    
+     const GOV_LESS_THEN = 1;
+    const GOV_OVER = 2;
+    
+    
+    public static function itemsAlias($key) {
+        $items = [
+            'gov_service_status' => [
+                self::GOV_LESS_THEN => Yii::t('andahrm/leave', 'Less then'),
+                self::GOV_OVER => Yii::t('andahrm/leave', 'Over'),
+            ],
+        ];
+        return ArrayHelper::getValue($items, $key, []);
+    }
+  
+    public function getGovStatusLabel() {
+        return ArrayHelper::getValue($this->getItemGovStatus(), $this->gov_service_status);
+    }
+    
+     public static function getItemGovStatus() {
+          return self::itemsAlias('gov_service_status');
+     }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -83,5 +127,13 @@ class LeaveCondition extends \yii\db\ActiveRecord
     public function getLeavePermissions()
     {
         return $this->hasMany(LeavePermission::className(), ['leave_condition_id' => 'id']);
+    }
+    
+     public function getCreatedBy(){      
+        return  $this->hasOne(PersonLeave::className(), ['user_id' => 'created_by']);
+    }
+    
+    public function getUpdatedBy(){      
+        return  $this->hasOne(PersonLeave::className(), ['user_id' => 'updated_by']);
     }
 }

@@ -23,16 +23,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'title',
-            'leave_type_id',
-            'gov_service_status',
+            //'leave_type_id',
+            [
+                'attribute'=>'gov_service_status',
+                'value' =>  'govStatusLabel',
+            ],
             'number_year',
             // 'per_annual_leave',
             // 'per_annual_leave_limit',
             // 'status',
-            // 'created_at',
-            // 'created_by',
+            'created_at:datetime',
+            [
+                'attribute'=>'created_by',
+                'value' =>  'createdBy.fullname',
+            ],
             // 'updated_at',
             // 'updated_by',
 

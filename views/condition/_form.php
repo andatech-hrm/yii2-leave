@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+use andahrm\leave\models\LeaveCondition;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeaveCondition */
 /* @var $form yii\widgets\ActiveForm */
@@ -18,7 +19,7 @@ use yii\widgets\ActiveForm;
       <div class="col-sm-3">
         
      
-    <?= $form->field($model, 'gov_service_status')->radioList(['1'=>'ไม่เกิน','2'=>'ไม่น้อยกว่า']) ?>
+    <?= $form->field($model, 'gov_service_status')->radioList(LeaveCondition::getItemGovStatus()) ?>
       </div>
 <div class="col-sm-9">
     <?= $form->field($model, 'number_year')->textInput() ?>

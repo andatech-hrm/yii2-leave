@@ -33,9 +33,18 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             //'leave_condition_id',
             //'year',
-            'number_day',
-            'created_at',
-            'created_by',
+             [
+                'attribute'=>'number_day',
+                'contentOptions' => ['class'=>'text-right'],
+                'value' => function($model){
+                    return $model->number_day." ".Yii::t('andahrm','Day');
+                }
+            ],
+            'created_at:datetime',
+            [
+                'attribute'=>'created_by',
+                'value' =>  'createdBy.fullname',
+            ],
             // 'updated_at',
             // 'updated_by',
 

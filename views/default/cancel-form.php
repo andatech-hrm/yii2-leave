@@ -1,9 +1,8 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
-use kartik\widgets\DatePicker;
-//use kuakling\datepicker\DatePicker;
+use yii\bootstrap\ActiveForm;
+use kuakling\datepicker\DatePicker;
 
 use andahrm\leave\models\Leave;
 use andahrm\leave\models\LeaveDayOff;
@@ -74,7 +73,7 @@ $items['date_range_old']= 'ตั้งแต่วันที่ <span class="
    $items['end_part']=$form->field($modelCancel, 'end_part')->dropdownList(Leave::getItemEndPart())->label(false)->hint(false)->error(false);
   
   
-  $layout3 = <<< HTML
+  /*$layout3 = <<< HTML
     <span class="input-group-addon">ตั้งแต่วันที่</span>
     {input1}
     <span class="input-group-addon">|</span>{$items['start_part']}
@@ -111,7 +110,75 @@ HTML;
     ])->label(false);
     
     
-  $items['date_range'] .= $model->getFirstError('end_part');
+  $items['date_range'] .= $model->getFirstError('end_part');*/
+    
+    /////////begin set date range///////////////////////////////////////
+    $datesDisabledGl = LeaveDayOff::getList();
+    $datesDisabledTh = [];
+    foreach ($datesDisabledGl as $date) {
+        $datesDisabledTh[] = Yii::$app->formatter->asDate($date, 'php:d/m/Y');
+    }
+    $dateWidgetConfig = [
+      'daysOfWeekDisabled' => [0, 6], 
+      'datesDisabled' => $datesDisabledTh, 
+      'startDate' => Yii::$app->formatter->asDate($model->date_start, 'php:d/m/Y'),
+      'endDate' => Yii::$app->formatter->asDate($model->date_end, 'php:d/m/Y'),
+      
+    ];
+    $items['date_range'] = '<div class="row">';
+    $items['date_range'] .= '<div class="col-sm-6">';
+    $items['date_range'] .= $form->field($modelCancel, 'date_start', [
+        // 'inputTemplate' => '{input}',
+        'options' => [
+            'style' => 'width: 80%; float:left'
+        ]
+    ])->widget(DatePicker::className(), ['options' => $dateWidgetConfig]);
+    $items['date_range'] .= '<div style="width: 20%; float: left;"><label class="control-label">&nbsp;</label>' . $items['start_part'] . '</div>';
+    $items['date_range'] .= '</div>';
+    
+    $items['date_range'] .= '<div class="col-sm-6">';
+    $items['date_range'] .= $form->field($modelCancel, 'date_end', [
+        // 'inputTemplate' => '{input}',
+        'options' => [
+            'style' => 'width: 80%; float:left'
+        ]
+    ])->widget(DatePicker::className(), ['options' => $dateWidgetConfig]);
+    $items['date_range'] .= '<div style="width: 20%; float: left;"><label class="control-label">&nbsp;</label>' . $items['end_part'] . '</div>';
+    $items['date_range'] .= '</div>';
+    $items['date_range'] .= '</div>';
+    
+    
+$inputStartId = Html::getInputId($modelCancel, 'date_start');
+$inputEndId = Html::getInputId($modelCancel, 'date_end');
+$js[] = <<< JS
+$("#{$inputStartId}").datepicker().on('changeDate', function(e) { $("#{$inputEndId}").datepicker('setStartDate', $(this).val()); });
+$("#{$inputEndId}").datepicker().on('changeDate', function(e) { $("#{$inputStartId}").datepicker('setEndDate', $(this).val()); });
+JS;
+
+$inputStartPartId = Html::getInputId($modelCancel, 'start_part');
+$inputEndPartId = Html::getInputId($modelCancel, 'end_part');
+$js[] = <<< JS
+$(document).on('submit', "#{$form->id}", function(e){
+    var inpStart = $("#{$inputStartId}");
+    var inpEnd = $("#{$inputEndId}");
+    var inpStartPart = $("#{$inputStartPartId}");
+    var inpEndPart = $("#{$inputEndPartId}");
+    
+    var pass = true;
+    if(inpStart.val() === inpEnd.val()){
+        if(inpStartPart.val() !== inpEndPart.val()){
+            pass = false;
+            alert('การกำหนดวันลาไม่ถูกต้อง กรุณณากำหนดวันลาใหม่');
+        }
+    }
+    
+    return pass;
+});
+JS;
+    
+    /////////end set date range///////////////////////////////////////
+    
+    
   
     $items['contact']=$form->field($model, 'contact')->textInput(['placeholder'=>'ติดต่อข้าพเจ้าได้ที่']);
   
@@ -155,3 +222,10 @@ HTML;
 
 </div>
 
+
+
+
+<?php
+$js = array_filter($js);
+$this->registerJs(implode("\n", $js));
+?>

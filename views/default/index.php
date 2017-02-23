@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 foreach($leaveType as $type):
 if($type->data):
-	if($type->id==4):
+	if($type->id==1):
 		// $searchModel1 = new LeaveCancelSearch();
   //      $dataProvider1 = $searchModel1->search(Yii::$app->request->queryParams);
 		// $dataProvider1 = ArrayHelper::toArray($dataProvider1);
@@ -164,7 +164,7 @@ if($type->data):
 			],
         ],
     ]); 
-    ################ 1-3 ลาอื่นๆ
+    ################ 2 ขึ้นไป 
     else:
     	echo GridView::widget([
         'dataProvider' => $type->data,

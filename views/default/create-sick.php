@@ -20,9 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
 $items=[];
 $personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
 $items['user'] = $personLeave;
-
+$personLeave = $personLeave->position->section->leaveRelatedSection;
 if($model->isNewRecord){
-  $model->to = $personLeave->toDirector;
+  echo $model->to = $personLeave->toDirector;
 }
 ?>
 
