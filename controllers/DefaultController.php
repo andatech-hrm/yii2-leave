@@ -40,6 +40,38 @@ class DefaultController extends Controller
     {
         $this->layout = 'menu-top';
     }
+    
+    
+    public function beforeAction($action)
+    {
+        $config = [];
+        switch ($action->id) {
+           
+            case 'registration':
+                $config = [
+                    'steps' => ['profile', 'address', 'phoneNumber', 'user'],
+                    'events' => [
+                        WizardBehavior::EVENT_WIZARD_STEP => [$this, $action->id.'WizardStep'],
+                        WizardBehavior::EVENT_AFTER_WIZARD => [$this, $action->id.'AfterWizard'],
+                        WizardBehavior::EVENT_INVALID_STEP => [$this, 'invalidStep']
+                    ]
+                ];
+                break;
+           
+            case 'resume':
+                $config = ['steps' => []]; // force attachment of WizardBehavior
+            default:
+                break;
+        }
+
+        if (!empty($config)) {
+            $config['class'] = WizardBehavior::className();
+            $this->attachBehavior('wizard', $config);
+        }
+
+        return parent::beforeAction($action);
+    }
+    
 
     /**
      * Lists all Leave models.
