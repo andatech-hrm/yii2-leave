@@ -46,7 +46,7 @@ class DefaultController extends Controller
     {
         $config = [];
         switch ($action->id) {
-           
+           55
             case 'registration':
                 $config = [
                     'steps' => ['profile', 'address', 'phoneNumber', 'user'],
