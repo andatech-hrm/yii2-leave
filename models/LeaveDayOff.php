@@ -7,7 +7,7 @@ use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
-use yii\behaviors\AttributeBehavior;
+use kuakling\datepicker\behaviors\DateBuddhistBehavior;
 use andahrm\setting\models\Helper;
 
 /**
@@ -43,25 +43,13 @@ class LeaveDayOff extends \yii\db\ActiveRecord
             'blameable' => [
                 'class' => BlameableBehavior::className(),
             ],
-            'date_start' =>[
-                'class' => AttributeBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'date_start',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'date_start',
-                ],
-                'value' => function($event) {
-                    return Helper::dateUi2Db($this->date_start);
-                },
+            'date_start' => [
+                'class' => DateBuddhistBehavior::className(),
+                'dateAttribute' => 'date_start',
             ],
-            'date_end' =>[
-                'class' => AttributeBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'date_end',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'date_end',
-                ],
-                'value' => function($event) {
-                    return Helper::dateUi2Db($this->date_end);
-                },
+            'date_end' => [
+                'class' => DateBuddhistBehavior::className(),
+                'dateAttribute' => 'date_end',
             ],
         ];
     }

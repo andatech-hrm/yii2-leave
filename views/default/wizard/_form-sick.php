@@ -161,7 +161,7 @@ use andahrm\structure\models\FiscalYear;
 <div class="row">
     <div class="col-sm-4">
     
-    <?=$form->field($model, 'inspector_by')->dropdownList($personLeave->inspectors,['prompt'=>'เลือกผู้ตรวจสอบ']); ?>
+    <?=$form->field($model, 'inspector_by')->dropdownList($personLeave->inspectors); ?>
     
     </div>
 </div>
@@ -169,7 +169,7 @@ use andahrm\structure\models\FiscalYear;
 <div class="row">
     <div class="col-sm-4">
     
-    <?= $form->field($model, 'commander_by')->dropdownList($personLeave->commanders,['prompt'=>'เลือกผู้บังคับบัญชา']); ?>
+    <?= $form->field($model, 'commander_by')->dropdownList($personLeave->commanders); ?>
     
     </div>
 </div>
@@ -177,7 +177,7 @@ use andahrm\structure\models\FiscalYear;
 <div class="row">
     <div class="col-sm-4">
     
-    <?= $form->field($model, 'director_by')->dropdownList($personLeave->directors,['prompt'=>'เลือกผู้ออกคำสั่ง']); ?>
+    <?= $form->field($model, 'director_by')->dropdownList($personLeave->directors); ?>
     
     </div>
 </div>

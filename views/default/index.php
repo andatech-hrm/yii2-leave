@@ -23,14 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 foreach($leaveType as $type):
 if($type->data):
-	if($type->id==1):
+	if($type->id==Leave::TYPE_VACATION):
 		// $searchModel1 = new LeaveCancelSearch();
   //      $dataProvider1 = $searchModel1->search(Yii::$app->request->queryParams);
 		// $dataProvider1 = ArrayHelper::toArray($dataProvider1);
 		// $dataProvider = ArrayHelper::merge($type->data,$dataProvider);
 		#ลาพักผ่อน
 	echo GridView::widget([
-        'dataProvider' => $dataProvider,
+        'dataProvider' => $type->data,
         //'filterModel' => $searchModel,
         //ActionColumn
         'showFooter'=>true,
@@ -133,7 +133,7 @@ if($type->data):
 			[
 				'class' => 'kartik\grid\ActionColumn',
 				'buttonOptions'=>['class'=>'btn btn-default'],
-				'template'=>'{cancel}{update}{delete}{view}{cancel-view}',
+				'template'=>'{cancel}{delete}{view}{cancel-view}',
 				'hAlign'=>'right',
 				'headerOptions'=>[
 				    'style'=>"width:10%"
@@ -145,17 +145,17 @@ if($type->data):
 				'buttons' => [
 					'cancel' => function($url,$model,$key){
 						if($model->numberDayTotal){
-							return $model->status==Leave::STATUS_ALLOW?Html::a(Yii::t('andahrm/leave', 'Cancel'),$url,['class'=>'btn btn-xs btn-warning']):'';
+							return $model->status==Leave::STATUS_ALLOW?Html::a(Yii::t('andahrm/leave', 'Cancel'),$url,['class'=>'btn btn-xs btn-warning', 'data-pjax' => 0]):'';
 						}
 					},
-					'update' => function($url,$model,$key){
-						return $model->status==0?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url,['class'=>'btn btn-xs btn-default']):'';
-					},
+					// 'update' => function($url,$model,$key){
+					// 	return $model->status==0?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url,['class'=>'btn btn-xs btn-default', 'data-pjax' => 0]):'';
+					// },
 					'delete' => function($url,$model,$key){
-						return $model->status==0?Html::a('ลบ',$url,['class'=>'btn btn-xs btn-danger','data-method'=>'POST']):'';
+						return $model->status==0?Html::a('ลบ',$url,['class'=>'btn btn-xs btn-danger','data-method'=>'POST', 'data-pjax' => 0]):'';
 					},
 					'view' => function($url,$model,$key){
-						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',$url,['class'=>'btn btn-xs btn-default']);
+						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',$url,['class'=>'btn btn-xs btn-default', 'data-pjax' => 0]);
 					},
 					'cancel-view' => function($url,$model,$key){
 						return $model->leaveCancel?$model->leaveCancelButton:'';
@@ -274,10 +274,10 @@ if($type->data):
 				'template'=>'{update} {view}',
 				'buttons' => [
 					'update' => function($url,$model,$key){
-						return $model->status==0?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url):'';
+						return $model->status==0?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url, ['data-pjax' => 0]):'';
 					},
 					'view' => function($url,$model,$key){
-						return $model->status!=0?Html::a('<span class="glyphicon glyphicon-eye-open"></span>',$url):'';
+						return $model->status!=0?Html::a('<span class="glyphicon glyphicon-eye-open"></span>',$url, ['data-pjax' => 0]):'';
 					},
 				]
 			],

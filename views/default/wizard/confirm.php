@@ -14,7 +14,7 @@ use backend\widgets\WizardMenu;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
-$this->title = Yii::t('andahrm/leave', 'Draft Form');
+$this->title = Yii::t('andahrm/leave', 'Confirm Form');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Create New'), 'url' => ['create','step'=>'reset']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Select Type'), 'url' => ['create','step'=>'select']];
@@ -36,15 +36,15 @@ $modelSelect = $event->sender->read('select')[0];
 <div class="leave-form">
 
     <?php $form = ActiveForm::begin(); 
-    $model->status = 1;
-    echo $form->field($model, 'status')->textInput()->label(false);
+    //$model->status = 1;
+    echo $form->field($model, 'status')->hiddenInput()->label(false);
     
     
-    // if($modelSelect->leave_type_id==1){
-    //      echo $this->render('_confirm-vacation',['form'=>$form,'model'=>$model,'event'=>$event]);
-    //  }else{
-    //      echo $this->render('_confirm-sick',['form'=>$form,'model'=>$model,'event'=>$event]);
-    //  }
+    if($modelSelect->leave_type_id==1){
+         echo $this->render('_confirm-vacation',['form'=>$form,'model'=>$model,'event'=>$event]);
+     }else{
+         echo $this->render('_confirm-sick',['form'=>$form,'model'=>$model,'event'=>$event]);
+     }
   
   
   ?>

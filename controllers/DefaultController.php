@@ -528,8 +528,9 @@ class DefaultController extends Controller
             // print_r($model);
             // exit();
             if($model){
+                $model->status = 1;
                 if($model->save()){
-                    print_r($model);
+                    //print_r($model);
                    // exit();
                 }else{
                     
@@ -541,7 +542,7 @@ class DefaultController extends Controller
             $event->data = $this->render('wizard/complete', [
                 'data' => $event->stepData
             ]);
-            $event->continue = false;
+            //$event->continue = false;
         } else {
             $event->data = $this->render('wizard/notStarted');
         }
