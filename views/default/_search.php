@@ -31,9 +31,14 @@ use andahrm\leave\models\LeavePermission;
     ]); ?>
   
     <div class="row">
+        
       <div class="col-sm-3 pull-right">
         <?= $form->field($model, 'year')->dropDownList(FiscalYear::getList(),['onchange'=>'this.form.submit()']) ?>
       </div>
+      
+       <div class="col-xs-12 col-sm-4">
+<?= Html::a('<i class="fa fa-edit"></i><br/>'.Yii::t('andahrm/leave', 'แบบฟอร์มการลา'), ['create'], ['class' => 'btn btn-success btn-blocks']) ?>
+    </div>
       
       <!--<div class="col-sm-3">-->
       <!--  <div class="form-group">-->
