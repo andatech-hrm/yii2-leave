@@ -109,7 +109,8 @@ class LeaveDayOff extends \yii\db\ActiveRecord
       $date_end = date('Y-m-d',strtotime($model->date_end."+1 days"));
       //echo $date_end;
       $dateRange = self::createDateRange($model->date_start,$date_end);     
-      foreach($dateRange as $day) $days[] =  $day;
+      //foreach($dateRange as $day) $days[] =  $day;
+      foreach($dateRange as $day) $days[] =  Yii::$app->formatter->asDate($day, 'php:d/m/Y');;
     }    
     return $days;
   }

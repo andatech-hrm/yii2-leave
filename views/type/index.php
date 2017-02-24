@@ -26,7 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
             //'id',
             'title',
             'limit',
-            'detail:ntext',
+        //     [
+        //     'attribute'=>'detail',
+        //   // 'format'=>'ntext',
+        //     'headerOptions'=>['width'=>'250'],
+        //     'contentOptions'=>['width'=>'250']
+        //     ],
             'created_at:datetime',
             [
                 'attribute'=>'created_by',

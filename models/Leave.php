@@ -117,36 +117,36 @@ class Leave extends ActiveRecord
             'blameable' => [
                 'class' => BlameableBehavior::className(),
             ],
-            'user_id' =>[
-                'class' => AttributeBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'user_id',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'user_id',
-                ],
-                'value' => function($event) {
-                    return Yii::$app->user->id;
-                },
-            ],
-            'date_start' =>[
-                'class' => AttributeBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'date_start',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'date_start',
-                ],
-                'value' => function($event) {
-                    return Helper::dateUi2Db($this->date_start);
-                },
-            ],
-            'date_end' =>[
-                'class' => AttributeBehavior::className(),
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'date_end',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'date_end',
-                ],
-                'value' => function($event) {
-                    return Helper::dateUi2Db($this->date_end);
-                },
-            ],
+            // 'user_id' =>[
+            //     'class' => AttributeBehavior::className(),
+            //     'attributes' => [
+            //         ActiveRecord::EVENT_BEFORE_INSERT => 'user_id',
+            //         ActiveRecord::EVENT_BEFORE_UPDATE => 'user_id',
+            //     ],
+            //     'value' => function($event) {
+            //         return Yii::$app->user->id;
+            //     },
+            // ],
+            // 'date_start' =>[
+            //     'class' => AttributeBehavior::className(),
+            //     'attributes' => [
+            //         ActiveRecord::EVENT_BEFORE_INSERT => 'date_start',
+            //         ActiveRecord::EVENT_BEFORE_UPDATE => 'date_start',
+            //     ],
+            //     'value' => function($event) {
+            //         return Helper::dateUi2Db($this->date_start);
+            //     },
+            // ],
+            // 'date_end' =>[
+            //     'class' => AttributeBehavior::className(),
+            //     'attributes' => [
+            //         ActiveRecord::EVENT_BEFORE_INSERT => 'date_end',
+            //         ActiveRecord::EVENT_BEFORE_UPDATE => 'date_end',
+            //     ],
+            //     'value' => function($event) {
+            //         return Helper::dateUi2Db($this->date_end);
+            //     },
+            // ],
         ];
     }
 

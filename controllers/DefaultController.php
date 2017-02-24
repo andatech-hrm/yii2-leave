@@ -16,6 +16,8 @@ use yii\data\ActiveDataProvider;
 use andahrm\leave\models\PersonLeave;
 use yii\helpers\Json;
 
+use beastbytes\wizard\WizardBehavior;
+
 /**
  * DefaultController implements the CRUD actions for Leave model.
  */
@@ -46,10 +48,13 @@ class DefaultController extends Controller
     {
         $config = [];
         switch ($action->id) {
-           55
-            case 'registration':
+            case 'create':
                 $config = [
-                    'steps' => ['profile', 'address', 'phoneNumber', 'user'],
+                    'steps' => [
+                        Yii::t('andahrm/leave','Select Type') => 'select', 
+                        Yii::t('andahrm/leave','Draft Form') => 'draft', 
+                        Yii::t('andahrm/leave','Confirm') => 'confirm',
+                        ],
                     'events' => [
                         WizardBehavior::EVENT_WIZARD_STEP => [$this, $action->id.'WizardStep'],
                         WizardBehavior::EVENT_AFTER_WIZARD => [$this, $action->id.'AfterWizard'],
@@ -60,6 +65,7 @@ class DefaultController extends Controller
            
             case 'resume':
                 $config = ['steps' => []]; // force attachment of WizardBehavior
+                
             default:
                 break;
         }
@@ -80,52 +86,10 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $searchModel = new LeaveSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         $leaveType = LeaveType::find()->all();
         
-        // foreach($leaveType as $k=> $type){
-        //     $leaveType[$k]['data'] = null;
-        //     $searchModel = new LeaveSearch();
-        //     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        //     $dataProvider->query->where(['leave_type_id'=>$type->id]);
-        //     $dataProvider->sort->defaultOrder = [
-        //         'leave_type_id' => SORT_ASC,
-        //         'created_at' => SORT_ASC
-        //     ];
-            
-            
-        //     $leaveType[$k]['data'] = $dataProvider;
-        // }
-        
-        
-        
-        
-        // $year=$year?$year:FiscalYear::currentYear();
-        // $query = Leave::find()
-        //     ->where([
-        //         'created_by' => Yii::$app->user->id,
-        //     ])
-        //     ->andFilterWhere(['year' => $year]);
-        //     //->all();
-        
-        
-        // //$model = ArrayHelper::index($model,'leave_type_id');
-        // //print_r($model);
-        
-        // $leaveProvider = new ActiveDataProvider([
-        //     'query' => $query,
-        //     // 'pagination' => [
-        //     //     'pageSize' => 10,
-        //     // ],
-        //     // 'sort' => [
-        //     //     'defaultOrder' => [
-        //     //         'created_at' => SORT_DESC,
-        //     //         'title' => SORT_ASC, 
-        //     //     ]
-        //     // ],
-        //     ]);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -289,18 +253,18 @@ class DefaultController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Leave();
+    // public function actionCreate()
+    // {
+    //     $model = new Leave();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
+    //     if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    //         return $this->redirect(['view', 'id' => $model->id]);
+    //     } else {
+    //         return $this->render('create', [
+    //             'model' => $model,
+    //         ]);
+    //     }
+    // }
 
     /**
      * Updates an existing Leave model.
@@ -451,4 +415,155 @@ class DefaultController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
+    
+    ###########################################################
+    ###########################################################
+    ###########################################################
+    
+    public function actionCreate($step = null)
+    {
+        //if ($step===null) $this->resetWizard();
+        if ($step=='reset') $this->resetWizard();
+        return $this->step($step);
+    }
+    
+    /**
+    * Process wizard steps.
+    * The event handler must set $event->handled=true for the wizard to continue
+    * @param WizardEvent The event
+    */
+    public function createWizardStep($event)
+    {
+        if (empty($event->stepData)) {
+            $modelName = 'andahrm\leave\models\\'.ucfirst($event->step);
+            $model = new $modelName();
+            $model->scenario = 'insert';
+        } else {
+            $model = $event->stepData;
+        }
+
+        $post = Yii::$app->request->post();
+       
+        if (isset($post['cancel'])) {
+            $event->continue = false;
+        } elseif (isset($post['prev'])) {
+            $event->nextStep = WizardBehavior::DIRECTION_BACKWARD;
+            $event->handled  = true;
+        } elseif ($model->load($post) && $model->validate()) {
+            
+            
+            
+            $event->data    = $model;
+            $event->handled = true;
+
+            if (isset($post['pause'])) {
+                $event->continue = false;
+            } elseif ($event->n < 2 && isset($post['add'])) {
+                $event->nextStep = WizardBehavior::DIRECTION_REPEAT;
+            }
+            
+             if($post){
+                print_r($post);
+                //exit();
+            }
+        } else {
+            if($model->getErrors()){
+                print_r($model->getErrors());
+                exit();
+            }
+                
+            $event->data = $this->render('wizard/'.$event->step, compact('event', 'model'));
+        }
+    }
+
+    /**
+    * @param WizardEvent The event
+    */
+    public function invalidStep($event)
+    {
+        $event->data = $this->render('wizard/invalidStep', compact('event'));
+        $event->continue = false;
+        return $this->redirect(['create']);
+    }
+
+    /**
+    * Registration wizard has ended; the reason can be determined by the
+    * step parameter: TRUE = wizard completed, FALSE = wizard did not start,
+    * <string> = the step the wizard stopped at
+    * @param WizardEvent The event
+    */
+    public function createAfterWizard($event)
+    {
+        if (is_string($event->step)) {
+            $uuid = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+                mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+                mt_rand(0, 0xffff),
+                mt_rand(0, 0x0fff) | 0x4000,
+                mt_rand(0, 0x3fff) | 0x8000,
+                mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+            );
+
+            $registrationDir = Yii::getAlias('@runtime/wizard/leave');
+            $registrationDirReady = true;
+            if (!file_exists($registrationDir)) {
+                if (!mkdir($registrationDir) || !chmod($registrationDir, 0775)) {
+                    $registrationDirReady = false;
+                }
+            }
+            if ($registrationDirReady && file_put_contents(
+                $registrationDir.DIRECTORY_SEPARATOR.$uuid,
+                $event->sender->pauseWizard()
+            )) {
+                $event->data = $this->render('wizard/paused', compact('uuid'));
+            } else {
+                $event->data = $this->render('wizard/notPaused');
+            }
+        } elseif ($event->step === null) {
+            $event->data = $this->render('wizard/cancelled');
+        } elseif ($event->step) {
+            
+            $model = $event->stepData['draft'][0];
+            $modelConfirm = $event->stepData['confirm'][0];
+            // print_r($model);
+            // exit();
+            if($model){
+                if($model->save()){
+                    print_r($model);
+                   // exit();
+                }else{
+                    
+                }
+                
+            }
+            
+            
+            $event->data = $this->render('wizard/complete', [
+                'data' => $event->stepData
+            ]);
+            $event->continue = false;
+        } else {
+            $event->data = $this->render('wizard/notStarted');
+        }
+    }
+
+    /**
+    * Method description
+    *
+    * @return mixed The return value
+    */
+    public function actionResume($uuid)
+    {
+        $registrationFile = Yii::getAlias('@runtime/wizard/leave').DIRECTORY_SEPARATOR.$uuid;
+        if (file_exists($registrationFile)) {
+            $this->resumeWizard(@file_get_contents($registrationFile));
+            unlink($registrationFile);
+            $this->redirect(['create']);
+        } else {
+            return $this->render('wizard/notResumed');
+        }
+    }
+    
+    
+    
 }

@@ -101,11 +101,11 @@ HTML;
     
   $items['date_range'] .= $model->getFirstError('end_part');*/
   
-  $datesDisabledGl = LeaveDayOff::getList();
-  $datesDisabledTh = [];
-  foreach ($datesDisabledGl as $date) {
-      $datesDisabledTh[] = Yii::$app->formatter->asDate($date, 'php:d/m/Y');
-  }
+//   $datesDisabledGl = LeaveDayOff::getList();
+//   $datesDisabledTh = [];
+//   foreach ($datesDisabledGl as $date) {
+//       $datesDisabledTh[] = Yii::$app->formatter->asDate($date, 'php:d/m/Y');
+//   }
     $items['date_range'] = '<div class="row">';
     $items['date_range'] .= '<div class="col-sm-6">';
     $items['date_range'] .= $form->field($model, 'date_start', [
@@ -113,7 +113,7 @@ HTML;
         'options' => [
             'style' => 'width: 80%; float:left'
         ]
-    ])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => $datesDisabledTh]]);
+    ])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => LeaveDayOff::getList()]]);
     $items['date_range'] .= '<div style="width: 20%; float: left;"><label class="control-label">&nbsp;</label>' . $items['start_part'] . '</div>';
     $items['date_range'] .= '</div>';
     
@@ -123,7 +123,7 @@ HTML;
         'options' => [
             'style' => 'width: 80%; float:left'
         ]
-    ])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => $datesDisabledTh]]);
+    ])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => LeaveDayOff::getList()]]);
     $items['date_range'] .= '<div style="width: 20%; float: left;"><label class="control-label">&nbsp;</label>' . $items['end_part'] . '</div>';
     $items['date_range'] .= '</div>';
     $items['date_range'] .= '</div>';

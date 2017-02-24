@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 ?>
-
+<?= Html::a('<i class="fa fa-edit"></i><br/>'.Yii::t('andahrm/leave', 'แบบฟอร์มการลา'), ['create'], ['class' => 'btn btn-success']) ?>
 
 <div class="row">
       <div class="col-xs-12 col-sm-4">
