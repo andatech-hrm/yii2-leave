@@ -584,7 +584,6 @@ class Leave extends ActiveRecord
   public static function getCancelDay($user_id = null,$year = null,$leave_type_id = self::TYPE_VACATION){
     $year = $year?$year:date('Y');
     $user_id = $user_id?$user_id:Yii::$app->user->id;
-    
    
     #จำนวนวันทั้งหมด
     $cancelDay = self::find()->joinWith('leaveCancel')
@@ -602,9 +601,8 @@ class Leave extends ActiveRecord
     return $cancelDay?$cancelDay:0;
   }
   
+    #จำนวนวันที่ลา - จำนวนวันยกเลิกทั้งหมด
    public function getNumberDayTotal(){
-    
-    #จำนวนวันทั้งหมด
     $cancelDay = LeaveCancel::find()
                  ->where([
            'leave_id'=>$this->id,
@@ -614,6 +612,18 @@ class Leave extends ActiveRecord
     return $cancelDay?$this->number_day - $cancelDay:0;
   }
   
+  #ลาครั้งล่าสุด
+  public static function getLastLeave($user_id = null,$year = null,$leave_type_id = self::TYPE_VACATION){
+      $year = $year?$year:date('Y');
+     $user_id = $user_id?$user_id:Yii::$app->user->id;
+      
+      return self::find()->where([
+            'year'=>$year,
+            'created_by'=>$user_id,
+            'status'=>self::STATUS_ALLOW,
+            'leave_type_id'=>$leave_type_id
+          ])->orderBy(['created_at'=>SORT_DEST])->one();
+  }
   
   
 }

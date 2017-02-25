@@ -2,6 +2,8 @@
 use yii\helpers\Html;
 //use yii\widgets\ActiveForm;
 
+use andahrm\leave\models\LeaveType;
+use andahrm\structure\models\FiscalYear;
 use yii\bootstrap\ActiveForm;
 use backend\widgets\WizardMenu;
 /* @var $this yii\web\View */
@@ -31,21 +33,41 @@ $modelSelect = $event->sender->read('select')[0];
 <div class="row">
     <div class="col-sm-12">
        
-        <?php $form = ActiveForm::begin(); ?>
+        <?php $form = ActiveForm::begin(); 
+         #ข้อมูลประเภทการลา
+        $model->leave_type_id = $modelSelect->leave_type_id;
+	    $leaveType = LeaveType::findOne($model->leave_type_id);
+        echo $form->field($model, 'leave_type_id')->hiddenInput()->label(false);
+        
+        #ปีงบประมาณ
+        $model->year = FiscalYear::currentYear();
+        echo $form->field($model, 'year')->hiddenInput()->label(false);
+        
+        echo $model->scenario;
+        ?>
        
        <div class="x_panel">
             <div class="x_title">
-               <?=Html::tag('h2',$this->title.$modelSelect->leaveType->title)?>
+               <?=Html::tag('h2',$this->title.$leaveType->title)?>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
+                
+                  <?php 
+                  if($model->hasErrors()):?>
+                    <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                        </button>
+                        <strong>คำเดือน</strong> <?=$model->getAttributeLabel('end_part').":".$model->getFirstError('end_part')?>
+                    </div>
+                  <?php  endif;?>
                 <?php
                     
-                     $model->leave_type_id = $modelSelect->leave_type_id;
+                     
                      if($modelSelect->leave_type_id==1){
-                         echo $this->render('_form-vacation',['form'=>$form,'model'=>$model,'event'=>$event]);
+                         echo $this->render('_form-vacation',['form'=>$form,'model'=>$model,'event'=>$event,'leaveType'=>$leaveType]);
                      }else{
-                         echo $this->render('_form-sick',['form'=>$form,'model'=>$model,'event'=>$event]);
+                         echo $this->render('_form-sick',['form'=>$form,'model'=>$model,'event'=>$event,'leaveType'=>$leaveType]);
                      }
                 ?>
                 

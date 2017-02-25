@@ -113,7 +113,8 @@ class LeaveType extends \yii\db\ActiveRecord
         return $dataProvider->getModels()?$dataProvider:null;
     }
     
-    public static function getList(){
-        return ArrayHelper::map(self::find()->where(['id'=>[1,2,3]])->all(),'id','title');
+    public static function getList($id_new = [2],$id=[2,4,5]){
+        $id=ArrayHelper::merge($id_new,$id);
+        return ArrayHelper::map(self::find()->where(['id'=>$id])->all(),'id','title');
     }
 }

@@ -42,12 +42,12 @@ if($type->data):
 	    'columns'=>[
 	        
 			//'year',
-            [
-				'class' => '\kartik\grid\CheckboxColumn',
-				'checkboxOptions' => function ($model, $key, $index, $column) {
-							return ['value' => $model->id,'disabled'=>$model->status!=0?true:false];
-					}
-			],
+   //         [
+			// 	'class' => '\kartik\grid\CheckboxColumn',
+			// 	'checkboxOptions' => function ($model, $key, $index, $column) {
+			// 				return ['value' => $model->id,'disabled'=>$model->status!=0?true:false];
+			// 		}
+			// ],
 			['class'=>'kartik\grid\SerialColumn'],
             //'id',
 			[
@@ -152,7 +152,7 @@ if($type->data):
 					// 	return $model->status==0?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url,['class'=>'btn btn-xs btn-default', 'data-pjax' => 0]):'';
 					// },
 					'delete' => function($url,$model,$key){
-						return $model->status==0?Html::a('ลบ',$url,['class'=>'btn btn-xs btn-danger','data-method'=>'POST', 'data-pjax' => 0]):'';
+						return $model->status==Leave::STATUS_OFFER?Html::a('ลบ',$url,['class'=>'btn btn-xs btn-danger','data-method'=>'POST', 'data-pjax' => 0]):'';
 					},
 					'view' => function($url,$model,$key){
 						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',$url,['class'=>'btn btn-xs btn-default', 'data-pjax' => 0]);
@@ -178,12 +178,12 @@ if($type->data):
 	    'columns'=>[
 	        
 			//'year',
-            [
-				'class' => '\kartik\grid\CheckboxColumn',
-				'checkboxOptions' => function ($model, $key, $index, $column) {
-							return ['value' => $model->id,'disabled'=>$model->status!=0?true:false];
-					}
-			],
+   //         [
+			// 	'class' => '\kartik\grid\CheckboxColumn',
+			// 	'checkboxOptions' => function ($model, $key, $index, $column) {
+			// 				return ['value' => $model->id,'disabled'=>$model->status!=0?true:false];
+			// 		}
+			// ],
 			['class'=>'kartik\grid\SerialColumn'],
             //'id',
             //'user_id',
@@ -270,14 +270,34 @@ if($type->data):
 			#########################			
             
 			[
-				'class' => 'yii\grid\ActionColumn',
-				'template'=>'{update} {view}',
+				'class' => 'kartik\grid\ActionColumn',
+				'buttonOptions'=>['class'=>'btn btn-default'],
+				'template'=>'{cancel}{delete}{view}{cancel-view}',
+				'hAlign'=>'right',
+				'headerOptions'=>[
+				    'style'=>"width:10%"
+				  ],
+				'contentOptions'=>[
+				    'noWrap' => true,
+				    'style'=>"width:10%"
+				  ],
 				'buttons' => [
-					'update' => function($url,$model,$key){
-						return $model->status==0?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url, ['data-pjax' => 0]):'';
+					'cancel' => function($url,$model,$key){
+						if($model->numberDayTotal){
+							return $model->status==Leave::STATUS_ALLOW?Html::a(Yii::t('andahrm/leave', 'Cancel'),$url,['class'=>'btn btn-xs btn-warning', 'data-pjax' => 0]):'';
+						}
+					},
+					// 'update' => function($url,$model,$key){
+					// 	return $model->status==0?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url,['class'=>'btn btn-xs btn-default', 'data-pjax' => 0]):'';
+					// },
+					'delete' => function($url,$model,$key){
+						return $model->status==Leave::STATUS_OFFER?Html::a('ลบ',$url,['class'=>'btn btn-xs btn-danger','data-method'=>'POST', 'data-pjax' => 0]):'';
 					},
 					'view' => function($url,$model,$key){
-						return $model->status!=0?Html::a('<span class="glyphicon glyphicon-eye-open"></span>',$url, ['data-pjax' => 0]):'';
+						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',$url,['class'=>'btn btn-xs btn-default', 'data-pjax' => 0]);
+					},
+					'cancel-view' => function($url,$model,$key){
+						return $model->leaveCancel?$model->leaveCancelButton:'';
 					},
 				]
 			],

@@ -34,7 +34,7 @@ $modelSelect = $event->sender->read('select')[0];
     ]);?>
 
 <div class="leave-form">
-
+    <hr/>
     <?php $form = ActiveForm::begin(); 
     //$model->status = 1;
     echo $form->field($model, 'status')->hiddenInput()->label(false);

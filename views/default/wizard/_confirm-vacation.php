@@ -112,12 +112,8 @@ $items=[];
 
     <?php
     
-    if($modelSelect->leave_type_id==1){
-        echo $this->render('../template-vacation',$items);
-    }else{
-        echo $this->render('../template-sick',$items);
-    }
-  
+    echo $this->render('../template-vacation',$items);
+   
   
   ?>
 

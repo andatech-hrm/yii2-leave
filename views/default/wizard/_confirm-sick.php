@@ -11,6 +11,7 @@ use andahrm\leave\models\PersonLeave;
 use andahrm\structure\models\FiscalYear;
 
 use backend\widgets\WizardMenu;
+use andahrm\setting\models\Helper;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
@@ -18,6 +19,7 @@ use backend\widgets\WizardMenu;
 $items=[];
 //$personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
 $items['user_id'] = Yii::$app->user->id;
+$items['year'] = FiscalYear::currentYear();
 
 
 $modelDraft = $event->sender->read('draft')[0];
@@ -33,14 +35,15 @@ $modelDraft = $event->sender->read('draft')[0];
     
     $items['to']='เรียน <span class="text-dashed">'.$modelDraft->to.'</span>'; 
     
-    $items['leave_type_id']=$modelDraft->leaveType->title;
+    // $items['leave_type_id']=$modelDraft->leave_type_id;
+    // $items['leave_type_title']=$modelDraft->leaveType->title;
     
-    $items['date_range']= '<span class="text-dashed">'.$modelDraft->date_start.'</span> '
-    .'<span class="text-dashed">'.$modelDraft->startPartLabel.'</span> ถึง '
-    .'<span class="text-dashed">'.$modelDraft->date_end.'</span> '
+    $items['date_range']= '<span class="text-dashed">'.Helper::dateBuddhistFormatter($modelDraft->date_start).'</span> '
+    .'<span class="text-dashed">'.$modelDraft->startPartLabel.'</span> ถึงวันที่ '
+    .'<span class="text-dashed">'.Helper::dateBuddhistFormatter($modelDraft->date_end).'</span> '
     .'<span class="text-dashed">'.$modelDraft->endPartLabel.'</span>';
     
-    $items['number_day']=$modelDraft->number_day;
+    $items['number_day']=Leave::calCountDays(Helper::dateUi2Db($modelDraft->date_start),Helper::dateUi2Db($modelDraft->date_end),$modelDraft->start_part,$modelDraft->end_part);
     
     $items['collect']=Leave::getCollect($modelDraft->createdBy,$modelDraft->year);
     
@@ -50,7 +53,7 @@ $modelDraft = $event->sender->read('draft')[0];
     
     $items['end_part']=$modelDraft->end_part;
     
-    $items['pastDay']=Leave::getPastDay($modelDraft->createdBy,$modelDraft->year);
+    //$items['pastDay']=Leave::getPastDay($modelDraft->createdBy,$modelDraft->year);
     
     $items['reason']=$modelDraft->reason;
     

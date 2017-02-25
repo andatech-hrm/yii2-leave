@@ -23,37 +23,36 @@ use andahrm\structure\models\FiscalYear;
       $model->to = $personLeave->toDirector;
     }    
     
-    echo $form->field($model, 'leave_type_id')->hiddenInput()->label(false);
     
-    $model->year = FiscalYear::currentYear();
-    echo $form->field($model, 'year')->hiddenInput()->label(false);
     
-    echo $model->scenario;
+    
 ?>
 
-
-<div class="row">
-    <div class="col-sm-4">
-    <?=$form->field($model, 'to')->textInput(['placeholder'=>'เรียน']);?>
+    <div class="row">
+        <div class="col-sm-4">
+        <?=$form->field($model, 'to')->textInput(['placeholder'=>'เรียน']);?>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-sm-4">
-    <?=$form->field($model, 'reason')->widget(TypeAhead::classname(),[
-        'options' => ['placeholder' => 'เหตุผล'],
-        'pluginOptions' => ['highlight'=>true],
-        'defaultSuggestions' => Draft::getReasonList(),
-        'dataset' => [
-            [
-                'local' => Draft::getReasonList(),
-                'limit' => 10
+
+<hr/>
+<?=Html::tag('h4','มีความประสงค์'.$leaveType->title)?>
+    <div class="row">
+        <div class="col-sm-4">
+        <?=$form->field($model, 'reason')->widget(TypeAhead::classname(),[
+            'options' => ['placeholder' => 'เหตุผล'],
+            'pluginOptions' => ['highlight'=>true],
+            'defaultSuggestions' => Draft::getReasonList(),
+            'dataset' => [
+                [
+                    'local' => Draft::getReasonList(),
+                    'limit' => 10
+                ]
             ]
-        ]
-        ]);
-    ?>
-</div>
-</div>
+            ]);
+        ?>
+        </div>
+    </div>
 
     <?php
   
@@ -157,24 +156,22 @@ use andahrm\structure\models\FiscalYear;
     </div>
 </div>
     
-         
+
+  <hr/>
+<?=Html::tag('h4',Yii::t('andahrm/leave','Leave Relateds'))?>         
 <div class="row">
     <div class="col-sm-4">
     
     <?=$form->field($model, 'inspector_by')->dropdownList($personLeave->inspectors); ?>
     
     </div>
-</div>
 
-<div class="row">
     <div class="col-sm-4">
     
     <?= $form->field($model, 'commander_by')->dropdownList($personLeave->commanders); ?>
     
     </div>
-</div>
 
-<div class="row">
     <div class="col-sm-4">
     
     <?= $form->field($model, 'director_by')->dropdownList($personLeave->directors); ?>
