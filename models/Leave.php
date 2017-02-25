@@ -401,8 +401,18 @@ class Leave extends ActiveRecord
         $item = [];
     	foreach($model as $cancel){
 		 		$item[] = "<span class='text-danger'>".$cancel->$field."</div>" ;
-		 	} 
-		 	return $item?'<hr/>'.implode('<br/>',$item):'';
+		 } 
+		 return $item?'<hr/>'.implode('<br/>',$item):'';
+    }
+    
+    public function getLeaveCancelNumber($field)
+    {
+        $model = $this->leaveCancel;
+        $item = [];
+    	foreach($model as $cancel){
+		 		$item[] = "<span class='text-danger'>".Yii::$app->formatter->asDecimal($cancel->$field,1)."</div>" ;
+		 } 
+		 return $item?'<hr/>'.implode('<br/>',$item):'';
     }
     
     public function getLeaveCancelButton()
@@ -412,7 +422,7 @@ class Leave extends ActiveRecord
     	foreach($model as $cancel){
 		 		$item[] = Html::a('<span class="glyphicon glyphicon-eye-open"></span>',Url::to(['cancel-view','id'=>$cancel->id]),['class'=>'btn btn-xs btn-default']) ;
 		} 
-		 	return $item?'<hr style="margin:11px 0px 23px;"/>'.implode('<br/>',$item):'';
+		return $item?'<hr style="margin:11px 0px 23px;"/>'.implode('<br/>',$item):'';
     }
   
     public function getCreatedBy(){      
@@ -471,43 +481,89 @@ class Leave extends ActiveRecord
             }
           return self::calCountDays($this->date_start,$this->date_end,$this->start_part,$this->end_part);
     }
-  
-    #คำนวนหาจำนวนวัน
-    public static function calCountDays($star,$end,$start_part,$end_part){
-            $strStartDate = $star;
-            $strEndDate =  $end;
-
+    
+     public static function calCountDays($start,$end,$start_part,$end_part){
+            $intTotalDay = ((strtotime($end) - strtotime($start))/  ( 60 * 60 * 24 )) + 1; 
             $intWorkDay = 0;
             $intHoliday = 0;
-            $intTotalDay = ((strtotime($strEndDate) - strtotime($strStartDate))/  ( 60 * 60 * 24 )) + 1; 
-
-            while (strtotime($strStartDate) <= strtotime($strEndDate)) {
-                  $DayOfWeek = date("w", strtotime($strStartDate));
-                  if($DayOfWeek == 0 or $DayOfWeek ==6)  // 0 = Sunday, 6 = Saturday;
-                  {
+            $intDayOff = 0;
+            $days = [];
+            $dayOffList = LeaveDayOff::getListOfCheck();
+            for ($i=0;$i<$intTotalDay;$i++) {
+                 //echo $i."<br/>";
+                 $days[$i] = date("Y-m-d", strtotime("+{$i} day", strtotime($start)));
+                 if(in_array($days[$i],$dayOffList)){
+                     $intDayOff++;
+                 }
+                 
+                 $DayOfWeek = date("w", strtotime($days[$i]));
+                  if($DayOfWeek == 0 or $DayOfWeek ==6){  // 0 = Sunday, 6 = Saturday;
+                  
                     $intHoliday++;
                   }
-                  elseif(!LeaveDayOff::checkDayOff($strStartDate)) # check day off
-                  { 
-                     $intWorkDay++;
-                  }
-              //$DayOfWeek = date("l", strtotime($strStartDate)); // return Sunday, Monday,Tuesday....
-              $strStartDate = date ("Y-m-d", strtotime("+1 day", strtotime($strStartDate)));
+                 
             }
-//             echo "<hr>";
-//             echo "<br>Total Day = $intTotalDay";
-//             echo "<br>Work Day = $intWorkDay";
-//             echo "<br>Holiday = $intHoliday";
-         if($start_part == self::LATE_AFTERNOON){
-            $intWorkDay -= 0.5;
-         }
-         
-         if($end_part == self::HALF_DAY_MORNIG){
-           $intWorkDay -= 0.5;  
-         }
-
-          return $intWorkDay;
+            //LeaveDayOff::getListOfCheck();
+            
+            //print_r(LeaveDayOff::getListOfCheck());
+            $intWorkDay = $intTotalDay-$intHoliday-$intDayOff;
+            
+            if($start_part != self::ALL_DAY){
+                $intWorkDay -= 0.5;
+             }
+             
+             if($end_part != self::ALL_DAY){
+               $intWorkDay -= 0.5;  
+             }
+            
+            // echo "<hr>";
+            // echo "<br>Total Day = $intTotalDay";
+            // echo "<br>Work Day = $intWorkDay";
+            // echo "<br>Holiday = $intHoliday";
+            // echo "<br>Day Off = $intDayOff";
+            return $intWorkDay;
    }
+  
+    #คำนวนหาจำนวนวัน
+//     public static function calCountDays($star,$end,$start_part,$end_part){
+//             $strStartDate = $star;
+//             $strEndDate =  $end;
+
+//             $intWorkDay = 0;
+//             $intDayOff = 0;
+//             $intHoliday = 0;
+//             $intTotalDay = ((strtotime($strEndDate) - strtotime($strStartDate))/  ( 60 * 60 * 24 )) + 1; 
+
+//             while (strtotime($strStartDate) <= strtotime($strEndDate)) {
+//                   $DayOfWeek = date("w", strtotime($strStartDate));
+//                   //echo $strStartDate."<br/>";
+//                   if($DayOfWeek == 0 or $DayOfWeek ==6)  // 0 = Sunday, 6 = Saturday;
+//                   {
+//                     $intHoliday++;
+//                   }
+//                   elseif(!LeaveDayOff::checkDayOff($strStartDate)) # check day off
+//                   { 
+//                      $intWorkDay++;
+//                   }
+//               //$DayOfWeek = date("l", strtotime($strStartDate)); // return Sunday, Monday,Tuesday....
+//               $strStartDate = date ("Y-m-d", strtotime("+1 day", strtotime($strStartDate)));
+//             }
+//             // echo "<hr>";
+//             // echo "<br>Total Day = $intTotalDay";
+//             // echo "<br>Work Day = $intWorkDay";
+//             // echo "<br>Holiday = $intHoliday";
+//             // echo "<br>Day Off = $intDayOff";
+            
+//          if($start_part == self::LATE_AFTERNOON){
+//             $intWorkDay -= 0.5;
+//          }
+         
+//          if($end_part == self::HALF_DAY_MORNIG){
+//           $intWorkDay -= 0.5;  
+//          }
+
+//           return $intWorkDay;
+//   }
    
   
   #วันลาพักผ่อนสะสม
@@ -556,7 +612,8 @@ class Leave extends ActiveRecord
       ->sum('number_day');
       //->one();    
     //print_r($model);
-    return $model?$model-self::getCancelDay($user_id,$year,$leave_type_id):0;
+    $pastDay = $model?$model-self::getCancelDay($user_id,$year,$leave_type_id):0;
+    return  Yii::$app->formatter->asDecimal($pastDay,1);
   }
   
   
@@ -576,7 +633,9 @@ class Leave extends ActiveRecord
       //->one();
     
     //echo $permissionAll.'-'.$leaveAll;
-    return $permissionAll-$leaveAll;
+    $total = 0;
+    $total = $permissionAll-$leaveAll;
+    return  Yii::$app->formatter->asDecimal($total,1);
   }
   
   
@@ -606,10 +665,13 @@ class Leave extends ActiveRecord
     $cancelDay = LeaveCancel::find()
                  ->where([
            'leave_id'=>$this->id,
+           'status'=>LeaveCancel::STATUS_ALLOW,
        ])
-      ->select('leave_cancel.number_day');
+      ->sum('leave_cancel.number_day');
       
-    return $cancelDay?$this->number_day - $cancelDay:0;
+      $cancelDay=$cancelDay?$cancelDay:0;
+      //echo $this->number_day .'-'. $cancelDay;
+    return $this->number_day - $cancelDay;
   }
   
   #ลาครั้งล่าสุด

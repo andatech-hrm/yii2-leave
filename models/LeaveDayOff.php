@@ -98,10 +98,27 @@ class LeaveDayOff extends \yii\db\ActiveRecord
       //echo $date_end;
       $dateRange = self::createDateRange($model->date_start,$date_end);     
       //foreach($dateRange as $day) $days[] =  $day;
-      foreach($dateRange as $day) $days[] =  Yii::$app->formatter->asDate($day, 'php:d/m/Y');;
+      foreach($dateRange as $day) $days[] =  Yii::$app->formatter->asDate($day, 'php:d/m/Y');
     }    
     return $days;
   }
+  
+  
+  public static function getListOfCheck(){
+    $data = self::find()
+      ->select(['date_start','date_end'])
+      ->all();
+    $days = [];
+    foreach($data as $model){
+      $date_end = date('Y-m-d',strtotime($model->date_end."+1 days"));
+      //echo $date_end;
+      $dateRange = self::createDateRange($model->date_start,$date_end);     
+      //foreach($dateRange as $day) $days[] =  $day;
+      foreach($dateRange as $day) $days[] =  $day;
+    }    
+    return $days;
+  }
+  
   
   /**
   * สร้างช่วงของวันที่
@@ -127,7 +144,10 @@ class LeaveDayOff extends \yii\db\ActiveRecord
   *
   */
   public static function checkDayOff($date){
-    $data = self::getList();
+    $data = self::getListOfCheck();
+    // print_r($data);
+    // echo "<hr/>";
+    // echo $date;
     return ArrayHelper::isIn($date,$data);
   }
   

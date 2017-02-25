@@ -53,88 +53,14 @@ use andahrm\structure\models\FiscalYear;
         ?>
         </div>
     </div>
-
-    <?php
-  
-//   $layout3 = <<< HTML
-//     <span class="input-group-addon">ตั้งแต่วันที่</span>
-//     {input1}
-//     <span class="input-group-addon">ถึงวันที่</span>
-//     {input2}
-//     <span class="input-group-addon kv-date-remove">
-//         <i class="glyphicon glyphicon-remove"></i>
-//     </span>
-// HTML;
-  
-  
-//   echo  DatePicker::widget([
-//     'type' => DatePicker::TYPE_RANGE,
-//     //'name' => 'dp_addon_3a',
-//     'model' => $model,
-//     'attribute' => 'date_start',
-//     'attribute2' => 'date_end',
-//     //'value' => '01-Jul-2015',
-//     //'name2' => 'dp_addon_3b',
-//     //'value2' => '18-Jul-2015',
-//     'separator' => '<i class="glyphicon glyphicon-resize-horizontal"></i>',
-//     'layout' => $layout3,
-//     'pluginOptions' => [
-//         'autoclose' => true,
-//         'datesDisabled' => LeaveDayOff::getList(),
-//         'format' => 'yyyy-mm-dd',
-//         'todayHighlight' => true,
-//         'todayBtn' => true,
-//         'endDate' => date('Y-m-d'),
-//         //'calendarWeeks' => true,
-//         'daysOfWeekDisabled' => [0, 6],
-//     ]
-// ]);
-  
-//   $items['date_start']=$form->field($model, 'date_start')->widget(DatePicker::classname(), [
-//     'options' => ['placeholder' => 'Enter birth date ...'],
-//     'pluginOptions' => [
-//         'autoclose'=>true,
-//         'datesDisabled' => LeaveDayOff::getList(),
-//         'format' => 'yyyy-mm-dd',
-//         'todayHighlight' => true,
-//         'todayBtn' => true,
-//         'startDate' => date('Y-m-d', strtotime("+4 day")),
-//         //'calendarWeeks' => true,
-//         'daysOfWeekDisabled' => [0, 6],
-        
-//     ],
-//     'pluginEvents'=>[
-        
-//     ]
-//     ]);
-?>
-<div class="row">
-    <div class="col-sm-6">
-        <?=$form->field($model, 'date_start', [
-            'inputTemplate' => '{input}',
-            'options' => [
-                'style' => 'width: 80%; float:left'
-            ]
-        ])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => LeaveDayOff::getList()]]);
-        ?>
-        <div style="width: 20%; float: left;"><label class="control-label">&nbsp;</label>
-            <?=$form->field($model, 'start_part')->dropdownList(Leave::getItemStartPart())->label(false)->error(false)->hint(false);?>
-        </div>
-    </div>
     
-    <div class="col-sm-6">
-        <?= $form->field($model, 'date_end', [
-            'inputTemplate' => '{input}',
-            'options' => [
-                'style' => 'width: 80%; float:left'
-            ]
-        ])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => LeaveDayOff::getList()]]);?>
-        
-       <div style="width: 20%; float: left;"><label class="control-label">&nbsp;</label>
-       <?=$form->field($model, 'end_part')->dropdownList(Leave::getItemEndPart())->label(false)->hint(false)->error(false);?>
-       </div>
+    <div class="row">
+        <?=$form->field($model, 'date_start',['options'=>['class'=>'form-group col-sm-4']])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => LeaveDayOff::getList()]]);?>
+        <?=$form->field($model, 'start_part',['options'=>['class'=>'form-group col-sm-2']])->dropdownList(Leave::getItemStartPart());?>
+        <?=$form->field($model, 'date_end',['options'=>['class'=>'form-group col-sm-4']])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => LeaveDayOff::getList()]]);?>
+        <?=$form->field($model, 'end_part',['options'=>['class'=>'form-group col-sm-2']])->dropdownList(Leave::getItemEndPart());?>
+           
     </div>
-</div>
 
     
 <div class="row">

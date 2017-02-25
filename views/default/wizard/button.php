@@ -16,7 +16,7 @@ $step_index = array_search($step,$steps);
 echo Html::beginTag('div', ['class' => 'btn-toolbar','role'=>'toolbar']);
 
     echo Html::beginTag('div', ['class' => 'btn-group pull-left','role'=>'group']);
-         echo Html::a('<i class="fa fa-times"></i> '.Yii::t('andahrm', 'Reset'),['request','step'=>'reset'], ['class' => 'btn btn-link', 'name' => 'cancel', 'value' => 'pause']);
+         echo Html::a('<i class="fa fa-times"></i> '.Yii::t('andahrm', 'Reset'),['create','step'=>'reset'], ['class' => 'btn btn-link', 'name' => 'cancel', 'value' => 'pause']);
      echo Html::endTag('div');
     
     

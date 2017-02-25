@@ -469,8 +469,9 @@ class DefaultController extends Controller
             }
         } else {
             if($model->getErrors()){
+                echo "DefaultController : ";
                 print_r($model->getErrors());
-                exit();
+                //exit();
             }
                 
             $event->data = $this->render('wizard/'.$event->step, compact('event', 'model'));

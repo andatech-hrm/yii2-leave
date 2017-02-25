@@ -4,8 +4,10 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 // use kartik\widgets\DatePicker;
 use kuakling\datepicker\DatePicker;
+use kartik\widgets\Typeahead;
 
 use andahrm\leave\models\Leave;
+use andahrm\leave\models\Draft;
 use andahrm\leave\models\LeaveDayOff;
 
 use andahrm\leave\models\PersonLeave;
@@ -29,7 +31,7 @@ use yii\web\JsExpression;
     }
     
 
-    echo 'ปีงบประมาณ '.FiscalYear::currentYear();
+   
 ?>
 
 <div class="leave-form">
@@ -43,37 +45,14 @@ use yii\web\JsExpression;
   
   <hr/>
 <?=Html::tag('h4','มีความประสงค์'.$leaveType->title)?>
-  <?php
-   $items['start_part']=$form->field($model, 'start_part')->dropdownList(Leave::getItemStartPart())->label(false)->error(false)->hint(false);
-   $items['end_part']=$form->field($model, 'end_part')->dropdownList(Leave::getItemEndPart())->label(false)->hint(false)->error(false);
- ?>
+  
  
     <div class="row">
-        <div class="col-sm-6">
-        <?=$form->field($model, 'date_start', [
-            'inputTemplate' => '{input}',
-            'options' => [
-                'style' => 'width: 80%; float:left'
-            ]
-        ])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => LeaveDayOff::getList()]]);?>
-        
-        <div style="width: 20%; float: left;"><label class="control-label">&nbsp;</label>
-                <?=$form->field($model, 'start_part')->dropdownList(Leave::getItemStartPart())->label(false)->error(false)->hint(false);?>
-            </div>
-        </div>
-        
-     <div class="col-sm-6">
-       <?=$form->field($model, 'date_end', [
-            'inputTemplate' => '{input}',
-            'options' => [
-                'style' => 'width: 80%; float:left'
-            ]
-        ])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => LeaveDayOff::getList()]]);?>
-            
-           <div style="width: 20%; float: left;"><label class="control-label">&nbsp;</label>
-           <?=$form->field($model, 'end_part')->dropdownList(Leave::getItemEndPart())->label(false)->hint(false)->error(false);?>
-           </div>
-        </div>
+        <?=$form->field($model, 'date_start',['options'=>['class'=>'form-group col-sm-4']])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => LeaveDayOff::getList()]]);?>
+        <?=$form->field($model, 'start_part',['options'=>['class'=>'form-group col-sm-2']])->dropdownList(Leave::getItemStartPart());?>
+        <?=$form->field($model, 'date_end',['options'=>['class'=>'form-group col-sm-4']])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => LeaveDayOff::getList()]]);?>
+        <?=$form->field($model, 'end_part',['options'=>['class'=>'form-group col-sm-2']])->dropdownList(Leave::getItemEndPart());?>
+           
     </div>
      
  <div class="row">

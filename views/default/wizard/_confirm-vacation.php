@@ -11,6 +11,7 @@ use andahrm\leave\models\PersonLeave;
 use andahrm\structure\models\FiscalYear;
 
 use backend\widgets\WizardMenu;
+use andahrm\setting\models\Helper;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
@@ -31,20 +32,11 @@ $modelDraft = $event->sender->read('draft')[0];
 //print_r($modelSelect);
 ?>
 
-<?php echo WizardMenu::widget([
-      'currentStepCssClass' => 'selected',
-      'step' => $event->step,
-      'wizard' => $event->sender,
-      'options' => ['class'=>'wizard_steps anchor']
-    ]);?>
+
 
 <div class="leave-form">
 
-    <?php $form = ActiveForm::begin(); 
-    $model->status = 1;
-    echo $form->field($model, 'status')->hiddenInput()->label(false);
-    
-    ?>
+   
 <?php
      # Candidate
 $items=[];
@@ -65,7 +57,7 @@ $items=[];
     .'<span class="text-dashed">'.$modelDraft->date_end.'</span> '
     .'<span class="text-dashed">'.$modelDraft->endPartLabel.'</span>';
   
-   $items['number_day']=$modelDraft->number_day;
+  $items['number_day']=Leave::calCountDays(Helper::dateUi2Db($modelDraft->date_start),Helper::dateUi2Db($modelDraft->date_end),$modelDraft->start_part,$modelDraft->end_part);
   
   $items['collect']=Leave::getCollect($modelDraft->createdBy,$modelDraft->year);
   
@@ -85,26 +77,28 @@ $items=[];
 
   
   $items['acting_user'] = '(<span class="text-dashed">'.$modelDraft->actingUser->fullname.'</span>)<br/>'; 
-   $items['acting_user'] .= 'ตำแหน่ง .'.$modelDraft->actingUser->positionTitle; 
+   $items['acting_user'] .= 'ตำแหน่ง .'.$modelDraft->actingUser->positionTitle;
+   
+    $items['model'] = $modelDraft;
   
-   $items['inspector_status'] = Leave::getWidgetStatus($modelDraft->inspector_status,Leave::getItemInspactorStatus());
-   $items['inspectors'] = '(<span class="text-dashed">'.$modelDraft->inspectorBy->fullname.'</span>)<br/>'; 
-   $items['inspectors'] .= 'ตำแหน่ง '.$modelDraft->inspectorBy->positionTitle; 
-   $items['inspector_comment'] = $modelDraft->inspector_comment?$modelDraft->inspector_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
-   $items['inspector_at'] = $modelDraft->inspector_at?$modelDraft->inspectorAt:'วันที่............./............................/................ ' ; 
+//   $items['inspector_status'] = Leave::getWidgetStatus($modelDraft->inspector_status,Leave::getItemInspactorStatus());
+//   $items['inspectors'] = '(<span class="text-dashed">'.$modelDraft->inspectorBy->fullname.'</span>)<br/>'; 
+//   $items['inspectors'] .= 'ตำแหน่ง '.$modelDraft->inspectorBy->positionTitle; 
+//   $items['inspector_comment'] = $modelDraft->inspector_comment?$modelDraft->inspector_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
+//   $items['inspector_at'] = $modelDraft->inspector_at?$modelDraft->inspectorAt:'วันที่............./............................/................ ' ; 
 
-   $items['commander_status'] = Leave::getWidgetStatus($modelDraft->commander_status,Leave::getItemCommanderStatus());
-   $items['commanders'] = '(<span class="text-dashed">'.$modelDraft->commanderBy->fullname.'</span>)<br/>'; 
-   $items['commanders'] .= 'ตำแหน่ง '.$modelDraft->commanderBy->positionTitle; 
-   $items['commander_comment'] = $modelDraft->commander_comment?$modelDraft->commander_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
-   $items['commander_at'] = $modelDraft->commander_at?$modelDraft->commanderAt:'วันที่............./............................/................ ' ; 
+//   $items['commander_status'] = Leave::getWidgetStatus($modelDraft->commander_status,Leave::getItemCommanderStatus());
+//   $items['commanders'] = '(<span class="text-dashed">'.$modelDraft->commanderBy->fullname.'</span>)<br/>'; 
+//   $items['commanders'] .= 'ตำแหน่ง '.$modelDraft->commanderBy->positionTitle; 
+//   $items['commander_comment'] = $modelDraft->commander_comment?$modelDraft->commander_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
+//   $items['commander_at'] = $modelDraft->commander_at?$modelDraft->commanderAt:'วันที่............./............................/................ ' ; 
   
 
-   $items['director_status'] = Leave::getWidgetStatus($modelDraft->director_status,Leave::getItemDirectorStatus());
-   $items['directors'] = '(<span class="text-dashed">'.$modelDraft->directorBy->fullname.'</span>)<br/>'; 
-   $items['directors'] .= 'ตำแหน่ง '.$modelDraft->directorBy->positionTitle; 
-   $items['director_comment'] = $modelDraft->director_comment?$modelDraft->director_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
-   $items['director_at'] = $modelDraft->director_at?$modelDraft->directorAt:'วันที่............./............................/................ ' ; 
+//   $items['director_status'] = Leave::getWidgetStatus($modelDraft->director_status,Leave::getItemDirectorStatus());
+//   $items['directors'] = '(<span class="text-dashed">'.$modelDraft->directorBy->fullname.'</span>)<br/>'; 
+//   $items['directors'] .= 'ตำแหน่ง '.$modelDraft->directorBy->positionTitle; 
+//   $items['director_comment'] = $modelDraft->director_comment?$modelDraft->director_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
+//   $items['director_at'] = $modelDraft->director_at?$modelDraft->directorAt:'วันที่............./............................/................ ' ; 
   
     
     ?>
@@ -116,10 +110,5 @@ $items=[];
    
   
   ?>
-
-     <?=$this->render('button',['event'=>$event]);?>
-     
-    <?php ActiveForm::end(); ?>
-
 </div>
 

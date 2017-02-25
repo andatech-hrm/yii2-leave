@@ -43,7 +43,8 @@ $modelSelect = $event->sender->read('select')[0];
         $model->year = FiscalYear::currentYear();
         echo $form->field($model, 'year')->hiddenInput()->label(false);
         
-        echo $model->scenario;
+        //echo $model->scenario;
+         //echo 'ปีงบประมาณ '.FiscalYear::currentYear();
         ?>
        
        <div class="x_panel">

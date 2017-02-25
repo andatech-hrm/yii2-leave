@@ -74,9 +74,9 @@ if($type->data):
 				'format'=>'html',
 				//'value'=>'number_day',
 				'value'=>function($model){
-			 	$str = $model->number_day;
-			 	return $str.$model->getLeaveCancelByField('number_day');
-			 },
+				 	$str = Yii::$app->formatter->asDecimal($model->number_day,1);
+				 	return $str.$model->getLeaveCancelNumber('number_day');
+				 },
 				'hAlign'=>'right',
 			    //'format'=>['decimal', 1],
 			    'groupedRow'=>true,  
@@ -145,7 +145,7 @@ if($type->data):
 				'buttons' => [
 					'cancel' => function($url,$model,$key){
 						if($model->numberDayTotal){
-							return $model->status==Leave::STATUS_ALLOW?Html::a(Yii::t('andahrm/leave', 'Cancel'),$url,['class'=>'btn btn-xs btn-warning', 'data-pjax' => 0]):'';
+							return $model->status==Leave::STATUS_ALLOW?Html::a(Yii::t('andahrm/leave', 'Cancel leave'),$url,['class'=>'btn btn-xs btn-warning', 'data-pjax' => 0]):'';
 						}
 					},
 					// 'update' => function($url,$model,$key){
@@ -233,8 +233,12 @@ if($type->data):
 				'attribute'=>'number_day',
 				'value'=>'number_day',
 				'footer' => Leave::getPastDay(Yii::$app->user->id,$searchModel->year),
+				'value'=>function($model){
+				 	$str = Yii::$app->formatter->asDecimal($model->number_day,1);
+				 	return $str.$model->getLeaveCancelNumber('number_day');
+				 },
 				'hAlign'=>'right',
-			    'format'=>['decimal', 1],
+			    //'format'=>['decimal', 1],
 			    'pageSummary'=>true,
 			    'pageSummaryFunc'=>GridView::F_AVG
 			],
@@ -283,8 +287,9 @@ if($type->data):
 				  ],
 				'buttons' => [
 					'cancel' => function($url,$model,$key){
+						//return $model->numberDayTotal;
 						if($model->numberDayTotal){
-							return $model->status==Leave::STATUS_ALLOW?Html::a(Yii::t('andahrm/leave', 'Cancel'),$url,['class'=>'btn btn-xs btn-warning', 'data-pjax' => 0]):'';
+							return $model->status==Leave::STATUS_ALLOW?Html::a(Yii::t('andahrm/leave', 'Cancel leave'),$url,['class'=>'btn btn-xs btn-warning', 'data-pjax' => 0]):'';
 						}
 					},
 					// 'update' => function($url,$model,$key){
