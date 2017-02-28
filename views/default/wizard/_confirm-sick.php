@@ -17,7 +17,8 @@ use andahrm\setting\models\Helper;
 
 # Candidate
 $items=[];
-//$personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
+$personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
+$items['user'] = $personLeave;
 $items['user_id'] = Yii::$app->user->id;
 $items['year'] = FiscalYear::currentYear();
 
@@ -38,8 +39,8 @@ $modelDraft = $event->sender->read('draft')[0];
     // $items['leave_type_id']=$modelDraft->leave_type_id;
     // $items['leave_type_title']=$modelDraft->leaveType->title;
     
-    $items['date_range']= '<span class="text-dashed">'.Helper::dateBuddhistFormatter($modelDraft->date_start).'</span> '
-    .'<span class="text-dashed">'.$modelDraft->startPartLabel.'</span> ถึงวันที่ '
+      $items['date_range']= '<span class="text-dashed">'.Helper::dateBuddhistFormatter($modelDraft->date_start).'</span> '
+    .'<span class="text-dashed">'.$modelDraft->startPartLabel.'</span> ถึง '
     .'<span class="text-dashed">'.Helper::dateBuddhistFormatter($modelDraft->date_end).'</span> '
     .'<span class="text-dashed">'.$modelDraft->endPartLabel.'</span>';
     

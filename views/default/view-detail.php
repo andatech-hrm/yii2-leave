@@ -20,7 +20,9 @@ use andahrm\leave\models\PersonLeave;
 $items=[];
 $items['user'] = $model->createdBy;
   
-   $items['created_at'] = 'วันที่ '.Yii::$app->formatter->asDate($model->created_at,'d').' เดือน '.Yii::$app->formatter->asDate($model->created_at,'MMMM').' พ.ศ. '.Yii::$app->formatter->asDate($model->created_at,'yyyy'); 
+  $items['created_at'] = 'วันที่ '.Yii::$app->formatter->asDate($model->created_at,'d').' เดือน '.Yii::$app->formatter->asDate($model->created_at,'MMMM').' พ.ศ. '.Yii::$app->formatter->asDate($model->created_at,'yyyy'); 
+  
+  $items['year']=$model->year; 
   
   $items['user_id']=$model->created_by; 
   
@@ -49,35 +51,18 @@ $items['user'] = $model->createdBy;
   
    $items['contact']='<span class="text-dashed">'.$model->contact.'</span>';
     
-  $items['acting_user_id'] = '<span class="text-dashed">'.$model->actingUser->fullname.'</span>'; 
+  // $items['acting_user_id'] = '<span class="text-dashed">'.$model->actingUser->fullname.'</span>'; 
 
   
-  $items['acting_user'] = '(<span class="text-dashed">'.$model->actingUser->fullname.'</span>)<br/>'; 
-   $items['acting_user'] .= 'ตำแหน่ง .'.$model->actingUser->positionTitle; 
+  // $items['acting_user'] = '(<span class="text-dashed">'.$model->actingUser->fullname.'</span>)<br/>'; 
+  // $items['acting_user'] .= 'ตำแหน่ง .'.$model->actingUser->positionTitle; 
   
-   $items['inspector_status'] = Leave::getWidgetStatus($model->inspector_status,Leave::getItemInspactorStatus());
-   $items['inspectors'] = '(<span class="text-dashed">'.$model->inspectorBy->fullname.'</span>)<br/>'; 
-   $items['inspectors'] .= 'ตำแหน่ง '.$model->inspectorBy->positionTitle; 
-   $items['inspector_comment'] = $model->inspector_comment?$model->inspector_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
-   $items['inspector_at'] = $model->inspector_at?$model->inspectorAt:'วันที่............./............................/................ ' ; 
-
-   $items['commander_status'] = Leave::getWidgetStatus($model->commander_status,Leave::getItemCommanderStatus());
-   $items['commanders'] = '(<span class="text-dashed">'.$model->commanderBy->fullname.'</span>)<br/>'; 
-   $items['commanders'] .= 'ตำแหน่ง '.$model->commanderBy->positionTitle; 
-   $items['commander_comment'] = $model->commander_comment?$model->commander_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
-   $items['commander_at'] = $model->commander_at?$model->commanderAt:'วันที่............./............................/................ ' ; 
-  
-
-   $items['director_status'] = Leave::getWidgetStatus($model->director_status,Leave::getItemDirectorStatus());
-   $items['directors'] = '(<span class="text-dashed">'.$model->directorBy->fullname.'</span>)<br/>'; 
-   $items['directors'] .= 'ตำแหน่ง '.$model->directorBy->positionTitle; 
-   $items['director_comment'] = $model->director_comment?$model->director_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
-   $items['director_at'] = $model->director_at?$model->directorAt:'วันที่............./............................/................ ' ; 
+   $items['model'] = $model; 
   ?>
   
   
   
 
-    <?=$this->render('template-'.(($model->leave_type_id==4)?'vacation':'sick'),$items)?>
+<?=$this->render('wizard/_template-'.(($model->leave_type_id==Leave::TYPE_VACATION)?'vacation':'sick'),$items)?>
 
 

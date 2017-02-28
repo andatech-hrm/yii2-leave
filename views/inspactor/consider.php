@@ -6,20 +6,24 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
-$this->title = Yii::t('andahrm', 'Update {modelClass}: ', [
-    'modelClass' => 'Leave',
+$this->title = Yii::t('andahrm/leave', 'Consider {leave_type} number: ', [
+    'leave_type' => $model->leaveType->title,
 ]) . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('andahrm', 'Update');
+
+$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['/default/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Inspactor'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="leave-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h2><?= Html::encode($this->title) ?></h2>
+    <hr/>
 
     <?= $this->render('../default/view-detail', [
         'model' => $model,
     ]) ?>
+    
+    <hr/>
   
     <?php $form = ActiveForm::begin();
         echo $form->field($model, 'status')->hiddenInput()->label(false)->hint(false);

@@ -482,6 +482,7 @@ class Leave extends ActiveRecord
           return self::calCountDays($this->date_start,$this->date_end,$this->start_part,$this->end_part);
     }
     
+    #คำนวนหาจำนวนวัน
      public static function calCountDays($start,$end,$start_part,$end_part){
             $intTotalDay = ((strtotime($end) - strtotime($start))/  ( 60 * 60 * 24 )) + 1; 
             $intWorkDay = 0;
@@ -524,53 +525,12 @@ class Leave extends ActiveRecord
             return $intWorkDay;
    }
   
-    #คำนวนหาจำนวนวัน
-//     public static function calCountDays($star,$end,$start_part,$end_part){
-//             $strStartDate = $star;
-//             $strEndDate =  $end;
-
-//             $intWorkDay = 0;
-//             $intDayOff = 0;
-//             $intHoliday = 0;
-//             $intTotalDay = ((strtotime($strEndDate) - strtotime($strStartDate))/  ( 60 * 60 * 24 )) + 1; 
-
-//             while (strtotime($strStartDate) <= strtotime($strEndDate)) {
-//                   $DayOfWeek = date("w", strtotime($strStartDate));
-//                   //echo $strStartDate."<br/>";
-//                   if($DayOfWeek == 0 or $DayOfWeek ==6)  // 0 = Sunday, 6 = Saturday;
-//                   {
-//                     $intHoliday++;
-//                   }
-//                   elseif(!LeaveDayOff::checkDayOff($strStartDate)) # check day off
-//                   { 
-//                      $intWorkDay++;
-//                   }
-//               //$DayOfWeek = date("l", strtotime($strStartDate)); // return Sunday, Monday,Tuesday....
-//               $strStartDate = date ("Y-m-d", strtotime("+1 day", strtotime($strStartDate)));
-//             }
-//             // echo "<hr>";
-//             // echo "<br>Total Day = $intTotalDay";
-//             // echo "<br>Work Day = $intWorkDay";
-//             // echo "<br>Holiday = $intHoliday";
-//             // echo "<br>Day Off = $intDayOff";
-            
-//          if($start_part == self::LATE_AFTERNOON){
-//             $intWorkDay -= 0.5;
-//          }
-         
-//          if($end_part == self::HALF_DAY_MORNIG){
-//           $intWorkDay -= 0.5;  
-//          }
-
-//           return $intWorkDay;
-//   }
-   
   
   #วันลาพักผ่อนสะสม
   public static function getCollect($user_id = null,$year = null,$leave_type_id = self::TYPE_VACATION){
     $year = $year?$year:date('Y');
     $user_id = $user_id?$user_id:Yii::$app->user->id;
-    
+    $year = $year-1;
     
     #จำนวนวันที่ได้โคต้า
     $permissionAll = LeavePermission::getPermissionAll($user_id,$year);
@@ -589,9 +549,11 @@ class Leave extends ActiveRecord
            ])
       ->sum('number_day');
       //->one();
+      
+    $cancelDay = self::getCancelDay($user_id,$year,$leave_type_id);
     
     //echo $permissionAll.'-'.$leaveAll;
-    return $permissionAll-$leaveAll;
+    return $permissionAll-$leaveAll+$cancelDay;
   }
   
   
@@ -684,7 +646,7 @@ class Leave extends ActiveRecord
             'created_by'=>$user_id,
             'status'=>self::STATUS_ALLOW,
             'leave_type_id'=>$leave_type_id
-          ])->orderBy(['created_at'=>SORT_DEST])->one();
+          ])->orderBy(['created_at'=>SORT_DESC])->one();
   }
   
   

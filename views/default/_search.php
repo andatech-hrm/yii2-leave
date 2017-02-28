@@ -38,7 +38,7 @@ use andahrm\leave\models\LeavePermission;
         </div>
       
         <div class="col-xs-12 col-sm-4">
-        <?= Html::a('<i class="fa fa-edit"></i><br/>'.Yii::t('andahrm/leave', 'แบบฟอร์มการลา'), ['create'], ['class' => 'btn btn-success btn-blocks']) ?>
+        <?= Html::a('<i class="fa fa-edit"></i><br/>'.Yii::t('andahrm/leave', 'Form Leave'), ['create'], ['class' => 'btn btn-success btn-blocks']) ?>
         </div>
         
     </div>

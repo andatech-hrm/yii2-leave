@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
 use andahrm\structure\models\FiscalYear;
+use andahrm\setting\models\Helper;
 
 
 class Draft extends Leave
@@ -22,7 +23,7 @@ class Draft extends Leave
     {
         return [
             [['user_id', 'leave_type_id', 'start_part', 'end_part', 'acting_user_id', 'status', 'inspector_status', 'inspector_by', 'inspector_at', 'commander_status', 'commander_by', 'commander_at', 'director_status', 'director_by', 'director_at', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['to','date_start', 'date_end','commander_by', 'inspector_by','director_by', 'contact'], 'required'],
+            [['to','date_start', 'date_end','commander_by', 'inspector_by','director_by','acting_user_id', 'contact'], 'required'],
         ];
     }
   
@@ -38,23 +39,45 @@ class Draft extends Leave
     
     public function beforeValidate()
     {
+        #เปลี่ยน Form
          if($this->leave_type_id==1){
             $this->scenario = "create-vacation";
          }else{
             $this->scenario = "create-sick";
          }
          
-         $this->number_day = self::calCountDays($this->date_start,$this->date_end,$this->start_part,$this->end_part);
          
+         #เช็คช่วงของวัน
         if(($this->date_start == $this->date_end) && ($this->start_part !== $this->end_part)){                   
             $this->addError('end_part',Yii::t('andahrm/leave','Not match'));                  
         }
-        
         if($this->date_start < $this->date_end){
             if(($this->start_part == Leave::HALF_DAY_MORNIG) || ($this->end_part ==  Leave::LATE_AFTERNOON)){                   
              $this->addError('end_part',Yii::t('andahrm/leave','Not match'));
             }
         }
+        
+        #ดึงจำนวนวันลา
+         $this->number_day = self::calCountDays(Helper::dateUi2Db($this->date_start),Helper::dateUi2Db($this->date_end),$this->start_part,$this->end_part);
+         #วันลาสะสม
+         $collect = Leave::getCollect(Yii::$app->user->id,$this->year);
+        #สิทธิ์ในการฃา
+        $permission = LeavePermission::getPermission(Yii::$app->user->id,$this->year);
+        $total = $collect+$permission;
+        
+        
+        #ตรวจสอบเงื่อนไง
+        switch($this->leave_type_id){
+            case self::TYPE_VACATION:
+                if($total<$this->number_day)
+                 $this->addError('date_end',Yii::t('andahrm/leave','Exceeds')); 
+            break;
+        }
+        
+        #ตรวจสอบการวันลาซ่ำ
+        
+        
+        
          
          
          

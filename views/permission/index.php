@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="leave-permission-index">
     
     <p>
-        <?= Html::a(Yii::t('andahrm/leave', 'Create Leave Permission'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('andahrm/leave', 'Manage Leave Permission'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -48,7 +48,8 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'updated_at',
             // 'updated_by',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+            'template'=>'{view}'],
         ],
     ]); ?>
 <?php Pjax::end(); ?>

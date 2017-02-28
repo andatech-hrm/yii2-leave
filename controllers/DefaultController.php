@@ -72,6 +72,7 @@ class DefaultController extends Controller
 
         if (!empty($config)) {
             $config['class'] = WizardBehavior::className();
+            $config['sessionKey'] = 'Wizard-Leave';
             $this->attachBehavior('wizard', $config);
         }
 
@@ -423,7 +424,10 @@ class DefaultController extends Controller
     
     public function actionCreate($step = null)
     {
+        // print_r(Yii::$app->session);
+        // exit();
         //if ($step===null) $this->resetWizard();
+        
         if ($step=='reset') $this->resetWizard();
         return $this->step($step);
     }
@@ -435,6 +439,8 @@ class DefaultController extends Controller
     */
     public function createWizardStep($event)
     {
+        
+        
         if (empty($event->stepData)) {
             $modelName = 'andahrm\leave\models\\'.ucfirst($event->step);
             $model = new $modelName();
@@ -469,8 +475,8 @@ class DefaultController extends Controller
             }
         } else {
             if($model->getErrors()){
-                echo "DefaultController : ";
-                print_r($model->getErrors());
+                // echo "DefaultController : ";
+                // print_r($model->getErrors());
                 //exit();
             }
                 
@@ -524,6 +530,8 @@ class DefaultController extends Controller
             $event->data = $this->render('wizard/cancelled');
         } elseif ($event->step) {
             
+            
+            
             $model = $event->stepData['draft'][0];
             $modelConfirm = $event->stepData['confirm'][0];
             // print_r($model);
@@ -545,6 +553,7 @@ class DefaultController extends Controller
             ]);
             //$event->continue = false;
         } else {
+            
             $event->data = $this->render('wizard/notStarted');
         }
     }

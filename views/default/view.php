@@ -7,7 +7,7 @@ use andahrm\person\models\Person;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
-$this->title = $model->leave_type_id;
+$this->title = $model->leaveType->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

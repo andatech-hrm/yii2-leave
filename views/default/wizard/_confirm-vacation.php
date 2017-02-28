@@ -15,17 +15,12 @@ use andahrm\setting\models\Helper;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
-$this->title = Yii::t('andahrm/leave', 'Draft Form');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Create New'), 'url' => ['create','step'=>'reset']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Select Type'), 'url' => ['create','step'=>'select']];
-$this->params['breadcrumbs'][] = $this->title;
-
 # Candidate
 $items=[];
 $personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
 $items['user'] = $personLeave;
-
+// print_r($items['user']->leavePermission->number_day);
+// exit();
 
 $modelDraft = $event->sender->read('draft')[0];
 //$modelSelect$modelSelect->leave_type_id;
@@ -39,27 +34,27 @@ $modelDraft = $event->sender->read('draft')[0];
    
 <?php
      # Candidate
-$items=[];
   
    $items['created_at'] = 'วันที่ '
    .Yii::$app->formatter->asDate(date('Y-m-d'),'d').' เดือน '.
    Yii::$app->formatter->asDate(date('Y-m-d'),'MMMM').' พ.ศ. '.
    Yii::$app->formatter->asDate(date('Y-m-d'),'yyyy'); 
   
-  $items['user_id']=$modelDraft->created_by; 
+  $items['user_id'] = Yii::$app->user->id;
   
   $items['to']='เรียน <span class="text-dashed">'.$modelDraft->to.'</span>'; 
   
   $items['leave_type_id']=$modelDraft->leave_type_id;
  
-  $items['date_range']= '<span class="text-dashed">'.$modelDraft->date_start.'</span> '
+  $items['date_range']= '<span class="text-dashed">'.Helper::dateBuddhistFormatter($modelDraft->date_start).'</span> '
     .'<span class="text-dashed">'.$modelDraft->startPartLabel.'</span> ถึง '
-    .'<span class="text-dashed">'.$modelDraft->date_end.'</span> '
+    .'<span class="text-dashed">'.Helper::dateBuddhistFormatter($modelDraft->date_end).'</span> '
     .'<span class="text-dashed">'.$modelDraft->endPartLabel.'</span>';
   
   $items['number_day']=Leave::calCountDays(Helper::dateUi2Db($modelDraft->date_start),Helper::dateUi2Db($modelDraft->date_end),$modelDraft->start_part,$modelDraft->end_part);
   
-  $items['collect']=Leave::getCollect($modelDraft->createdBy,$modelDraft->year);
+  $items['collect']=Leave::getCollect($items['user_id'],$modelDraft->year);
+  
   
   $items['total']=$items['collect']+$items['user']->leavePermission->number_day;
 
@@ -67,20 +62,22 @@ $items=[];
   
   $items['end_part']=$modelDraft->end_part;
 
-  $items['pastDay']=Leave::getPastDay($modelDraft->createdBy,$modelDraft->year);
+  $items['pastDay']=Leave::getPastDay($items['user_id'],$modelDraft->year);
   
   $items['reason']=$modelDraft->reason;
   
-   $items['contact']='<span class="text-dashed">'.$modelDraft->contact.'</span>';
+  $items['contact']='<span class="text-dashed">'.$modelDraft->contact.'</span>';
     
-  $items['acting_user_id'] = '<span class="text-dashed">'.$modelDraft->actingUser->fullname.'</span>'; 
+//   $items['acting_user_id'] = '<span class="text-dashed">'.$modelDraft->actingUser->fullname.'</span>'; 
 
   
-  $items['acting_user'] = '(<span class="text-dashed">'.$modelDraft->actingUser->fullname.'</span>)<br/>'; 
-   $items['acting_user'] .= 'ตำแหน่ง .'.$modelDraft->actingUser->positionTitle;
-   
-    $items['model'] = $modelDraft;
+//   $items['acting_user'] = '(<span class="text-dashed">'.$modelDraft->actingUser->fullname.'</span>)<br/>'; 
   
+//   $items['acting_user'] .= 'ตำแหน่ง .'.$modelDraft->actingUser->positionTitle;
+   
+  $items['model'] = $modelDraft;
+  
+  //print_r($items);
 //   $items['inspector_status'] = Leave::getWidgetStatus($modelDraft->inspector_status,Leave::getItemInspactorStatus());
 //   $items['inspectors'] = '(<span class="text-dashed">'.$modelDraft->inspectorBy->fullname.'</span>)<br/>'; 
 //   $items['inspectors'] .= 'ตำแหน่ง '.$modelDraft->inspectorBy->positionTitle; 
@@ -106,7 +103,7 @@ $items=[];
 
     <?php
     
-    echo $this->render('../template-vacation',$items);
+    echo $this->render('_template-vacation',$items);
    
   
   ?>

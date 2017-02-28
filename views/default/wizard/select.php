@@ -48,11 +48,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <table class="table">
-    <thead>
+    <thead> 
         <tr>
-            <th width="300">ประเภท</th>
-            <th width="100">จำกัดวัน</th>
-            <th width="250">รายละเอียด</th>
+            <th width="300"><?=Yii::t('andahrm/leave', 'Title')?></th>
+            <!--<th width="100"><?=Yii::t('andahrm/leave', 'Limit')?></th>-->
+            <th width="250"><?=Yii::t('andahrm/leave', 'Detail')?></th>
             <th>หมายเหตุ</th>
         </tr>
     </thead>
@@ -74,11 +74,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'options'=>['value'=>$type->id,]
             ])->label(false)?>
             </td>
-            <td>
-                <?=$type->limit?$type->limit." ".Yii::t('andahrm','Day'):'-'?>
-            </td>
+            <!--<td>-->
+            <!--    <?php /*echo$type->limit?$type->limit." ".Yii::t('andahrm','Day'):'-'*/?>-->
+            <!--</td>-->
             <td>
                 <?=$type->detail?>
+                <?=$type->limit?'<br/><span class="red">'.Yii::t('andahrm/leave', 'Limit').' '.$type->limit." ".Yii::t('andahrm','Day')."</span>":'-'?>
             </td>
             <td>&nbsp;</td>
         </tr>

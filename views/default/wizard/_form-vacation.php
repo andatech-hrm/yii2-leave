@@ -9,6 +9,7 @@ use kartik\widgets\Typeahead;
 use andahrm\leave\models\Leave;
 use andahrm\leave\models\Draft;
 use andahrm\leave\models\LeaveDayOff;
+use andahrm\leave\models\LeavePermission;
 
 use andahrm\leave\models\PersonLeave;
 use andahrm\structure\models\FiscalYear;
@@ -45,8 +46,32 @@ use yii\web\JsExpression;
   
   <hr/>
 <?=Html::tag('h4','มีความประสงค์'.$leaveType->title)?>
+
+<?php
   
+  $collect = Leave::getCollect(Yii::$app->user->id,$model->year);
+  $permission = LeavePermission::getPermission(Yii::$app->user->id,$model->year);
+  ?>
  
+    <div class="row">
+        <div class="col-sm-12">
+            <label >
+            วันลาพักผ่อนสะสม <span class="text-dashed"><?=$collect?></span> วัน 
+    มีสิทธิลาพักผ่อนประจำปีนี้อีก 
+    	<span class="text-dashed">
+    		<?=$permission ?>
+    	</span> 
+        วัน
+		รวมเป็น
+		<span class="text-dashed">
+			<?=$tatal = $collect+$permission?>
+		</span> 
+		วัน
+		</label>
+        </div>
+    </div>
+    
+    
     <div class="row">
         <?=$form->field($model, 'date_start',['options'=>['class'=>'form-group col-sm-4']])->widget(DatePicker::className(), ['options' => ['daysOfWeekDisabled' => [0, 6], 'datesDisabled' => LeaveDayOff::getList()]]);?>
         <?=$form->field($model, 'start_part',['options'=>['class'=>'form-group col-sm-2']])->dropdownList(Leave::getItemStartPart());?>
@@ -74,6 +99,7 @@ use yii\web\JsExpression;
         <div class="col-sm-4">
              <?=$form->field($model, 'acting_user_id')->widget(Select2::classname(), [
         //'initValueText' => $cityDesc, // set the initial display text
+        'data'=>PersonLeave::getList(),
         'options' => ['placeholder' => 'ค้นหาบุคคล'],
         'pluginOptions' => [
             'allowClear' => true,
@@ -201,8 +227,11 @@ use yii\web\JsExpression;
 
 $inputStartId = Html::getInputId($model, 'date_start');
 $inputEndId = Html::getInputId($model, 'date_end');
-// $datesDisabled = \yii\helpers\Json::encode($datesDisabledGl);
+$dateNow = Yii::$app->formatter->asDate(time(), 'php:d/m/Y');
 $js[] = <<< JS
+$("#{$inputStartId}").datepicker('setStartDate', "{$dateNow}");
+$("#{$inputEndId}").datepicker('setStartDate', "{$dateNow}");
+
 $("#{$inputStartId}").datepicker().on('changeDate', function(e) { $("#{$inputEndId}").datepicker('setStartDate', $(this).val()); });
 $("#{$inputEndId}").datepicker().on('changeDate', function(e) { $("#{$inputStartId}").datepicker('setEndDate', $(this).val()); });
 JS;

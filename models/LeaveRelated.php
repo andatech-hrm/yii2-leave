@@ -9,6 +9,8 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\ArrayHelper;
 use andahrm\person\models\Person;
+use andahrm\leave\models\PersonLeave;
+
 /**
  * This is the model class for table "leave_related".
  *
@@ -93,6 +95,14 @@ class LeaveRelated extends \yii\db\ActiveRecord
     public static function getList(){
       return ArrayHelper::map(self::find()->all(),'id','title');
     } 
+    
+    public function getCreatedBy(){      
+        return  $this->hasOne(PersonLeave::className(), ['user_id' => 'created_by']);
+    }
+  
+    public function getUpdatedBy(){      
+        return  $this->hasOne(PersonLeave::className(), ['user_id' => 'updated_by']);
+    }
   
     
   

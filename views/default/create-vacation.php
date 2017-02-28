@@ -63,49 +63,6 @@ if($model->isNewRecord){
    $items['end_part']=$form->field($model, 'end_part')->dropdownList(Leave::getItemEndPart())->label(false)->hint(false)->error(false);
   
   
-  /*$layout3 = <<< HTML
-    <span class="input-group-addon">ตั้งแต่วันที่</span>
-    {input1}
-    <span class="input-group-addon">|</span>{$items['start_part']}
-    <span class="input-group-addon">ถึงวันที่</span>
-    {input2}
-      <span class="input-group-addon">|</span>{$items['end_part']}
-    <span class="input-group-addon kv-date-remove">
-        <i class="glyphicon glyphicon-remove"></i>
-    </span>
-HTML;
-  
-    
-  $items['date_range']=$form->field($model, 'date_start')->widget(DatePicker::classname(), [
-    'type' => DatePicker::TYPE_RANGE,
-    'options' => ['placeholder' => $model->getAttributeLabel('date_start')],
-    'attribute2' => 'date_end',
-    'options2' => ['placeholder' =>  $model->getAttributeLabel('date_end')],
-     'separator' => '<i class="glyphicon glyphicon-resize-horizontal"></i>',
-    'layout' => $layout3,
-    'pluginOptions' => [
-        'autoclose'=>true,
-        'datesDisabled' => LeaveDayOff::getList(),
-        'format' => 'yyyy-mm-dd',
-        'todayHighlight' => true,
-        'todayBtn' => true,
-        'startDate' => date('Y-m-d', strtotime("+1 day")),
-        //'calendarWeeks' => true,
-        'daysOfWeekDisabled' => [0, 6],
-        
-    ],
-    'pluginEvents'=>[
-        
-    ]
-    ])->label(false);
-    
-  $items['date_range'] .= $model->getFirstError('end_part');*/
-  
-//   $datesDisabledGl = LeaveDayOff::getList();
-//   $datesDisabledTh = [];
-//   foreach ($datesDisabledGl as $date) {
-//       $datesDisabledTh[] = Yii::$app->formatter->asDate($date, 'php:d/m/Y');
-//   }
     $items['date_range'] = '<div class="row">';
     $items['date_range'] .= '<div class="col-sm-6">';
     $items['date_range'] .= $form->field($model, 'date_start', [
@@ -205,83 +162,14 @@ HTML;
 <?php
 
 
-// $js = '<!--
-
-// function ValidForm(){
-
-// 	var PartIn = document.Absent.StartPart.value;
-// 	var PartOut  = document.Absent.EndPart.value;
-	
-// 	var NumRest = document.Absent.NumRest.value;
-
-// 	var gStartDate = document.Absent.StartDate.value;
-// 	arrStartDate = gStartDate.split("/");
-// 	StartDay = arrStartDate[0];
-// 	StartMonth = arrStartDate[1];
-// 	StartYear = arrStartDate[2];
-// 	cmpStartDate = StartYear + StartMonth + StartDay;
-
-// 	var gEndDate = document.Absent.EndDate.value;
-// 	arrEndDate = gEndDate.split("/");
-// 	EndDay = arrEndDate[0];
-// 	EndMonth = arrEndDate[1];
-// 	EndYear = arrEndDate[2];
-// 	cmpEndDate = EndYear + EndMonth + EndDay;
-
-// 	if(NumRest == ""){
-// 		alert("ท่านยังไม่มีวันลาพักผ่อนสะสม ไม่สามารถลาพักผ่อนได้      \n\nกรุณาติดต่อเจ้าหน้าที่ระบบการลาหรือกจ. **ของหน่วยงานตนเอง** ");
-// 		return false;
-// 	}
-// 	if(gStartDate == "" || gEndDate == ""){
-// 		alert("กรุณาระบุวันลา !");
-// 		return false;
-// 	}
-// 	if(cmpStartDate > cmpEndDate){
-// 		alert("ระบุวันลาผิด กรุณาระบุใหม่ !");
-// 		return false;
-// 	}
-// 	if((cmpStartDate == cmpEndDate) && (PartIn !== PartOut)){
-// 		alert("ระบุวันลาผิด กรุณาระบุใหม่ !");
-// 		return false;
-// 	}
-// 	if((cmpStartDate < cmpEndDate) && ((PartIn == "02") || (PartOut == "03"))){
-// 		alert("ระบุวันลาผิด กรุณาระบุใหม่ !");
-// 		return false;
-// 	}
-// 	if(document.Absent.AbsentSpecial.checked == 1){
-// 			 if(document.getElementById("NumDay").value == "" || document.getElementById("NumDayAll").value == ""){
-// 				alert("กรุณาระบุจำนวนวันลา  มีกำหนด?วัน เป็นวันทำการ?วัน");
-// 				return false;
-// 			}
-// 	}
-
-// 	// **********lock การลาข้ามปีงบประมาณ********************
-	
-	
-// 	if(cmpStartDate > "25600930" || cmpEndDate > "25600930"){
-// 		alert("ระบบยังไม่อนุญาตให้ทำใบลาของปีงบประมาณหน้า! \n\n เนื่องจากระบบต้องประมวลผลวันลา ณ สิ้นปีงบนี้ก่อน \n\n หากต้องการลา  กรุณาส่งใบลาด้วยกระดาษ");
-// 		return false;
-// 	}
-// 	if(document.Absent.Header.value == "" || document.Absent.Permittee.value == ""){
-// 		alert("กรุณาเลือกผู้มีอำนาจอนุมัติเอกสาร !");
-// 		return false;
-// 	}
-// 	if(document.Absent.DeputyID.value == ""){
-// 		if(confirm("ท่านไม่ได้เลือกผู้ปฎิบัติหน้าที่แทน ! ต้องการส่งเอกสารหรือไม่ ? ")){
-// 			return true;
-// 		}else{
-// 			return false;
-// 		}
-// 	}
-// 	return true;
-// }
-// //-->';
-// $this->registerJs($js);
-
 $inputStartId = Html::getInputId($model, 'date_start');
 $inputEndId = Html::getInputId($model, 'date_end');
+$dateNow = Yii::$app->formatter->asDate('NOW()');
 // $datesDisabled = \yii\helpers\Json::encode($datesDisabledGl);
 $js[] = <<< JS
+$("#{$inputStartId}").datepicker('setEndDate', "{$dateNow}");
+// $("#{$inputEndId}").datepicker('setStartDate', $(this).val());
+
 $("#{$inputStartId}").datepicker().on('changeDate', function(e) { $("#{$inputEndId}").datepicker('setStartDate', $(this).val()); });
 $("#{$inputEndId}").datepicker().on('changeDate', function(e) { $("#{$inputStartId}").datepicker('setEndDate', $(this).val()); });
 JS;

@@ -84,6 +84,14 @@ class LeaveDayOff extends \yii\db\ActiveRecord
             'updated_by' => Yii::t('andahrm', 'Updated By'),
         ];
     }
+    
+     public function getCreatedBy(){      
+        return  $this->hasOne(PersonLeave::className(), ['user_id' => 'created_by']);
+    }
+  
+    public function getUpdatedBy(){      
+        return  $this->hasOne(PersonLeave::className(), ['user_id' => 'updated_by']);
+    }
   
   public static function getList(){
 //     return ArrayHelper::getColumn(self::find()->all(), function ($model) {

@@ -61,18 +61,20 @@ $items['user'] = $model->createdBy;
 //   $items['inspector_comment'] = $model->inspector_comment?$model->inspector_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
 //   $items['inspector_at'] = $model->inspector_at?$model->inspectorAt:'วันที่............./............................/................ ' ; 
 
-   $items['commander_status'] = Leave::getWidgetStatus($model->commander_status,Leave::getItemCommanderStatus());
-   $items['commanders'] = '(<span class="text-dashed">'.$model->commanderBy->fullname.'</span>)<br/>'; 
-   $items['commanders'] .= 'ตำแหน่ง '.$model->commanderBy->positionTitle; 
-   $items['commander_comment'] = $model->commander_comment?$model->commander_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
-   $items['commander_at'] = $model->commander_at?$model->commanderAt:'วันที่............./............................/................ ' ; 
+//   $items['commander_status'] = Leave::getWidgetStatus($model->commander_status,Leave::getItemCommanderStatus());
+//   $items['commanders'] = '(<span class="text-dashed">'.$model->commanderBy->fullname.'</span>)<br/>'; 
+//   $items['commanders'] .= 'ตำแหน่ง '.$model->commanderBy->positionTitle; 
+//   $items['commander_comment'] = $model->commander_comment?$model->commander_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
+//   $items['commander_at'] = $model->commander_at?$model->commanderAt:'วันที่............./............................/................ ' ; 
   
 
-   $items['director_status'] = Leave::getWidgetStatus($model->director_status,Leave::getItemDirectorStatus());
-   $items['directors'] = '(<span class="text-dashed">'.$model->directorBy->fullname.'</span>)<br/>'; 
-   $items['directors'] .= 'ตำแหน่ง '.$model->directorBy->positionTitle; 
-   $items['director_comment'] = $model->director_comment?$model->director_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
-   $items['director_at'] = $model->director_at?$model->directorAt:'วันที่............./............................/................ ' ; 
+//   $items['director_status'] = Leave::getWidgetStatus($model->director_status,Leave::getItemDirectorStatus());
+//   $items['directors'] = '(<span class="text-dashed">'.$model->directorBy->fullname.'</span>)<br/>'; 
+//   $items['directors'] .= 'ตำแหน่ง '.$model->directorBy->positionTitle; 
+//   $items['director_comment'] = $model->director_comment?$model->director_comment:'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ; 
+//   $items['director_at'] = $model->director_at?$model->directorAt:'วันที่............./............................/................ ' ; 
+
+$items['model'] = $model; 
   ?>
   
   

@@ -59,7 +59,7 @@ $modelSelect = $event->sender->read('select')[0];
                     <div class="alert alert-warning alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
                         </button>
-                        <strong>คำเดือน</strong> <?=$model->getAttributeLabel('end_part').":".$model->getFirstError('end_part')?>
+                        <strong>คำเดือน</strong> พบข้อผิดพลาด
                     </div>
                   <?php  endif;?>
                 <?php
