@@ -266,6 +266,11 @@ class RelatedController extends Controller
               
                 if ($flag) {
                     $transaction->commit();
+                    
+                    Yii::$app->getSession()->setFlash('saved',[
+                        'type' => 'success',
+                        'msg' => Yii::t('andahrm/leave', 'The system successfully sent.')
+                    ]);
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
             } catch (Exception $e) {
@@ -364,6 +369,10 @@ class RelatedController extends Controller
               
                 if ($flag) {
                     $transaction->commit();
+                    Yii::$app->getSession()->setFlash('saved',[
+                    'type' => 'success',
+                    'msg' => Yii::t('andahrm/leave', 'Update Successfully.')
+                ]);
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
             } catch (Exception $e) {
