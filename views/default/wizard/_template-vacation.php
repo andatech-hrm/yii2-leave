@@ -88,11 +88,13 @@ use andahrm\leave\models\LeavePermission;
 			<?=$tatal = $collect+$permission?>
 		</span> 
 		วันทำการ ขอลาพักผ่อน
-		<?=$date_range?> 
+		<?=(isset($date_range_input)?"<br/>".$date_range_input."<br/>":'ตั้งแต่วันที่'.$date_range)?>
 		มีกำหนด<span class="text-dashed"> <?=$number_day?> </span>วัน ในระหว่างลาจะติดต่อข้าพเจ้าได้ที่
 		<?=$contact?>
 
 	</p>
+  
+  	<?=(isset($acting_user_id)?$acting_user_id:'')?>
   
 	<p class="p-form-indent">
 		ในการลาครั้งนี้ ข้าพเจ้าได้มอบหมายงานในหน้าที่ให้ 
@@ -160,6 +162,7 @@ use andahrm\leave\models\LeavePermission;
 				ความคิดเห็น<br/>
 				<span class="text-dashed width100"><?=$commander['comment']?></span>
 			</p>
+			<?=isset($commander_input)?$commander_input:''?>
 			<p>
 					ลงชื่อ .....................................<br/>
 					<?=$commander['name']?><br/>
@@ -183,6 +186,7 @@ use andahrm\leave\models\LeavePermission;
 					<?=$inspector['comment']?>
 				</span>
 			</p>
+				<?=isset($inspector_input)?$inspector_input:''?>
 			<p>
 				ลงชื่อ .....................................<br/>
 				
@@ -201,6 +205,7 @@ use andahrm\leave\models\LeavePermission;
 					<?=$director['comment']?>
 				</span>
 			</p>
+			<?=isset($director_input)?$director_input:''?>
 			<p>
 					ลงชื่อ  .....................................<br/>
 					<?=$director['name']?><br/>	

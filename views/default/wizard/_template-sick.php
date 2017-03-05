@@ -88,8 +88,11 @@ use andahrm\leave\models\LeaveType;
     		ขอ<span class="text-dashed"><?=$leaveType->title?></span>
     	 	เนื่องจาก
     	 	<span class="text-dashed"><?=$reason?></span> 
-			ตั้งแต่วันที่
-			<?=$date_range?>
+			
+			
+			<?=(isset($date_range_input)?"<br/>".$date_range_input."<br/>":'ตั้งแต่วันที่'.$date_range)?>
+			
+			
 			มีกำหนด
 			<span class="text-dashed"><?=$number_day?></span>
 			วัน   

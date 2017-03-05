@@ -110,7 +110,8 @@ class LeaveType extends \yii\db\ActiveRecord
         ];
         
         
-        return $dataProvider->getModels()?$dataProvider:null;
+        //return $dataProvider->getModels()?$dataProvider:null;
+        return $dataProvider;
     }
     
     public static function getList($id_new = [2],$id=[2,4,5]){

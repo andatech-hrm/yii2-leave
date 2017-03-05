@@ -49,7 +49,14 @@ if($type->data):
 			// 		}
 			// ],
 			['class'=>'kartik\grid\SerialColumn'],
-            //'id',
+			
+			[
+			 'attribute'=>'id',
+			 'format'=>'html',
+			 'value'=>function($model){
+			 	return Html::a('<i class="fa fa-book"></i> '.$model->id,['view','id'=>$model->id],['class'=>'btn btn-xs btn-link']);
+			 },
+			],
 			[
 			 'attribute'=>'date_range',
 			 'format'=>'html',
@@ -133,7 +140,8 @@ if($type->data):
 			[
 				'class' => 'kartik\grid\ActionColumn',
 				'buttonOptions'=>['class'=>'btn btn-default'],
-				'template'=>'{cancel}{delete}{view}{cancel-view}',
+				//'template'=>'{cancel}{update}{delete}{view}{cancel-view}',
+				'template'=>'{cancel}{update}{delete}{cancel-view}',
 				'hAlign'=>'right',
 				'headerOptions'=>[
 				    'style'=>"width:10%"
@@ -148,9 +156,9 @@ if($type->data):
 							return $model->status==Leave::STATUS_ALLOW?Html::a(Yii::t('andahrm/leave', 'Cancel leave'),$url,['class'=>'btn btn-xs btn-warning', 'data-pjax' => 0]):'';
 						}
 					},
-					// 'update' => function($url,$model,$key){
-					// 	return $model->status==0?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url,['class'=>'btn btn-xs btn-default', 'data-pjax' => 0]):'';
-					// },
+					'update' => function($url,$model,$key){
+						return ($model->status==Leave::STATUS_OFFER&&$model->commander_status==null)?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url,['class'=>'btn btn-xs btn-default', 'data-pjax' => 0]):'';
+					},
 					'delete' => function($url,$model,$key){
 						return $model->status==Leave::STATUS_OFFER?Html::a('ลบ',$url,['class'=>'btn btn-xs btn-danger','data-method'=>'POST', 'data-pjax' => 0]):'';
 					},
@@ -185,7 +193,13 @@ if($type->data):
 			// 		}
 			// ],
 			['class'=>'kartik\grid\SerialColumn'],
-            //'id',
+			[
+			 'attribute'=>'id',
+			 'format'=>'html',
+			 'value'=>function($model){
+			 	return Html::a('<i class="fa fa-book"></i> '.$model->id,['view','id'=>$model->id],['class'=>'btn btn-xs btn-link']);
+			 },
+			],
             //'user_id',
 			// [
 			//  'attribute'=>'leave_type_id',
@@ -276,7 +290,7 @@ if($type->data):
 			[
 				'class' => 'kartik\grid\ActionColumn',
 				'buttonOptions'=>['class'=>'btn btn-default'],
-				'template'=>'{cancel}{delete}{view}{cancel-view}',
+				'template'=>'{cancel}{update}{delete}{cancel-view}',
 				'hAlign'=>'right',
 				'headerOptions'=>[
 				    'style'=>"width:10%"
@@ -292,9 +306,9 @@ if($type->data):
 							return $model->status==Leave::STATUS_ALLOW?Html::a(Yii::t('andahrm/leave', 'Cancel leave'),$url,['class'=>'btn btn-xs btn-warning', 'data-pjax' => 0]):'';
 						}
 					},
-					// 'update' => function($url,$model,$key){
-					// 	return $model->status==0?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url,['class'=>'btn btn-xs btn-default', 'data-pjax' => 0]):'';
-					// },
+					'update' => function($url,$model,$key){
+						return ($model->status==Leave::STATUS_OFFER&&$model->commander_status==null)?Html::a('<span class="glyphicon glyphicon-pencil"></span>',$url,['class'=>'btn btn-xs btn-default', 'data-pjax' => 0]):'';
+					},
 					'delete' => function($url,$model,$key){
 						return $model->status==Leave::STATUS_OFFER?Html::a('ลบ',$url,['class'=>'btn btn-xs btn-danger','data-method'=>'POST', 'data-pjax' => 0]):'';
 					},

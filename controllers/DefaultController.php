@@ -16,6 +16,7 @@ use yii\data\ActiveDataProvider;
 use andahrm\leave\models\PersonLeave;
 use yii\helpers\Json;
 
+use andahrm\setting\models\Helper;
 use beastbytes\wizard\WizardBehavior;
 
 /**
@@ -130,9 +131,9 @@ class DefaultController extends Controller
             $model->status = Leave::STATUS_OFFER;
             if($model->save()) {
                 Yii::$app->getSession()->setFlash('saved',[
-                'type' => 'success',
-                'msg' => Yii::t('andahrm/leave', 'The system successfully sent.')
-            ]);
+                    'type' => 'success',
+                    'msg' => Yii::t('andahrm/leave', 'The system successfully sent.')
+                ]);
               return $this->redirect(['index']);
             }else{
               print_r($model->getErrors());
@@ -232,7 +233,7 @@ class DefaultController extends Controller
             }
             
             
-            $model->number_day = Leave::calCountDays($model->date_start,$model->date_end,$model->start_part,$model->end_part);
+            $model->number_day = Leave::calCountDays(Helper::dateUi2Db($model->date_start),Helper::dateUi2Db($model->date_end),$model->start_part,$model->end_part);
 //           print_r($model->getErrors());
 //            exit();
             $model->year = FiscalYear::currentYear();
@@ -276,17 +277,29 @@ class DefaultController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        return $this->redirect(['create-'.(($model->leave_type_id==4)?'vacation':'sick'), 'id' => $model->id]);
-//        if ($model->load(Yii::$app->request->post())){
-//             if($model->save()) {
-//               return $this->redirect(['confirm', 'id' => $model->id]);
-//             }else{
-//               print_r($model->getErrors());
-//             }
-//         } 
-//             return $this->render('update', [
-//                 'model' => $model,
-//             ]);
+        
+        if($model->leave_type_id==1){
+            $model->scenario = Leave::SCENA_UPDATE_VACATION;
+        }elseif($model->leave_type_id){
+            $model->scenario = Leave::SCENA_UPDATE_SICK;
+        }
+        
+        //return $this->redirect(['create-'.(($model->leave_type_id==4)?'vacation':'sick'), 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())){
+            $model->number_day = Leave::calCountDays(Helper::dateUi2Db($model->date_start),Helper::dateUi2Db($model->date_end),$model->start_part,$model->end_part);
+            if($model->save()) {
+                Yii::$app->getSession()->setFlash('saved',[
+                    'type' => 'success',
+                    'msg' => Yii::t('andahrm/leave', 'The system successfully sent.')
+                ]);
+                return $this->redirect(['index']);
+            }else{
+              print_r($model->getErrors());
+            }
+        } 
+            return $this->render('update', [
+                'model' => $model,
+            ]);
         
     }
 

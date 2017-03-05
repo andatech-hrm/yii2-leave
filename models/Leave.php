@@ -92,12 +92,18 @@ class Leave extends ActiveRecord
             ],
         ];
     }
+    
+    const SCENA_UPDATE_VACATION= 'update-vacation';
+    const SCENA_UPDATE_SICK = 'update-sick';
   
     public function scenarios(){
       $scenarios = parent::scenarios();
       
       $scenarios['create-vacation'] = ['to','year', 'user_id','leave_type_id','acting_user_id','contact', 'date_start', 'date_end','status','inspector_by','director_by','commander_by','start_part','end_part','contact','number_day','year'];
       $scenarios['create-sick'] = ['to','year', 'user_id','leave_type_id','reason','contact', 'date_start', 'date_end','status','inspector_by','director_by','commander_by','contact','number_day','year'];
+      
+      $scenarios[self::SCENA_UPDATE_VACATION] = ['to','contact', 'date_start', 'date_end','end_part','status','inspector_by','director_by','commander_by','start_part','end_part','contact','number_day'];
+      $scenarios[self::SCENA_UPDATE_SICK] = ['to','reason','contact', 'date_start', 'date_end','start_part','date_end', 'end_part','inspector_by','director_by','commander_by','contact','number_day'];
       
       $scenarios['confirm'] = ['status'];
       
