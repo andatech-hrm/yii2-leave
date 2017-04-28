@@ -27,8 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
   
     <?php $form = ActiveForm::begin();
         echo $form->field($model, 'status')->hiddenInput()->label(false)->hint(false);
-        echo $form->field($model, 'start')->hiddenInput()->label(false)->hint(false);
-        echo $form->field($model, 'end')->hiddenInput()->label(false)->hint(false);
+        echo $form->field($model, 'date_start')->hiddenInput()->label(false)->hint(false);
+        echo $form->field($model, 'date_end')->hiddenInput()->label(false)->hint(false);
       ?>
   
       <?=$form->field($model, 'inspector_comment')->textInput(['maxlength' => true]) ?>
