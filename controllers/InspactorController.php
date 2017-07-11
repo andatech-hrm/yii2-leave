@@ -77,15 +77,16 @@ class InspactorController extends Controller
         if ($model->load(Yii::$app->request->post())){
               $post = Yii::$app->request->post();
           
+            // print_r($post);
+            // exit();
               if(isset($post['allow'])){
                   $model->inspector_status = 1;
+                  $model->status = Leave::STATUS_CONSIDER; #พิจารณา
               }elseif(isset($post['disallow'])){
                   $model->inspector_status = 0;
                   $model->status = Leave::STATUS_DISALLOW; #พิจารณา
               }
-              $model->status = Leave::STATUS_CONSIDER; #พิจารณา
               $model->inspector_at= time();
-          
           if($model->save()) {
               //return $this->redirect(['view', 'id' => $model->id]);
               return $this->redirect(['index']);

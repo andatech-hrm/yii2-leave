@@ -5,15 +5,13 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
-
 use backend\widgets\WizardMenu;
-
-
 use kartik\widgets\Typeahead;
 use kartik\widgets\DepDrop;
 use kartik\widgets\Select2;
 
 use andahrm\leave\models\LeaveType;
+use andahrm\leave\models\PersonLeave;
 
 
 
@@ -21,6 +19,11 @@ $this->title = Yii::t('andahrm/leave', 'Select Type');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Create New'), 'url' => ['create','step'=>'reset']];
 $this->params['breadcrumbs'][] = $this->title;
+
+
+    $personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
+    $personLeave = $personLeave->position->section->leaveRelatedSection;
+    if($personLeave){
 
 ?>
 
@@ -94,4 +97,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="clearfix"></div>
     </div>
 </div>
-<?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); 
+    }else{
+?>
+
+คุณยังไม่มีตำแหน่ง
+<?php
+    }
+?>

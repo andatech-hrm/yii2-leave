@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use kuakling\datepicker\DatePicker;
+use andahrm\datepicker\DatePicker;
 use kartik\widgets\Typeahead;
 
 use andahrm\leave\models\Leave;

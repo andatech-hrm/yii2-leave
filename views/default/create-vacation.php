@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 // use kartik\widgets\DatePicker;
-use kuakling\datepicker\DatePicker;
+use andahrm\datepicker\DatePicker;
 
 use andahrm\leave\models\Leave;
 use andahrm\leave\models\LeaveDayOff;

@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
 foreach($leaveType as $type):
 if($type->data):
-	if($type->id==Leave::TYPE_VACATION):
+	if($type->id==Leave::TYPE_VACATION): #ลาพักผ่อน
 		// $searchModel1 = new LeaveCancelSearch();
   //      $dataProvider1 = $searchModel1->search(Yii::$app->request->queryParams);
 		// $dataProvider1 = ArrayHelper::toArray($dataProvider1);

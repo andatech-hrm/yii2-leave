@@ -5,7 +5,7 @@ use andahrm\leave\models\Leave;
 use andahrm\leave\models\LeaveType;
 
 
-$model= $model->leave;
+//$model= $model->leave;
 	
 #ข้อมูลประเภทการลา
 	$leaveType = LeaveType::findOne($model->leave_type_id);

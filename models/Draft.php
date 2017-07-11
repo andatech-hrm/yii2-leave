@@ -103,12 +103,12 @@ class Draft extends Leave
         $model = self::find()->select('reason')->distinct()->where([
             'created_by'=>Yii::$app->user->id
             ])->groupBy('reason')->all();
-        return ArrayHelper::getColumn($model,'reason');
+        return $model?ArrayHelper::getColumn($model,'reason'):[];
     }
     
      public static function getContactList(){
         $model = self::find()->select('contact')->distinct()->where(['created_by'=>Yii::$app->user->id])->groupBy('contact')->all();
-        return ArrayHelper::getColumn($model,'contact');
+        return $model?ArrayHelper::getColumn($model,'contact'):[];
     }
   
   

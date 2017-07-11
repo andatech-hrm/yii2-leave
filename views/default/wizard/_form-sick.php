@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 //use kartik\widgets\DatePicker;
 
-use kuakling\datepicker\DatePicker;
+use andahrm\datepicker\DatePicker;
 use kartik\widgets\Typeahead;
 
 use andahrm\leave\models\Leave;

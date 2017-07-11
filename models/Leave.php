@@ -12,7 +12,7 @@ use yii\helpers\ArrayHelper;
 
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
-use kuakling\datepicker\behaviors\DateBuddhistBehavior;
+use andahrm\datepicker\behaviors\DateBuddhistBehavior;
 use andahrm\setting\models\Helper;
 
 use andahrm\structure\models\FiscalYear;
@@ -107,9 +107,9 @@ class Leave extends ActiveRecord
       
       $scenarios['confirm'] = ['status'];
       
-      $scenarios['inspector'] = ['status','inspector_status', 'inspector_at','inspector_comment'];
-      $scenarios['commander'] = ['status','commander_status', 'commander_at', 'commander_comment'];
-      $scenarios['director'] = ['status','director_status', 'director_at', 'director_comment'];
+      $scenarios['inspector'] = ['status','inspector_status', 'inspector_at','inspector_comment','date_start','date_end'];
+      $scenarios['commander'] = ['status','commander_status', 'commander_at', 'commander_comment','date_start','date_end'];
+      $scenarios['director'] = ['status','director_status', 'director_at', 'director_comment','date_start','date_end'];
       
       return $scenarios;
     }
@@ -117,7 +117,7 @@ class Leave extends ActiveRecord
   function behaviors()
     {
         return [ 
-          'timestamp' => [
+           'timestamp' => [
                 'class' => TimestampBehavior::className(),
             ],
             'blameable' => [
@@ -276,7 +276,7 @@ class Leave extends ActiveRecord
                 $str = $status;
                 break;
         }
-        $str= $this->inspector_at?$str.' <small>'.Yii::$app->formatter->asDate($this->inspector_at)."</small>":$str;
+        $str= $this->inspector_at?$str.'<br/><small>'.Yii::$app->formatter->asDate($this->inspector_at)."</small>":$str;
         return $str;
     }
     public function getCommanderStatusLabel() {
@@ -298,7 +298,7 @@ class Leave extends ActiveRecord
                 $str = $status;
                 break;
         }
-        $str= $this->commander_at?$str.' <small>'.Yii::$app->formatter->asDate($this->commander_at)."</small>":$str;
+        $str= $this->commander_at?$str.'<br/><small>'.Yii::$app->formatter->asDate($this->commander_at)."</small>":$str;
         return $str;
     }
   
@@ -321,7 +321,7 @@ class Leave extends ActiveRecord
                 $str = $status;
                 break;
         }
-        $str= $this->director_at?$str.' <small>'.Yii::$app->formatter->asDate($this->director_at)."</small>":$str;
+        $str= $this->director_at?$str.'<br/><small>'.Yii::$app->formatter->asDate($this->director_at)."</small>":$str;
         return $str;
     }
   

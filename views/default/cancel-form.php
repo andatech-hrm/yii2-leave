@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
-use kuakling\datepicker\DatePicker;
+use andahrm\datepicker\DatePicker;
 
 use andahrm\leave\models\Leave;
 use andahrm\leave\models\LeaveDayOff;
@@ -39,6 +39,7 @@ if($model->isNewRecord){
 
 # Candidate
 $items=[];
+$items['model'] = $model;
 $items['user'] = PersonLeave::findOne(Yii::$app->user->identity->id);
 ?>
 
@@ -116,7 +117,8 @@ HTML;
     $datesDisabledGl = LeaveDayOff::getList();
     $datesDisabledTh = [];
     foreach ($datesDisabledGl as $date) {
-        $datesDisabledTh[] = Yii::$app->formatter->asDate($date, 'php:d/m/Y');
+       //$datesDisabledTh[] = Yii::$app->formatter->asDate($date, 'php:d/m/Y');
+        $datesDisabledTh[] = $date;
     }
     $dateWidgetConfig = [
       'daysOfWeekDisabled' => [0, 6], 

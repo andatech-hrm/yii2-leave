@@ -24,6 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
   
     <?php $form = ActiveForm::begin();
   echo $form->field($model, 'status')->hiddenInput()->label(false)->hint(false);
+        
+    $model->date_start = Yii::$app->formatter->asDate($model->date_start, 'php:d/m/Y');
+    $model->date_end = Yii::$app->formatter->asDate($model->date_end, 'php:d/m/Y');
+        
   echo $form->field($model, 'date_start')->hiddenInput()->label(false)->hint(false);
   echo $form->field($model, 'date_end')->hiddenInput()->label(false)->hint(false);
       ?>

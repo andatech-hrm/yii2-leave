@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 // use kartik\widgets\DatePicker;
-use kuakling\datepicker\DatePicker;
+use andahrm\datepicker\DatePicker;
 use kartik\widgets\Typeahead;
 
 use andahrm\leave\models\Leave;
@@ -31,7 +31,9 @@ use yii\web\JsExpression;
       $model->to = $personLeave->toDirector;
     }
     
-
+    print_r($personLeave->inspectors);
+    
+    
    
 ?>
 
@@ -82,7 +84,7 @@ use yii\web\JsExpression;
      
  <div class="row">
         <div class="col-sm-4">
-             <?=$form->field($model, 'contact')->widget(TypeAhead::classname(),[
+             <?=Draft::getContactList()?$form->field($model, 'contact')->widget(TypeAhead::classname(),[
             'options' => ['placeholder' => 'ติดต่อข้าพเจ้าได้ที่'],
             'pluginOptions' => ['highlight'=>true],
             'defaultSuggestions' => Draft::getContactList(),
@@ -92,7 +94,7 @@ use yii\web\JsExpression;
                     'limit' => 10
                 ]
             ]
-        ]);
+        ]):$form->field($model, 'contact');
         ?>
          </div>
         
