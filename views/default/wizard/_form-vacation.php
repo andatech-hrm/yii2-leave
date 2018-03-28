@@ -31,7 +31,7 @@ use yii\web\JsExpression;
       $model->to = $personLeave->toDirector;
     }
     
-    print_r($personLeave->inspectors);
+    //print_r($personLeave->inspectors);
     
     
    
@@ -128,15 +128,11 @@ use yii\web\JsExpression;
 <?=Html::tag('h4',Yii::t('andahrm/leave','Leave Relateds'))?>
     <div class="row">
         <div class="col-sm-4">
-        
-        <?=$form->field($model, 'inspector_by')->dropdownList($personLeave->inspectors); ?>
-        
+            <?=$form->field($model, 'inspector_by')->dropdownList($personLeave->inspectors); ?>
         </div>
         
         <div class="col-sm-4">
-        
-        <?= $form->field($model, 'commander_by')->dropdownList($personLeave->commanders); ?>
-        
+            <?= $form->field($model, 'commander_by')->dropdownList($personLeave->commanders); ?>
         </div>
         
         <div class="col-sm-4">

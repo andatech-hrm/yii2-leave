@@ -20,9 +20,10 @@ class LeavePermissionSearch extends LeavePermission
     {
         return [
             [['user_id', 'leave_condition_id', 'number_day', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['year'], 'safe'],
+            [['year','fullname'], 'safe'],
         ];
     }
+    public $fullname;
 
     /**
      * @inheritdoc
@@ -58,6 +59,14 @@ class LeavePermissionSearch extends LeavePermission
             return $dataProvider;
         }
         $this->year=$this->year?$this->year:FiscalYear::currentYear();
+        
+        
+        if($this->fullname){
+            $query->joinWith('user');
+            $query->andWhere(['LIKE', 'person.user_id',$this->fullname]);
+            $query->orWhere(['LIKE', 'person.firstname_th',$this->fullname]);
+            $query->orWhere(['LIKE', 'person.lastname_th',$this->fullname]);
+        }
 
         // grid filtering conditions
         $query->andFilterWhere([

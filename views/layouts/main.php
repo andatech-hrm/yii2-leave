@@ -50,11 +50,11 @@ $controller = Yii::$app->controller->id;
                     ];                 
                        
       
-                    $menuItems[] =  [
-                            'label' => Yii::t('andahrm/leave', 'Leave Conditions'),
-                            'url' => ["/{$module}/condition/"],
-                            'icon' => 'fa fa-sitemap'
-                     ];
+//                    $menuItems[] =  [
+//                            'label' => Yii::t('andahrm/leave', 'Leave Conditions'),
+//                            'url' => ["/{$module}/condition/"],
+//                            'icon' => 'fa fa-sitemap'
+//                     ];
       
                       $menuItems[] =  [
                            'label' => Yii::t('andahrm/leave', 'Leave Permissions'),

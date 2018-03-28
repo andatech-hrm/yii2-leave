@@ -19,7 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     
-<?php Pjax::begin(); ?>   
   <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -27,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             [
-                'attribute'=> 'user_id',
+                'attribute'=> 'fullname',
                 'format' => 'html',
                 'value' => 'user.infoMedia'
             ],
@@ -52,5 +51,4 @@ $this->params['breadcrumbs'][] = $this->title;
             'template'=>'{view}'],
         ],
     ]); ?>
-<?php Pjax::end(); ?>
 </div>
