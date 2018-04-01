@@ -28,6 +28,15 @@ class RelatedPersonController extends Controller
             ],
         ];
     }
+    
+     /**
+     * Lists all LeaveDayOff models.
+     * @return mixed
+     */
+    public function actions() {
+        $this->layout = 'menu-left-setting';
+    }
+
 
     /**
      * Lists all LeaveRelatedPerson models.

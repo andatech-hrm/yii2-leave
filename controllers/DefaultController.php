@@ -157,7 +157,7 @@ class DefaultController extends Controller
     {
         $model=[];
         if(!$model = Leave::findOne($id)){
-          $model = new Leave();
+          $model = new Leave(['user_id'=>Yii::$app->user->identity->id]);
         }
         $model->scenario = 'create-sick';
 

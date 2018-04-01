@@ -28,6 +28,15 @@ class TypeController extends Controller
             ],
         ];
     }
+    
+     /**
+     * Lists all LeaveDayOff models.
+     * @return mixed
+     */
+    public function actions() {
+        $this->layout = 'menu-left-setting';
+    }
+
 
     /**
      * Lists all LeaveType models.

@@ -11,9 +11,9 @@ $controller = Yii::$app->controller->id;
 
 ?>
 
-<?php /*if(Yii::$app->user->can('manage-leave')):?>
-<div class="row hidden-print">
-    <div class="col-md-12"> 
+<?php #if(Yii::$app->user->can('manage-leave')):?>
+<div class="row ">
+    <div class="col-md-3 hidden-print"> 
       
       <?php
       $active = false;
@@ -26,16 +26,7 @@ $controller = Yii::$app->controller->id;
           break;
       }
       
-                    $menuItems = [];
-      
-      
-                    $menuItems[] =  [
-                           'label' => Yii::t('andahrm/leave', 'Leaves'),
-                            'active' => $active,
-                            'url' => ["/{$module}/default/"],
-                            'icon' => 'fa fa-sitemap'
-                     ];
-      
+                    $menuItems = [];      
       
                     $menuItems[] =  [
                             'label' => Yii::t('andahrm/leave', 'Leave Day Offs'),
@@ -84,7 +75,7 @@ $controller = Yii::$app->controller->id;
                     //print_r($menuItems);
                     //$nav = new Navigate();
                     echo Menu::widget([
-                        'options' => ['class' => 'nav nav-tabs bar_tabs'],
+                        'options' => ['class' => 'nav nav-pills nav-stacked'],
                         'encodeLabels' => false,
                         //'activateParents' => true,
                         //'linkTemplate' =>'<a href="{url}">{icon} {label} {badge}</a>',
@@ -96,11 +87,8 @@ $controller = Yii::$app->controller->id;
      
       
     </div>
-</div>
-<?php endif;*/?>
 
-<div class="row">
-    <div class="col-md-12">
+    <div class="col-md-9">
       
         <div class="x_panel tile">
             <div class="x_title">
@@ -115,5 +103,6 @@ $controller = Yii::$app->controller->id;
       
     </div>
 </div>
+<?php #endif;?>
 
 <?php $this->endContent(); ?>

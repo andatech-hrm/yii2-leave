@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * RelatedController implements the CRUD actions for LeaveRelated model.
  */
-class RelatedController extends Controller
+class RelatedController1 extends Controller
 {
     /**
      * @inheritdoc
