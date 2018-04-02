@@ -101,18 +101,19 @@ $controller = Yii::$app->controller->id;
 
 <div class="row">
     <div class="col-md-12">
-      
+  <!--     
         <div class="x_panel tile">
-            <div class="x_title">
+           <div class="x_title">
                 <h2><?= $this->title; ?></h2>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <?php echo $content; ?>
+                
                 <div class="clearfix"></div>
             </div>
         </div>
-      
+      -->
+      <?php echo $content; ?>
     </div>
 </div>
 
