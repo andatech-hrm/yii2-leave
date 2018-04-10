@@ -485,7 +485,7 @@ class DefaultController extends Controller
             }
             
              if($post){
-                print_r($post);
+                //print_r($post);
                 //exit();
             }
         } else {
