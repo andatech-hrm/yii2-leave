@@ -77,16 +77,18 @@ class PermissionController extends Controller
     {
         $model = new LeavePermission(['scenario'=>'create']);
 
-        
+        $request = Yii::$app->request;
+         $post = $request->post();
      
-        if ($model->load(Yii::$app->request->post())){
-          $post = Yii::$app->request->post();
-          $post = $post['LeavePermission'];
-//           print_r($post);
-//           exit();
+        if ($model->load($post) && $request->post('save')){
+         
+          $postLeave = $post['LeavePermission'];
+          echo "<pre>";
+           print_r($post);
+           exit();
           $flag = true;
           
-         foreach($post['user_id'] as $key => $item){
+         foreach($postLeave['user_id'] as $key => $item){
            $newModel = [];
            
            if($newModel = LeavePermission::find()->where(['year'=>$model->year,'user_id'=>$item])->one()){
