@@ -3,23 +3,27 @@
 namespace andahrm\leave\controllers;
 
 use Yii;
-use andahrm\leave\models\LeavePermission;
-use andahrm\leave\models\LeavePermissionSearch;
-use andahrm\leave\models\PersonSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ArrayDataProvider;
+###
+use andahrm\leave\models\PersonSearch;
+use andahrm\leave\models\LeavePermission;
+use andahrm\leave\models\LeavePermissionSearch;
+use andahrm\leave\models\LeavePermissionTransection;
+use andahrm\leave\models\PersonLeave;
+use andahrm\leave\models\PersonPermissionSearch;
 
 /**
  * PermissionController implements the CRUD actions for LeavePermission model.
  */
-class PermissionController extends Controller
-{
+class PermissionController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -29,8 +33,8 @@ class PermissionController extends Controller
             ],
         ];
     }
-    
-     /**
+
+    /**
      * Lists all LeaveDayOff models.
      * @return mixed
      */
@@ -38,19 +42,17 @@ class PermissionController extends Controller
         $this->layout = 'menu-left-setting';
     }
 
-
     /**
      * Lists all LeavePermission models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $searchModel = new LeavePermissionSearch();
+    public function actionIndex() {
+        $searchModel = new PersonPermissionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -61,10 +63,37 @@ class PermissionController extends Controller
      * @param string $year
      * @return mixed
      */
-    public function actionView($user_id, $leave_condition_id, $year)
-    {
+    public function actionView($user_id, $leave_condition_id, $year) {
         return $this->render('view', [
-            'model' => $this->findModel($user_id, $leave_condition_id, $year),
+                    'model' => $this->findModel($user_id, $leave_condition_id, $year),
+        ]);
+    }
+
+    public function actionManage($id) {
+        $model = PersonLeave::findOne($id);
+
+        $modelTrans = LeavePermissionTransection::findAll(['user_id' => $id]);
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $modelTrans
+        ]);
+
+        return $this->render('manage', [
+                    'model' => $model,
+                    'dataProvider' => $dataProvider
+        ]);
+    }
+
+    public function actionAssign($id) {
+        $model = PersonLeave::findOne($id);
+
+        $modelTrans = LeavePermissionTransection::findAll(['user_id' => $id]);
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $modelTrans
+        ]);
+
+        return $this->renderPartial('assign', [
+                    'model' => $model,
+                    'dataProvider' => $dataProvider
         ]);
     }
 
@@ -73,52 +102,50 @@ class PermissionController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new LeavePermission(['scenario'=>'create']);
+    public function actionCreate() {
+        $model = new LeavePermission(['scenario' => 'create']);
 
         $request = Yii::$app->request;
-         $post = $request->post();
-     
-        if ($model->load($post) && $request->post('save')){
-         
-          $postLeave = $post['LeavePermission'];
-          echo "<pre>";
-           print_r($post);
-           exit();
-          $flag = true;
-          
-         foreach($postLeave['user_id'] as $key => $item){
-           $newModel = [];
-           
-           if($newModel = LeavePermission::find()->where(['year'=>$model->year,'user_id'=>$item])->one()){
-             $newModel->number_day = $post['number_day'][$key];
-           }else{ 
-             $newModel = new LeavePermission(['scenario'=>'insert']);
-             $newModel->user_id = $item;
-             $newModel->year = $model->year;
-             $newModel->number_day = $post['number_day'][$key];
-           }
-            if(!$newModel->save()){
-              $flag = false;
+        $post = $request->post();
+
+        if ($model->load($post) && $request->post('save')) {
+
+            $postLeave = $post['LeavePermission'];
+            echo "<pre>";
+            print_r($post);
+            exit();
+            $flag = true;
+
+            foreach ($postLeave['user_id'] as $key => $item) {
+                $newModel = [];
+
+                if ($newModel = LeavePermission::find()->where(['year' => $model->year, 'user_id' => $item])->one()) {
+                    $newModel->number_day = $post['number_day'][$key];
+                } else {
+                    $newModel = new LeavePermission(['scenario' => 'insert']);
+                    $newModel->user_id = $item;
+                    $newModel->year = $model->year;
+                    $newModel->number_day = $post['number_day'][$key];
+                }
+                if (!$newModel->save()) {
+                    $flag = false;
+                }
             }
-         }
-          
-          
-         if($flag)
-            return $this->redirect(['index']);          
+
+
+            if ($flag)
+                return $this->redirect(['index']);
         }
-      
+
         $searchModel = new PersonSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-      
-            return $this->render('create', [
-                'model' => $model,
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-        
+
+        return $this->render('create', [
+                    'model' => $model,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
@@ -129,15 +156,14 @@ class PermissionController extends Controller
      * @param string $year
      * @return mixed
      */
-    public function actionUpdate($user_id, $leave_condition_id, $year)
-    {
+    public function actionUpdate($user_id, $leave_condition_id, $year) {
         $model = $this->findModel($user_id, $leave_condition_id, $year);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'user_id' => $model->user_id, 'leave_condition_id' => $model->leave_condition_id, 'year' => $model->year]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -150,8 +176,7 @@ class PermissionController extends Controller
      * @param string $year
      * @return mixed
      */
-    public function actionDelete($user_id, $leave_condition_id, $year)
-    {
+    public function actionDelete($user_id, $leave_condition_id, $year) {
         $this->findModel($user_id, $leave_condition_id, $year)->delete();
 
         return $this->redirect(['index']);
@@ -166,12 +191,12 @@ class PermissionController extends Controller
      * @return LeavePermission the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($user_id, $leave_condition_id, $year)
-    {
+    protected function findModel($user_id, $leave_condition_id, $year) {
         if (($model = LeavePermission::findOne(['user_id' => $user_id, 'leave_condition_id' => $leave_condition_id, 'year' => $year])) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

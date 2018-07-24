@@ -11,25 +11,24 @@ use andahrm\structure\models\FiscalYear;
 /**
  * LeavePermissionSearch represents the model behind the search form about `andahrm\leave\models\LeavePermission`.
  */
-class LeavePermissionSearch extends LeavePermission
-{
+class LeavePermissionSearch extends LeavePermission {
+
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['user_id', 'leave_condition_id', 'number_day', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['year','fullname'], 'safe'],
+            [['year', 'fullname'], 'safe'],
         ];
     }
+
     public $fullname;
 
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -41,8 +40,7 @@ class LeavePermissionSearch extends LeavePermission
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = LeavePermission::find();
 
         // add conditions that should always apply here
@@ -58,14 +56,18 @@ class LeavePermissionSearch extends LeavePermission
             // $query->where('0=1');
             return $dataProvider;
         }
-        $this->year=$this->year?$this->year:FiscalYear::currentYear();
-        
-        
-        if($this->fullname){
+        $this->year = $this->year ? $this->year : FiscalYear::currentYear();
+
+
+        if ($this->fullname) {
             $query->joinWith('user');
-            $query->andWhere(['LIKE', 'person.user_id',$this->fullname]);
-            $query->orWhere(['LIKE', 'person.firstname_th',$this->fullname]);
-            $query->orWhere(['LIKE', 'person.lastname_th',$this->fullname]);
+            $query->andWhere(['OR',
+                ['LIKE', 'person.user_id', $this->fullname],
+                ['LIKE', 'person.firstname_th', $this->fullname],
+                ['LIKE', 'person.lastname_th', $this->fullname]
+            ]);
+//            $query->orWhere(['LIKE', 'person.firstname_th', $this->fullname]);
+//            $query->orWhere(['LIKE', 'person.lastname_th', $this->fullname]);
         }
 
         // grid filtering conditions
@@ -82,4 +84,5 @@ class LeavePermissionSearch extends LeavePermission
 
         return $dataProvider;
     }
+
 }

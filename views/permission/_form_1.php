@@ -23,6 +23,7 @@ $positionList = ArrayHelper::map($data, 'positionSalary.position.id', 'positionS
     <?php echo $this->render('_person_type', ['model' => $searchModel]); ?>
 
 
+
     <?php Pjax::begin(['id' => 'pjax_person']); ?>   
 
     <?php
