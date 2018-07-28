@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeavePermission */
@@ -12,23 +13,63 @@ use kartik\export\ExportMenu;
 
     <?=
     DetailView::widget([
-        'model' => $model,
+        'model' => $modelPerson,
         'attributes' => [
             [
                 'attribute' => 'user_id',
                 'format' => 'html',
-                'value' => $model->infoMedia
-            ],
-            [
-                'attribute' => 'leavePermission.credit',
-//                'value'=>function($model){
-//        
-//                }
+                'value' => $modelPerson->infoMedia
             ]
         ],
     ])
     ?>
+    <?php $form = ActiveForm::begin(); ?>
+    <?= $form->field($model, 'amount')->textInput() ?>
+
+    <div class="form-group">
+        <?=
+        Html::submitButton($model->isNewRecord ? Yii::t('andahrm', 'Create') : Yii::t('andahrm', 'Update'), [
+            'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary',
+            'name' => 'save',
+            'value' => 1
+        ])
+        ?>
+    </div>
+    <?php ActiveForm::end(); ?>
 
 </div>
 
+<?php
+///Surakit
+if ($isAjax) {
 
+    $js[] = <<< JS
+$(document).on('submit', '#{$form->id}', function(e){
+  e.preventDefault();
+  var form = $(this);
+  var formData = new FormData(form[0]);
+   //alert(form.serialize());
+  
+  $.ajax({
+    url: form.attr('action'),
+    type : 'POST',
+    data: formData,
+    contentType:false,
+    cache: false,
+    processData:false,
+    dataType: "json",
+    success: function(data) {
+      if(data.success){
+        callbackHospital(data.result,"#{$form->id}");
+      }else{
+        alert('Fail');
+        alert(data);
+      }
+    }
+  });
+});
+JS;
+
+    $this->registerJs(implode("\n", $js));
+}
+?>

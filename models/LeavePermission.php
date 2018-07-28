@@ -7,7 +7,7 @@ use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 ###
-use andahrm\leave\base\YearConverter; 
+use andahrm\leave\base\YearConverter;
 use andahrm\person\models\Person;
 use andahrm\leave\models\PersonLeave;
 
@@ -41,11 +41,14 @@ class LeavePermission extends \yii\db\ActiveRecord {
         return [
             [['user_id', 'leave_condition_id', 'year'], 'required'],
             [['user_id', 'leave_condition_id', 'number_day', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['amount'], 'number'],
             [['year'], 'safe'],
             [['user_id', 'leave_condition_id', 'year'], 'unique', 'targetAttribute' => ['user_id', 'leave_condition_id', 'year']],
             [['leave_condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveCondition::className(), 'targetAttribute' => ['leave_condition_id' => 'id']],
         ];
     }
+
+    public $amount;
 
     /**
      * @inheritdoc

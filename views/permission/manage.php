@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
@@ -17,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $modals['add'] = Modal::begin([
             'header' => 'add'
         ]);
-echo Yii::$app->runAction('/leave/permission/assign', ['id' => $model->user_id, 'formAction' => '/leave/permission/assign']);
+//echo Yii::$app->runAction('/leave/permission/assign', ['id' => $model->user_id, 'formAction' => '/leave/permission/assign']);
 Modal::end();
 ?>
 <div class="leave-permission-view">
@@ -119,4 +120,27 @@ $fullExportMenu = ExportMenu::widget([
     ]);
     ?>
 </div>
+
+<?php
+$urlAssign = Url::to(['assign', 'id' => $model->user_id]);
+$js[] = <<< JS
+var modalAssign = "#{$modals['add']->id}";
+var urlAssign = "{$urlAssign}";
+//alert(modalAssign);
+
+   
+
+    //$(modalAssign).modal('show');
+    $(modalAssign).on('show.bs.modal', function () {
+         $(this).find(".modal-body").load(urlAssign);
+    });
+
+    $(modalAssign).on('hidden.bs.modal', function () {
+
+    });
+        
+JS;
+
+$this->registerJs(implode('\n', $js));
+?>
 

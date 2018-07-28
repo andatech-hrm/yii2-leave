@@ -84,17 +84,48 @@ class PermissionController extends Controller {
     }
 
     public function actionAssign($id) {
-        $model = PersonLeave::findOne($id);
+        $modelPerson = PersonLeave::findOne($id);
+        $model = new LeavePermissionTransection(['user_id' => $modelPerson->user_id]);
 
-        $modelTrans = LeavePermissionTransection::findAll(['user_id' => $id]);
+        $modelTrans = LeavePermissionTransection::findAll(['user_id' => $modelPerson->user_id]);
         $dataProvider = new ArrayDataProvider([
             'allModels' => $modelTrans
         ]);
+        $request = Yii::$app->request;
+        $post = $request->post();
+        $isAjax = Yii::$app->request->isAjax;
+        //echo $isAjax;
+        if ($model->load($post)) {
+            $success = false;
+            $result = null;
 
-        return $this->renderPartial('assign', [
-                    'model' => $model,
-                    'dataProvider' => $dataProvider
-        ]);
+            if ($isAjax && $request->post('ajax')) {
+                return ActiveForm::validate($model);
+            } else {
+                print_r($post);
+                exit();
+                if ($model->save()) {
+                    $success = true;
+                } else {
+                    $result = $model->getErrors();
+                    print_r($result);
+                }
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ['success' => $success, 'result' => $result];
+            }
+        }
+        $param = [
+            'model' => $model,
+            'modelPerson' => $modelPerson,
+            'modelTrans' => $modelTrans,
+            'dataProvider' => $dataProvider,
+            'isAjax' => $isAjax
+        ];
+        if ($isAjax) {
+            return $this->renderAjax('assign', $param);
+        } else {
+            return $this->render('assign', $param);
+        }
     }
 
     /**

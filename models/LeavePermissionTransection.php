@@ -11,12 +11,13 @@ use Yii;
  * @property int $trans_time
  * @property int $trans_type
  * @property int $leave_condition_id
- * @property string $year
- * @property int $number_day
+ * @property string $amount
  * @property int $created_at
  * @property int $created_by
  * @property int $updated_at
  * @property int $updated_by
+ *
+ * @property LeaveCondition $leaveCondition
  */
 class LeavePermissionTransection extends \yii\db\ActiveRecord
 {
@@ -34,10 +35,11 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'trans_time', 'trans_type', 'leave_condition_id', 'year', 'number_day'], 'required'],
-            [['user_id', 'trans_time', 'trans_type', 'leave_condition_id', 'number_day', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['year'], 'safe'],
-            [['user_id', 'trans_time', 'trans_type', 'leave_condition_id', 'year'], 'unique', 'targetAttribute' => ['user_id', 'trans_time', 'trans_type', 'leave_condition_id', 'year']],
+            [['user_id', 'trans_time', 'trans_type', 'leave_condition_id'], 'required'],
+            [['user_id', 'trans_time', 'trans_type', 'leave_condition_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['amount'], 'number'],
+            [['user_id', 'trans_time', 'trans_type', 'leave_condition_id'], 'unique', 'targetAttribute' => ['user_id', 'trans_time', 'trans_type', 'leave_condition_id']],
+            [['leave_condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveCondition::className(), 'targetAttribute' => ['leave_condition_id' => 'id']],
         ];
     }
 
@@ -51,12 +53,19 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord
             'trans_time' => Yii::t('andahrm/leave', 'Trans Time'),
             'trans_type' => Yii::t('andahrm/leave', 'Trans Type'),
             'leave_condition_id' => Yii::t('andahrm/leave', 'Leave Condition ID'),
-            'year' => Yii::t('andahrm/leave', 'Year'),
-            'number_day' => Yii::t('andahrm/leave', 'Number Day'),
+            'amount' => Yii::t('andahrm/leave', 'Amount'),
             'created_at' => Yii::t('andahrm/leave', 'Created At'),
             'created_by' => Yii::t('andahrm/leave', 'Created By'),
             'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
             'updated_by' => Yii::t('andahrm/leave', 'Updated By'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLeaveCondition()
+    {
+        return $this->hasOne(LeaveCondition::className(), ['id' => 'leave_condition_id']);
     }
 }
