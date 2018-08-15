@@ -132,6 +132,16 @@ class PermissionController extends Controller {
         }
     }
 
+    public function actionDel($id, $time) {
+
+        $model = LeavePermissionTransection::findOne(['user_id' => $id, 'trans_time' => $time]);
+        if ($model) {
+            $model->delete();
+            LeavePermission::updateBalance($id);
+        }
+        return $this->redirect(['manage', 'id' => $id]);
+    }
+
     /**
      * Creates a new LeavePermission model.
      * If creation is successful, the browser will be redirected to the 'view' page.

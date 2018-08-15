@@ -91,7 +91,7 @@ $fullExportMenu = ExportMenu::widget([
     <div class="panel-heading">
         <div class="btn-group">
             <?=
-            Html::button('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('andahrm', 'Create'), [
+            Html::button('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('andahrm', 'Add'), [
                 'class' => 'btn btn-success btn-flat',
                 'data-pjax' => 0,
                 'data-toggle' => 'modal',
@@ -107,16 +107,22 @@ $fullExportMenu = ExportMenu::widget([
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 [
-                    'label'=>'ได้รับ',
+                    'attribute' => 'trans_type',
+                ],
+                [
+                    //'label' => 'ได้รับ',
                     'attribute' => 'amount',
-                    'format' => ['decimal', 2],
+                    'format' => ['decimal', 1],
                     'contentOptions' => ['class' => 'text-right'],
 //                    'value'=>function($model){
 //                        return 
 //                    }
                 ],
                 [
-                    
+                    'format' => 'html',
+                    'value' => function($model) {
+                        return Html::a('ลบ', ['del', 'id' => $model->user_id, 'time' => $model->trans_time], ['class' => '']);
+                    }
                 ]
 //                'created_at:datetime',
 //                [
