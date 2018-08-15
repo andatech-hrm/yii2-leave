@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ArrayDataProvider;
+use yii\web\Response;
 ###
 use andahrm\leave\models\PersonSearch;
 use andahrm\leave\models\LeavePermission;
@@ -85,12 +86,12 @@ class PermissionController extends Controller {
 
     public function actionAssign($id) {
         $modelPerson = PersonLeave::findOne($id);
-        $model = new LeavePermissionTransection(['user_id' => $modelPerson->user_id]);
+        $model = new LeavePermissionTransection(['attributes' => $modelPerson->attributes]);
 
-        $modelTrans = LeavePermissionTransection::findAll(['user_id' => $modelPerson->user_id]);
-        $dataProvider = new ArrayDataProvider([
-            'allModels' => $modelTrans
-        ]);
+//        $modelTrans = LeavePermissionTransection::findAll(['user_id' => $modelPerson->user_id]);
+//        $dataProvider = new ArrayDataProvider([
+//            'allModels' => $modelTrans
+//        ]);
         $request = Yii::$app->request;
         $post = $request->post();
         $isAjax = Yii::$app->request->isAjax;
@@ -102,8 +103,11 @@ class PermissionController extends Controller {
             if ($isAjax && $request->post('ajax')) {
                 return ActiveForm::validate($model);
             } else {
-                print_r($post);
-                exit();
+//                print_r($post);
+//                exit();
+                $model->trans_time = time();
+                $model->trans_type = LeavePermissionTransection::TYPE_ADD;
+                //$model->trans_by = Yii::$app->user->identity->id;
                 if ($model->save()) {
                     $success = true;
                 } else {

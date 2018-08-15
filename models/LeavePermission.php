@@ -18,6 +18,9 @@ use andahrm\leave\models\PersonLeave;
  * @property int $leave_condition_id
  * @property string $year
  * @property int $number_day
+ * @property string $credit 
+ * @property string $debit 
+ * @property string $balance 
  * @property int $created_at
  * @property int $created_by
  * @property int $updated_at
@@ -39,16 +42,24 @@ class LeavePermission extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['user_id', 'leave_condition_id', 'year'], 'required'],
+            [['user_id',], 'required'],
             [['user_id', 'leave_condition_id', 'number_day', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['amount'], 'number'],
             [['year'], 'safe'],
-            [['user_id', 'leave_condition_id', 'year'], 'unique', 'targetAttribute' => ['user_id', 'leave_condition_id', 'year']],
+            [['credit', 'debit', 'balance'], 'number'],
+            //[['user_id', 'leave_condition_id', 'year'], 'unique', 'targetAttribute' => ['user_id', 'leave_condition_id', 'year']],
             [['leave_condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveCondition::className(), 'targetAttribute' => ['leave_condition_id' => 'id']],
         ];
     }
 
     public $amount;
+
+    const SCENARIOS_UPDATE = 'update';
+
+    public function scenarios() {
+        $scenarios[self::SCENARIOS_UPDATE] = ['user_id', 'year_credit', 'credit', 'insure', 'balance'];
+        return array_merge(parent::scenarios(), $scenarios);
+    }
 
     /**
      * @inheritdoc
@@ -113,6 +124,46 @@ class LeavePermission extends \yii\db\ActiveRecord {
                 ->sum('number_day');
 
         return $permissionAll ? $permissionAll : 0;
+    }
+
+    public static function updateBalance($id, $request_id = null) {
+        if (!$model = self::findOne($id)) {
+            $model = new self(['user_id' => $id]);
+        }
+
+
+        if ($model) {
+//            echo ($id);
+//            exit();
+            $err = [];
+            $countAll = 0;
+            $trans = LeavePermissionTransection::findAll(['user_id' => $model->user_id]);
+            if ($trans) {
+                $data['credit'] = 0;
+                $data['debit'] = 0;
+                $data['balance'] = 0;
+                foreach ($trans as $tran) {
+                    if ($tran->trans_type == LeavePermissionTransection::TYPE_MINUS) {
+                        $data['debit'] += $tran->amount;
+                    } else {
+                        $data['credit'] += $tran->amount;
+                    }
+                }
+                $data['balance'] = $data['credit'] - $data['debit'];
+                $model->attributes = $data;
+                //$model->request_form_id = $request_id;
+                //$model->scenario = WelfareCredit::SCENARIOS_SYNC;
+                if ($model->save()) {
+                    //$this->saveLog();
+//                    print_r($model->attributes);
+//                    exit();
+                } else {
+                    print_r($model->getErrors());
+                    exit();
+                }
+            }
+        }
+        return true;
     }
 
 }

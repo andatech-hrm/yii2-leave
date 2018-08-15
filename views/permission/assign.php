@@ -45,7 +45,13 @@ if ($isAjax) {
 
     $js[] = <<< JS
 $(document).on('submit', '#{$form->id}', function(e){
-  e.preventDefault();
+    var me = $(this);
+    e.preventDefault();
+    if (me.data('requestRunning')) {
+        return;
+    }
+    me.data('requestRunning', true);
+
   var form = $(this);
   var formData = new FormData(form[0]);
    //alert(form.serialize());
@@ -60,12 +66,15 @@ $(document).on('submit', '#{$form->id}', function(e){
     dataType: "json",
     success: function(data) {
       if(data.success){
-        callbackHospital(data.result,"#{$form->id}");
+        callbackPermisstion(data.result,"#{$form->id}");
       }else{
         alert('Fail');
         alert(data);
       }
-    }
+    },
+        complete: function() {
+            me.data('requestRunning', false);
+        }
   });
 });
 JS;

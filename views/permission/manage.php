@@ -3,9 +3,10 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use kartik\export\ExportMenu;
 use yii\bootstrap\Modal;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeavePermission */
@@ -21,23 +22,38 @@ $modals['add'] = Modal::begin([
 //echo Yii::$app->runAction('/leave/permission/assign', ['id' => $model->user_id, 'formAction' => '/leave/permission/assign']);
 Modal::end();
 ?>
+
+<?php $pjaxs['permisstion'] = Pjax::begin(['id' => 'pjax-permission']) ?>
+
 <div class="leave-permission-view">
 
     <?=
     DetailView::widget([
         'model' => $model,
         'attributes' => [
-            [
-                'attribute' => 'user_id',
-                'format' => 'html',
-                'value' => $model->infoMedia
-            ],
+//            [
+//                'attribute' => 'user_id',
+//                'format' => 'html',
+//                'value' => $model->infoMedia
+//            ],
             [
                 'attribute' => 'leavePermission.credit',
 //                'value'=>function($model){
 //        
 //                }
-            ]
+            ],
+            [
+                'attribute' => 'leavePermission.debit',
+//                'value'=>function($model){
+//        
+//                }
+            ],
+            [
+                'attribute' => 'leavePermission.balance',
+//                'value'=>function($model){
+//        
+//                }
+            ],
         ],
     ])
     ?>
@@ -71,24 +87,62 @@ $fullExportMenu = ExportMenu::widget([
             ],
         ]);
 ?>
-<div class="person-index">
-
-    <?=
-    GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'id' => 'data-grid',
-        'pjax' => true,
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="btn-group">
+            <?=
+            Html::button('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('andahrm', 'Create'), [
+                'class' => 'btn btn-success btn-flat',
+                'data-pjax' => 0,
+                'data-toggle' => 'modal',
+                'data-target' => '#' . $modals['add']->id,
+            ]);
+            ?>
+            '</div>
+    </div>
+    <div class="panel-body no-padding">
+        <?=
+        GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'label'=>'ได้รับ',
+                    'attribute' => 'amount',
+                    'format' => ['decimal', 2],
+                    'contentOptions' => ['class' => 'text-right'],
+//                    'value'=>function($model){
+//                        return 
+//                    }
+                ],
+                [
+                    
+                ]
+//                'created_at:datetime',
+//                [
+//                    'attribute' => 'created_by',
+//                    'value' => 'createdBy.fullname',
+//                ],
+//                [
+//                    'format' => 'html',
+//                    'value' => function($model) {
+//                        return Html::a(Yii::t('andahrm/leave', 'Management'), ['manage', 'id' => $model->user_id], ['class' => 'btn btn-primary']);
+//                    }
+//                ]
+            ]
+                //'filterModel' => $searchModel,
+                //'id' => 'data-grid',
+                //'pjax' => false,
 //        'resizableColumns'=>true,
 //        'resizeStorageKey'=>Yii::$app->user->id . '-' . date("m"),
 //        'floatHeader'=>true,
 //        'floatHeaderOptions'=>['scrollingTop'=>'50'],
-        'export' => [
-            'label' => Yii::t('yii', 'Page'),
-            'fontAwesome' => true,
-            'target' => GridView::TARGET_SELF,
-            'showConfirmAlert' => false,
-        ],
+//        'export' => [
+//            'label' => Yii::t('yii', 'Page'),
+//            'fontAwesome' => true,
+//            'target' => GridView::TARGET_SELF,
+//            'showConfirmAlert' => false,
+//        ],
 //         'exportConfig' => [
 //             GridView::HTML=>['filename' => $exportFilename],
 //             GridView::CSV=>['filename' => $exportFilename],
@@ -97,48 +151,58 @@ $fullExportMenu = ExportMenu::widget([
 //             GridView::PDF=>['filename' => $exportFilename],
 //             GridView::JSON=>['filename' => $exportFilename],
 //         ],
-        'panel' => [
-            'heading' => '<h3 class="panel-title"><i class="fa fa-th"></i> ' . Html::encode($this->title) . '</h3>',
-            'type' => 'default',
-            'before' => '<div class="btn-group">' .
-            Html::button('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('andahrm', 'Create'), [
-                'class' => 'btn btn-success btn-flat',
-                'data-pjax' => 0,
-                'data-toggle' => 'modal',
-                'data-target' => '#' . $modals['add']->id,
-            ]) . ' ' .
-            '</div>',
-            'heading' => false,
-        //'footer'=>false,
-        ],
-        'toolbar' => [
-            '{export}',
-            '{toggleData}',
-            $fullExportMenu,
-        ],
-            //'columns' => $gridColumns,
-    ]);
-    ?>
+//        'panel' => [
+//            'heading' => '<h3 class="panel-title"><i class="fa fa-th"></i> ' . Html::encode($this->title) . '</h3>',
+//            'type' => 'default',
+//            'before' => '<div class="btn-group">' .
+//            Html::button('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('andahrm', 'Create'), [
+//                'class' => 'btn btn-success btn-flat',
+//                'data-pjax' => 0,
+//                'data-toggle' => 'modal',
+//                'data-target' => '#' . $modals['add']->id,
+//            ]) . ' ' .
+//            '</div>',
+//            'heading' => false,
+//        //'footer'=>false,
+//        ],
+//        'toolbar' => [
+//            '{export}',
+//            '{toggleData}',
+//            $fullExportMenu,
+//        ],
+                //'columns' => $gridColumns,
+        ]);
+        ?>
+    </div>
 </div>
-
+<?php Pjax::end(); ?>
 <?php
 $urlAssign = Url::to(['assign', 'id' => $model->user_id]);
-$js[] = <<< JS
+$jsHead[] = <<< JS
 var modalAssign = "#{$modals['add']->id}";
 var urlAssign = "{$urlAssign}";
-//alert(modalAssign);
+var pjaxPermission = "#{$pjaxs['permisstion']->id}";
+function callbackPermisstion(result,form)
+{       
+    jQuery(modalAssign).modal('hide');
+    
+}
+JS;
+$this->registerJs(implode("\n", $jsHead), $this::POS_HEAD);
 
-   
+$js[] = <<< JS
 
+//alert(modalAssign); 
     //$(modalAssign).modal('show');
-    $(modalAssign).on('show.bs.modal', function () {
-         $(this).find(".modal-body").load(urlAssign);
-    });
-
-    $(modalAssign).on('hidden.bs.modal', function () {
-
-    });
         
+
+    jQuery(modalAssign).on('show.bs.modal', function () {
+         jQuery(this).find(".modal-body").load(urlAssign);
+    });
+    jQuery(modalAssign).on('hidden.bs.modal', function () {
+        $.pjax.reload({container: "#{$pjaxs['permisstion']->id}"});
+    });
+
 JS;
 
 $this->registerJs(implode('\n', $js));
