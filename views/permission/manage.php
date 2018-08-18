@@ -7,11 +7,13 @@ use yii\grid\GridView;
 use kartik\export\ExportMenu;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
+use yii\widgets\ActiveForm;
+use andahrm\structure\models\FiscalYear;
 
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeavePermission */
 
-$this->title = $model->fullname;
+$this->title = $modelPerson->fullname;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leave Permissions'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -23,9 +25,23 @@ $modals['add'] = Modal::begin([
 Modal::end();
 ?>
 
+<?php
+$form = ActiveForm::begin([
+            'action' => [$this->context->action->id],
+            'method' => 'get',
+            'options' => ['data-pjax' => true],
+        ]);
+?>
+<?= Html::hiddenInput('id', $model->user_id); ?>
+<?= $form->field($model, 'year')->dropDownList(FiscalYear::getList(), ['name' => 'year', 'onchange' => 'this.form.submit();']) ?>
+<?php #= Html::dropDownList('year', FiscalYear::getList(), ['onchange' => 'this.form.submit();'])  ?>
+<?php ActiveForm::end(); ?>
+
 <?php $pjaxs['permisstion'] = Pjax::begin(['id' => 'pjax-permission']) ?>
 
 <div class="leave-permission-view">
+
+
 
     <?=
     DetailView::widget([
@@ -37,19 +53,19 @@ Modal::end();
 //                'value' => $model->infoMedia
 //            ],
             [
-                'attribute' => 'leavePermission.credit',
+                'attribute' => 'credit',
 //                'value'=>function($model){
 //        
 //                }
             ],
             [
-                'attribute' => 'leavePermission.debit',
+                'attribute' => 'debit',
 //                'value'=>function($model){
 //        
 //                }
             ],
             [
-                'attribute' => 'leavePermission.balance',
+                'attribute' => 'balance',
 //                'value'=>function($model){
 //        
 //                }
@@ -98,7 +114,13 @@ $fullExportMenu = ExportMenu::widget([
                 'data-target' => '#' . $modals['add']->id,
             ]);
             ?>
-            '</div>
+            <?=
+            Html::a('<i class="glyphicon glyphicon-repeat"></i> ' . Yii::t('andahrm', 'Reload'), ['update-balance', 'id' => $model->user_id, 'year' => $model->year], [
+                'class' => 'btn btn-success btn-flat',
+                'data-pjax' => 1,
+            ]);
+            ?>
+        </div>
     </div>
     <div class="panel-body no-padding">
         <?=
@@ -109,6 +131,7 @@ $fullExportMenu = ExportMenu::widget([
                 [
                     'attribute' => 'trans_type',
                 ],
+                'trans_time:datetime',
                 [
                     //'label' => 'ได้รับ',
                     'attribute' => 'amount',
@@ -183,7 +206,7 @@ $fullExportMenu = ExportMenu::widget([
 </div>
 <?php Pjax::end(); ?>
 <?php
-$urlAssign = Url::to(['assign', 'id' => $model->user_id]);
+$urlAssign = Url::to(['assign', 'id' => $model->user_id, 'year' => $model->year]);
 $jsHead[] = <<< JS
 var modalAssign = "#{$modals['add']->id}";
 var urlAssign = "{$urlAssign}";

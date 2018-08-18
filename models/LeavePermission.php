@@ -10,6 +10,7 @@ use yii\behaviors\TimestampBehavior;
 use andahrm\leave\base\YearConverter;
 use andahrm\person\models\Person;
 use andahrm\leave\models\PersonLeave;
+use andahrm\structure\models\FiscalYear;
 
 /**
  * This is the model class for table "leave_permission".
@@ -126,9 +127,11 @@ class LeavePermission extends \yii\db\ActiveRecord {
         return $permissionAll ? $permissionAll : 0;
     }
 
-    public static function updateBalance($id, $request_id = null) {
-        if (!$model = self::findOne($id)) {
-            $model = new self(['user_id' => $id]);
+    public static function updateBalance($id, $year = null) {
+        $year = $year == null ? FiscalYear::getYearly() : $year;
+        $options = ['user_id'=>$id,'year'=>$year];
+        if (!$model = self::findOne($options)) {
+            $model = new self($options);
         }
 
 
@@ -137,7 +140,7 @@ class LeavePermission extends \yii\db\ActiveRecord {
 //            exit();
             $err = [];
             $countAll = 0;
-            $trans = LeavePermissionTransection::findAll(['user_id' => $model->user_id]);
+            $trans = LeavePermissionTransection::findAll($options);
             if ($trans) {
                 $data['credit'] = 0;
                 $data['debit'] = 0;

@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
 use yii\widgets\ActiveForm;
+use andahrm\structure\models\FiscalYear;
 
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeavePermission */
@@ -23,8 +24,11 @@ use yii\widgets\ActiveForm;
         ],
     ])
     ?>
-    <?php $form = ActiveForm::begin(); ?>
-    <?= $form->field($model, 'amount')->textInput() ?>
+    <?php
+    $form = ActiveForm::begin();
+    echo Html::activeHiddenInput($model, 'year');
+    ?>    
+    <?= $form->field($model, 'amount')->textInput(['autocomplate' => 'off']) ?>
 
     <div class="form-group">
         <?=

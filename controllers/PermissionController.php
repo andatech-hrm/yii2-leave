@@ -15,6 +15,7 @@ use andahrm\leave\models\LeavePermissionSearch;
 use andahrm\leave\models\LeavePermissionTransection;
 use andahrm\leave\models\PersonLeave;
 use andahrm\leave\models\PersonPermissionSearch;
+use andahrm\structure\models\FiscalYear;
 
 /**
  * PermissionController implements the CRUD actions for LeavePermission model.
@@ -70,23 +71,28 @@ class PermissionController extends Controller {
         ]);
     }
 
-    public function actionManage($id) {
-        $model = PersonLeave::findOne($id);
+    public function actionManage($id, $year = null) {
+        $year = $year == null ? FiscalYear::currentYear() : $year;
+        $options = ['user_id' => $id, 'year' => $year];
+        $model = LeavePermission::findOne($options);
+        $model = $model ? $model : new LeavePermission($options);
+        $modelPerson = PersonLeave::findOne($id);
 
-        $modelTrans = LeavePermissionTransection::findAll(['user_id' => $id]);
+        $modelTrans = LeavePermissionTransection::findAll($options);
         $dataProvider = new ArrayDataProvider([
             'allModels' => $modelTrans
         ]);
 
         return $this->render('manage', [
                     'model' => $model,
+                    'modelPerson' => $modelPerson,
                     'dataProvider' => $dataProvider
         ]);
     }
 
-    public function actionAssign($id) {
+    public function actionAssign($id, $year) {
         $modelPerson = PersonLeave::findOne($id);
-        $model = new LeavePermissionTransection(['attributes' => $modelPerson->attributes]);
+        $model = new LeavePermissionTransection(['user_id' => $id, 'year' => $year]);
 
 //        $modelTrans = LeavePermissionTransection::findAll(['user_id' => $modelPerson->user_id]);
 //        $dataProvider = new ArrayDataProvider([
@@ -132,6 +138,47 @@ class PermissionController extends Controller {
         }
     }
 
+    public function actionMinus($id, $year) {
+        $modelPerson = PersonLeave::findOne($id);
+        $model = new LeavePermissionTransection(['user_id' => $id, 'year' => $year]);
+
+        $request = Yii::$app->request;
+        $post = $request->post();
+        $isAjax = Yii::$app->request->isAjax;
+        //echo $isAjax;
+        if ($model->load($post)) {
+            $success = false;
+            $result = null;
+
+            if ($isAjax && $request->post('ajax')) {
+                return ActiveForm::validate($model);
+            } else {
+                $model->trans_time = time();
+                $model->trans_type = LeavePermissionTransection::TYPE_MINUS;
+                if ($model->save()) {
+                    $success = true;
+                } else {
+                    $result = $model->getErrors();
+                    print_r($result);
+                }
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ['success' => $success, 'result' => $result];
+            }
+        }
+        $param = [
+            'model' => $model,
+            'modelPerson' => $modelPerson,
+            'modelTrans' => $modelTrans,
+            'dataProvider' => $dataProvider,
+            'isAjax' => $isAjax
+        ];
+        if ($isAjax) {
+            return $this->renderAjax('minus', $param);
+        } else {
+            return $this->render('minus', $param);
+        }
+    }
+
     public function actionDel($id, $time) {
 
         $model = LeavePermissionTransection::findOne(['user_id' => $id, 'trans_time' => $time]);
@@ -140,6 +187,12 @@ class PermissionController extends Controller {
             LeavePermission::updateBalance($id);
         }
         return $this->redirect(['manage', 'id' => $id]);
+    }
+
+    public function actionUpdateBalance($id, $year) {
+
+        LeavePermission::updateBalance($id, $year);
+        return $this->redirect(['manage', 'id' => $id, 'year' => $year]);
     }
 
     /**
