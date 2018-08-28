@@ -27,7 +27,7 @@ use andahrm\leave\models\PersonLeave;
  *
  * @property LeaveCondition $leaveCondition
  */
-class LeavePermission extends ActiveRecord
+class LeavePermission_1 extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -131,7 +131,7 @@ class LeavePermission extends ActiveRecord
         $permissionAll = LeavePermission::find()
         ->where(['<=','year',$year])
         ->andWhere(['user_id'=>$user_id])
-        ->sum('number_day');
+        ->sum('balance');
         
         return $permissionAll?$permissionAll:0;
     }

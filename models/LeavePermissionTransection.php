@@ -5,6 +5,7 @@ namespace andahrm\leave\models;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "leave_permission_transection".
@@ -71,9 +72,25 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
         ];
     }
 
-    const TYPE_ADD = 1;
-    const TYPE_MINUS = 2;
-    const TYPE_CARRY = 3;
+    /**
+     * @const Add
+     */
+    const TYPE_ADD = 1; 
+    const TYPE_MINUS = 2; #ใช้ไป
+    const TYPE_CARRY = 3; #ยกยอด
+    const TYPE_RESTORE = 4; #ยกเลิก
+
+    public static function itemsAlias($key) {
+        $items = [
+            'type' => [
+                self::TYPE_ADD => Yii::t('andahrm/leave', 'Add'),
+                self::TYPE_MINUS => Yii::t('andahrm/leave', 'Minus'),
+                self::TYPE_CARRY => Yii::t('andahrm/leave', 'Carry'),
+                self::TYPE_RESTORE => Yii::t('andahrm/leave', 'Restore'),
+            ],
+        ];
+        return ArrayHelper::getValue($items, $key, []);
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -93,6 +110,33 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
         }
     }
 
+    /**
+     * Func สำหรับดึงยอดตามประเภทต่างๆ
+     * @param type $user_id
+     * @param type $year
+     * @return boolean
+     */
+    public static function getAmountOnType($user_id, $year) {
+        $options = ['user_id' => $user_id, 'year' => $year];
+        $trans = self::findAll($options);
+        if ($trans) {
+            $data = self::itemsAlias('type');
+
+            foreach ($data as $k => $d)
+                $data[$k] = 0;
+            foreach ($trans as $tran) {
+                $data[$tran->trans_type] += $tran->amount;
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Func สำหรับยกยอดจำนวนโควต้า
+     * @param type $user_id
+     * @param type $year
+     * @return boolean
+     */
     public static function getLastBalanceYear($user_id, $year) {
         $options = ['user_id' => $user_id, 'year' => ($year - 1)];
         $trans = self::findAll($options);

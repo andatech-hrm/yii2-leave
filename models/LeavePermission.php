@@ -55,12 +55,14 @@ class LeavePermission extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['user_id',], 'required'],
-            [['user_id', 'leave_condition_id', 'number_day', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['user_id', 'leave_condition_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            //[['user_id', 'leave_condition_id', 'number_day', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['amount'], 'number'],
             [['year'], 'safe'],
             [['credit', 'debit', 'balance'], 'number'],
             //[['user_id', 'leave_condition_id', 'year'], 'unique', 'targetAttribute' => ['user_id', 'leave_condition_id', 'year']],
             [['leave_condition_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveCondition::className(), 'targetAttribute' => ['leave_condition_id' => 'id']],
+            [['credit', 'debit', 'balance'], 'default', 'value' => 0],
         ];
     }
 
@@ -82,6 +84,9 @@ class LeavePermission extends \yii\db\ActiveRecord {
             'leave_condition_id' => Yii::t('andahrm/leave', 'Leave Condition ID'),
             'year' => Yii::t('andahrm/leave', 'Year'),
             'number_day' => Yii::t('andahrm/leave', 'Number Day'),
+            'credit' => Yii::t('andahrm/leave', 'credit'),
+            'debit' => Yii::t('andahrm/leave', 'debit'),
+            'balance' => Yii::t('andahrm/leave', 'balance'),
             'created_at' => Yii::t('andahrm/leave', 'Created At'),
             'created_by' => Yii::t('andahrm/leave', 'Created By'),
             'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
@@ -113,27 +118,34 @@ class LeavePermission extends \yii\db\ActiveRecord {
     }
 
     public static function getPermission($user_id = null, $year = null) {
-        $year = $year ? $year : date('Y');
+        $year = $year ? $year : FiscalYear::getYearly();
         $user_id = $user_id ? $user_id : Yii::$app->user->id;
 
         $userNumber = self::find()
                 ->where(['year' => $year])
                 ->andWhere(['user_id' => $user_id])
                 ->one();
+        if (!$userNumber) {
+            $userNumber = new self();
+            $userNumber->user_id = $user_id;
+            $userNumber->year = $year;
+            $userNumber->save();
+        }
 
-        return $userNumber ? $userNumber->number_day : 0;
+        //return $userNumber ? $userNumber->number_day : 0;
+        return $userNumber;
     }
 
     #วันสะสมทั้งหมด
 
     public static function getPermissionAll($user_id = null, $year = null) {
-        $year = $year ? $year : date('Y');
+        $year = $year ? $year : FiscalYear::getYearly();
         $user_id = $user_id ? $user_id : Yii::$app->user->id;
 
         $permissionAll = LeavePermission::find()
-                ->where(['<=', 'year', $year])
+                ->where(['year' => $year])
                 ->andWhere(['user_id' => $user_id])
-                ->sum('number_day');
+                ->sum('credit');
 
         return $permissionAll ? $permissionAll : 0;
     }

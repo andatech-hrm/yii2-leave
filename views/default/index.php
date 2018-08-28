@@ -7,6 +7,7 @@ use yii\widgets\Pjax;
 use andahrm\leave\models\Leave;
 use andahrm\leave\models\LeaveCancelSearch;
 use yii\helpers\ArrayHelper;
+use andahrm\leave\models\LeavePermission;
 
 /* @var $this yii\web\View */
 /* @var $searchModel andahrm\leave\models\LeaveSearch */
@@ -16,7 +17,7 @@ $this->title = Yii::t('andahrm/leave', 'Leaves');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="leave-index">
-<?php echo $this->render('intro'); ?>
+    <?php echo $this->render('intro'); ?>
     <hr/>
 
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -85,7 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'format'=>['decimal', 1],
                             'groupedRow' => true,
                             'pageSummary' => Leave::getPastDay(Yii::$app->user->id, $searchModel->year),
-                            'footer' => Leave::getTotal(Yii::$app->user->id, $searchModel->year),
+                            'footer' => $leavePermission->balance,
                         ],
                         ############################
                         // 'reason:ntext',
