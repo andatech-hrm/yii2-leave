@@ -38,6 +38,17 @@ class LeavePermission extends \yii\db\ActiveRecord {
         return 'leave_permission';
     }
 
+    function behaviors() {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::className(),
+            ],
+            'blameable' => [
+                'class' => BlameableBehavior::className(),
+            ],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -129,9 +140,14 @@ class LeavePermission extends \yii\db\ActiveRecord {
 
     public static function updateBalance($id, $year = null) {
         $year = $year == null ? FiscalYear::getYearly() : $year;
-        $options = ['user_id'=>$id,'year'=>$year];
+        $options = ['user_id' => $id, 'year' => $year];
         if (!$model = self::findOne($options)) {
             $model = new self($options);
+            #Is new year
+//            if ($model->isNewRecord) {
+//                LeavePermissionTransection::getLastBalanceYear($id, $year);
+////                exit();
+//            }
         }
 
 

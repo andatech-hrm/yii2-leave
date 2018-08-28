@@ -120,6 +120,12 @@ $fullExportMenu = ExportMenu::widget([
                 'data-pjax' => 1,
             ]);
             ?>
+            <?=
+            Html::a('<i class="glyphicon glyphicon-repeat"></i> ' . Yii::t('andahrm', 'Cal Carry'), ['update-carry', 'id' => $model->user_id, 'year' => $model->year], [
+                'class' => 'btn btn-success btn-flat',
+                'data-pjax' => 1,
+            ]);
+            ?>
         </div>
     </div>
     <div class="panel-body no-padding">

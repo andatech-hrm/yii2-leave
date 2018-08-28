@@ -182,16 +182,21 @@ class PermissionController extends Controller {
     public function actionDel($id, $time) {
 
         $model = LeavePermissionTransection::findOne(['user_id' => $id, 'trans_time' => $time]);
+        $yaer = $model->year;
         if ($model) {
             $model->delete();
             LeavePermission::updateBalance($id);
         }
-        return $this->redirect(['manage', 'id' => $id]);
+        return $this->redirect(['manage', 'id' => $id, 'year' => $year]);
     }
 
     public function actionUpdateBalance($id, $year) {
-
         LeavePermission::updateBalance($id, $year);
+        return $this->redirect(['manage', 'id' => $id, 'year' => $year]);
+    }
+
+    public function actionUpdateCarry($id, $year) {
+        LeavePermissionTransection::getLastBalanceYear($id, $year);
         return $this->redirect(['manage', 'id' => $id, 'year' => $year]);
     }
 

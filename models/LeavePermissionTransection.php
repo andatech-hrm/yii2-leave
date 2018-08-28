@@ -73,6 +73,7 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
 
     const TYPE_ADD = 1;
     const TYPE_MINUS = 2;
+    const TYPE_CARRY = 3;
 
     /**
      * @return \yii\db\ActiveQuery
@@ -90,6 +91,39 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
         if (parent::afterSave($insert, $changedAttributes)) {
             return true; // do some otherthings
         }
+    }
+
+    public static function getLastBalanceYear($user_id, $year) {
+        $options = ['user_id' => $user_id, 'year' => ($year - 1)];
+        $trans = self::findAll($options);
+        if ($trans) {
+            $data['credit'] = 0;
+            $data['debit'] = 0;
+            $data['balance'] = 0;
+            foreach ($trans as $tran) {
+                if ($tran->trans_type == LeavePermissionTransection::TYPE_MINUS) {
+                    $data['debit'] += $tran->amount;
+                } else {
+                    $data['credit'] += $tran->amount;
+                }
+            }
+            $data['balance'] = $data['credit'] - $data['debit'];
+            if ($data['balance']) {
+                $options = ['user_id' => $user_id, 'year' => $year, 'trans_type' => LeavePermissionTransection::TYPE_CARRY];
+                if (!$model = self::findOne($options)) {
+                    $model = new self($options);
+                    $model->amount = $data['balance'];
+                    $model->trans_time = time();
+                    //$model->trans_type = LeavePermissionTransection::TYPE_CARRY;
+                    if (!$model->save()) {
+                        //print_r($model);
+                        // exit();
+                    }
+                    return true;
+                }
+            }
+        }
+        return null;
     }
 
 }
