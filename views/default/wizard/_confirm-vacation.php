@@ -25,7 +25,7 @@ $items['user'] = $personLeave;
 $modelDraft = $event->sender->read('draft')[0];
 //$modelSelect$modelSelect->leave_type_id;
 //print_r($modelSelect);
-print_r($modelDraft);
+//print_r($modelDraft);
 ?>
 
 

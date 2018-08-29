@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+###
 use andahrm\structure\models\FiscalYear;
 use andahrm\setting\models\Helper;
 
@@ -59,6 +60,9 @@ class Draft extends Leave {
         $permission = LeavePermission::getPermission(Yii::$app->user->id, $this->year);
         $total = $collect + $permission;
 
+        #สิทธิ์ในการฃา
+        $permisTrans = LeavePermissionTransection::getAmountOnType($user_id, $model->year);
+        $total = ($permisTrans[LeavePermissionTransection::TYPE_ADD] + $permisTrans[LeavePermissionTransection::TYPE_CARRY]) - $permisTrans[LeavePermissionTransection::TYPE_MINUS];
 
         #ตรวจสอบเงื่อนไง
         switch ($this->leave_type_id) {
