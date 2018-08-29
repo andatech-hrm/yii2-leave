@@ -107,7 +107,7 @@ $fullExportMenu = ExportMenu::widget([
     <div class="panel-heading">
         <div class="btn-group">
             <?=
-            Html::button('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('andahrm', 'Add'), [
+            Html::button('<i class="glyphicon glyphicon-plus"></i> ' . Yii::t('andahrm/leave', 'Add'), [
                 'class' => 'btn btn-success btn-flat',
                 'data-pjax' => 0,
                 'data-toggle' => 'modal',
@@ -115,13 +115,13 @@ $fullExportMenu = ExportMenu::widget([
             ]);
             ?>
             <?=
-            Html::a('<i class="glyphicon glyphicon-repeat"></i> ' . Yii::t('andahrm', 'Reload'), ['update-balance', 'id' => $model->user_id, 'year' => $model->year], [
+            Html::a('<i class="glyphicon glyphicon-repeat"></i> ' . Yii::t('andahrm/leave', 'Reload'), ['update-balance', 'id' => $model->user_id, 'year' => $model->year], [
                 'class' => 'btn btn-success btn-flat',
                 'data-pjax' => 1,
             ]);
             ?>
             <?=
-            Html::a('<i class="glyphicon glyphicon-repeat"></i> ' . Yii::t('andahrm', 'Cal Carry'), ['update-carry', 'id' => $model->user_id, 'year' => $model->year], [
+            Html::a('<i class="glyphicon glyphicon-repeat"></i> ' . Yii::t('andahrm/leave', 'Cal Carry'), ['update-carry', 'id' => $model->user_id, 'year' => $model->year], [
                 'class' => 'btn btn-success btn-flat',
                 'data-pjax' => 1,
             ]);
@@ -136,6 +136,7 @@ $fullExportMenu = ExportMenu::widget([
                 ['class' => 'yii\grid\SerialColumn'],
                 [
                     'attribute' => 'trans_type',
+                    'value'=> 'typeLabel',
                 ],
                 'trans_time:datetime',
                 [

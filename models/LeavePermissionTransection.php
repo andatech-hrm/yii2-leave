@@ -96,6 +96,10 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
         return ArrayHelper::getValue($items, $key, []);
     }
 
+    public function getTypeLabel() {
+        return ArrayHelper::getValue(self::itemsAlias('type'), $this->trans_type);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

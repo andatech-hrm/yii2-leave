@@ -13,9 +13,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="leave-permission-index">
 
-    <p>
+<!--    <p>
         <?= Html::a(Yii::t('andahrm/leave', 'Manage Leave Permission'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    </p>-->
 
     <?php #echo $this->render('_search', ['model' => $searchModel]);  ?>
 
