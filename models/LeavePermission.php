@@ -118,7 +118,9 @@ class LeavePermission extends \yii\db\ActiveRecord {
     }
 
     public static function getPermission($user_id = null, $year = null) {
-        $year = $year ? $year : FiscalYear::getYearly();
+        $year = $year ? $year : FiscalYear::currentYear();
+//        print_r($year);
+//        exit();
         $user_id = $user_id ? $user_id : Yii::$app->user->id;
 
         $userNumber = self::find()
@@ -139,7 +141,7 @@ class LeavePermission extends \yii\db\ActiveRecord {
     #วันสะสมทั้งหมด
 
     public static function getPermissionAll($user_id = null, $year = null) {
-        $year = $year ? $year : FiscalYear::getYearly();
+        $year = $year ? $year : FiscalYear::currentYear();
         $user_id = $user_id ? $user_id : Yii::$app->user->id;
 
         $permissionAll = LeavePermission::find()
@@ -151,7 +153,7 @@ class LeavePermission extends \yii\db\ActiveRecord {
     }
 
     public static function updateBalance($id, $year = null) {
-        $year = $year == null ? FiscalYear::getYearly() : $year;
+        $year = $year == null ? FiscalYear::currentYear() : $year;
         $options = ['user_id' => $id, 'year' => $year];
         if (!$model = self::findOne($options)) {
             $model = new self($options);

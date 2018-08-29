@@ -75,7 +75,7 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
     /**
      * @const Add
      */
-    const TYPE_ADD = 1; 
+    const TYPE_ADD = 1; #เพิ่มโควต้า
     const TYPE_MINUS = 2; #ใช้ไป
     const TYPE_CARRY = 3; #ยกยอด
     const TYPE_RESTORE = 4; #ยกเลิก

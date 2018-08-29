@@ -4,6 +4,7 @@ use andahrm\leave\models\PersonLeave;
 use andahrm\leave\models\Leave;
 use andahrm\leave\models\LeaveType;
 use andahrm\leave\models\LeavePermission;
+use andahrm\leave\models\LeavePermissionTransection;
 
 #ผู้ขอ
 $user = PersonLeave::findOne($user_id);
@@ -13,6 +14,9 @@ $actingUser = PersonLeave::findOne($model->acting_user_id);
 
 #ข้อมูลประเภทการลา
 $leaveType = LeaveType::findOne($model->leave_type_id);
+
+#ข้อมูลโควต้า
+$permisTrans = LeavePermissionTransection::getAmountOnType($user_id, $model->year);
 
 #ผู้บังคับบัญชา
 $commanderBy = PersonLeave::findOne($model->commander_by);
@@ -50,7 +54,7 @@ $director['at'] = $model->director_at ? $model->directorAt : '';
     </p>
 
     <p class="text-right">
-<?= $created_at ?>
+        <?= $created_at ?>
     </p>
 
 
@@ -62,7 +66,7 @@ $director['at'] = $model->director_at ? $model->directorAt : '';
     <p class="text-left">
     <div class="row">
         <div class="col-sm-5">
-<?= $to ?>
+            <?= $to ?>
         </div>
     </div>
 </p>
@@ -74,18 +78,18 @@ $director['at'] = $model->director_at ? $model->directorAt : '';
     ข้าพเจ้า <span class="text-dashed"><?= $user->fullname ?></span>
     ตำแหน่ง <span class="text-dashed"><?= $user->position->title ?></span>
     สังกัด <span class="text-dashed"><?= $user->position->section->title ?></span>
-    วันลาพักผ่อนสะสม <span class="text-dashed"><?= $collect ?></span> วัน 
+    วันลาพักผ่อนสะสม <span class="text-dashed"><?= $permisTrans[LeavePermissionTransection::TYPE_CARRY] ?></span> วัน 
     มีสิทธิลาพักผ่อนประจำปีนี้อีก 
     <span class="text-dashed">
-<?= $permission = LeavePermission::getPermission($user_id, $model->year) ?>
+         <?= $permisTrans[LeavePermissionTransection::TYPE_ADD] ?>
     </span> 
     วันทำการ
     รวมเป็น
     <span class="text-dashed">
-<?= $tatal = $collect + $permission ?>
+        <?= array_sum($permisTrans) ?>
     </span> 
     วันทำการ ขอลาพักผ่อน
-        <?= (isset($date_range_input) ? "<br/>" . $date_range_input . "<br/>" : 'ตั้งแต่วันที่' . $date_range) ?>
+    <?= (isset($date_range_input) ? "<br/>" . $date_range_input . "<br/>" : 'ตั้งแต่วันที่' . $date_range) ?>
     มีกำหนด<span class="text-dashed"> <?= $number_day ?> </span>วัน ในระหว่างลาจะติดต่อข้าพเจ้าได้ที่
     <?= $contact ?>
 
@@ -110,7 +114,7 @@ $col2 = 'col-sm-4 col-sm-offset-2';
         <p>
             ลงชื่อ ...................................ผู้รับมอบ<br/>
             (<span class="text-dashed"><?= $actingUser->fullname ?></span>)<br/>
-<?= Yii::t('andahrm/position-salary', 'Position') ?><span class="text-dashed"> <?= $actingUser->positionTitle ?></span>
+            <?= Yii::t('andahrm/position-salary', 'Position') ?><span class="text-dashed"> <?= $actingUser->positionTitle ?></span>
         </p>
     </div>
     <div class="<?= $col2 ?> text-center">
@@ -118,7 +122,7 @@ $col2 = 'col-sm-4 col-sm-offset-2';
         <p>
             ลงชื่อ .....................................<br/>
             (<span class="text-dashed"><?= $user->fullname ?></span>)<br/>
-<?= Yii::t('andahrm/position-salary', 'Position') ?><span class="text-dashed"> <?= $user->positionTitle ?></span>
+            <?= Yii::t('andahrm/position-salary', 'Position') ?><span class="text-dashed"> <?= $user->positionTitle ?></span>
         </p>
     </div>
 </div>
@@ -155,15 +159,15 @@ $col2 = 'col-sm-4 col-sm-offset-2';
 
         <h4 class="text-left">ผู้บังคับบัญชา</h4>
         <p class="text-left">
-<?= $commander['status'] ?><br/>
+            <?= $commander['status'] ?><br/>
             ความคิดเห็น<br/>
             <span class="text-dashed width100"><?= $commander['comment'] ?></span>
         </p>
-<?= isset($commander_input) ? $commander_input : '' ?>
+        <?= isset($commander_input) ? $commander_input : '' ?>
         <p>
             ลงชื่อ .....................................<br/>
-        <?= $commander['name'] ?><br/>
-<?= $commander['position'] ?><br/>				
+            <?= $commander['name'] ?><br/>
+            <?= $commander['position'] ?><br/>				
             <?= $commander['at'] ? $commander['at'] : 'วันที่............./............................/................ ' ?>
         </p>
         <br/>
@@ -176,19 +180,19 @@ $col2 = 'col-sm-4 col-sm-offset-2';
     <div class="<?= $col1 ?> text-center">
         <h4 class="text-left">ผู้ตรวจสอบ</h4>
         <p class="text-left">
-<?= $inspector['status'] ?>
+            <?= $inspector['status'] ?>
             <br/>
             ความคิดเห็น<br/>
             <span class="text-dashed width100">
-<?= $inspector['comment'] ?>
+                <?= $inspector['comment'] ?>
             </span>
         </p>
-                <?= isset($inspector_input) ? $inspector_input : '' ?>
+        <?= isset($inspector_input) ? $inspector_input : '' ?>
         <p>
             ลงชื่อ .....................................<br/>
 
-<?= $inspector['name'] ?><br/>
-<?= $inspector['position'] ?><br/>	
+            <?= $inspector['name'] ?><br/>
+            <?= $inspector['position'] ?><br/>	
             <?= $inspector['at'] ? $inspector['at'] : 'วันที่............./............................/................ ' ?>
         </p>
     </div>
@@ -196,17 +200,17 @@ $col2 = 'col-sm-4 col-sm-offset-2';
     <div class="<?= $col2 ?> text-center">
         <h4 class="text-left">คำสั่ง</h4>
         <p class="text-left">
-<?= $director['status'] ?><br/>
+            <?= $director['status'] ?><br/>
             ความคิดเห็น<br/>
             <span class="text-dashed width100">
-            <?= $director['comment'] ?>
+                <?= $director['comment'] ?>
             </span>
         </p>
-                <?= isset($director_input) ? $director_input : '' ?>
+        <?= isset($director_input) ? $director_input : '' ?>
         <p>
             ลงชื่อ  .....................................<br/>
-        <?= $director['name'] ?><br/>	
-<?= $director['position'] ?><br/>	
+            <?= $director['name'] ?><br/>	
+            <?= $director['position'] ?><br/>	
             <?= $director['at'] ? $director['at'] : 'วันที่............./............................/................ ' ?>
         </p>
     </div>
