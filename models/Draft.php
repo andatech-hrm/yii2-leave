@@ -61,7 +61,7 @@ class Draft extends Leave {
         $total = $collect + $permission;
 
         #สิทธิ์ในการฃา
-        $permisTrans = LeavePermissionTransection::getAmountOnType($user_id, $model->year);
+        $permisTrans = LeavePermissionTransection::getAmountOnType($this->user_id, $this->year);
         $total = ($permisTrans[LeavePermissionTransection::TYPE_ADD] + $permisTrans[LeavePermissionTransection::TYPE_CARRY]) - $permisTrans[LeavePermissionTransection::TYPE_MINUS];
 
         #ตรวจสอบเงื่อนไง
