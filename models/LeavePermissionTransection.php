@@ -19,6 +19,8 @@ use yii\helpers\ArrayHelper;
  * @property int $created_by
  * @property int $updated_at
  * @property int $updated_by
+ * @property int $leave_type
+ * @property int $leave_id
  *
  * @property LeaveCondition $leaveCondition
  */
@@ -48,7 +50,7 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['user_id', 'year', 'trans_time', 'trans_type'], 'required'],
-            [['user_id', 'trans_time', 'trans_type', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['user_id', 'trans_time', 'trans_type', 'leave_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['amount'], 'number'],
             [['year'], 'safe'],
             [['user_id', 'trans_time', 'trans_type'], 'unique', 'targetAttribute' => ['user_id', 'trans_time', 'trans_type']],
@@ -65,6 +67,8 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
             'trans_time' => Yii::t('andahrm/leave', 'Trans Time'),
             'trans_type' => Yii::t('andahrm/leave', 'Trans Type'),
             'amount' => Yii::t('andahrm/leave', 'Amount'),
+            'leave_type' => Yii::t('andahrm/leave', 'Leave Type'),
+            'leave_id' => Yii::t('andahrm/leave', 'Leave ID'),
             'created_at' => Yii::t('andahrm/leave', 'Created At'),
             'created_by' => Yii::t('andahrm/leave', 'Created By'),
             'updated_at' => Yii::t('andahrm/leave', 'Updated At'),

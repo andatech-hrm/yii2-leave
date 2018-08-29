@@ -81,12 +81,12 @@ $director['at'] = $model->director_at ? $model->directorAt : '';
     วันลาพักผ่อนสะสม <span class="text-dashed"><?= $permisTrans[LeavePermissionTransection::TYPE_CARRY] ?></span> วัน 
     มีสิทธิลาพักผ่อนประจำปีนี้อีก 
     <span class="text-dashed">
-         <?= $permisTrans[LeavePermissionTransection::TYPE_ADD] ?>
+        <?= $permisTrans[LeavePermissionTransection::TYPE_ADD] ?>
     </span> 
     วันทำการ
     รวมเป็น
     <span class="text-dashed">
-        <?= array_sum($permisTrans) ?>
+        <?= $permisTrans[LeavePermissionTransection::TYPE_ADD] + $permisTrans[LeavePermissionTransection::TYPE_CARRY] ?>
     </span> 
     วันทำการ ขอลาพักผ่อน
     <?= (isset($date_range_input) ? "<br/>" . $date_range_input . "<br/>" : 'ตั้งแต่วันที่' . $date_range) ?>
@@ -138,9 +138,9 @@ $col2 = 'col-sm-4 col-sm-offset-2';
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center">ลามาแล้ว (วันทำการ)</th>
-                    <th class="text-center">ลาครั้งนี้ (วันทำการ)</th>
-                    <th class="text-center">รวมเป็น (วันทำการ)</th>
+                    <th class="text-center">ลามาแล้ว<br/>(วันทำการ)</th>
+                    <th class="text-center">ลาครั้งนี้<br/>(วันทำการ)</th>
+                    <th class="text-center">รวมเป็น<br/>(วันทำการ)</th>
                 </tr>
             </thead>
             <tbody>

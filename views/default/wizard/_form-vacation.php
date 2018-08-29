@@ -34,6 +34,7 @@ if ($model->isNewRecord) {
 $permisTrans = LeavePermissionTransection::getAmountOnType(Yii::$app->user->id, $model->year);
 
 //print_r($personLeave->inspectors);
+echo Html::hiddenInput(Html::getInputName($model, 'user_id'), Yii::$app->user->id);
 ?>
 
 <div class="leave-form">
@@ -66,7 +67,7 @@ $permisTrans = LeavePermissionTransection::getAmountOnType(Yii::$app->user->id, 
                 วัน
                 รวมเป็น
                 <span class="text-dashed">
-                    <?= array_sum($permisTrans) ?>
+                    <?= $permisTrans[LeavePermissionTransection::TYPE_ADD] + $permisTrans[LeavePermissionTransection::TYPE_CARRY] ?>
                 </span> 
                 วัน
             </label>

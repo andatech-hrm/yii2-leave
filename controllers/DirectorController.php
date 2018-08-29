@@ -68,7 +68,7 @@ class DirectorController extends Controller {
 
     public function actionConsider($id) {
         $model = $this->findModel($id);
-        $model->scenario = 'director';
+        $model->scenario = Leave::SCENARIO_DIRECTOR;
 
         if ($model->load(Yii::$app->request->post())) {
             $post = Yii::$app->request->post();

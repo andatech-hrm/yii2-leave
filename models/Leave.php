@@ -6,14 +6,16 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use andahrm\person\models\Person;
-use andahrm\leave\models\PersonLeave;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+###
+use andahrm\person\models\Person;
+use andahrm\leave\models\PersonLeave;
 use andahrm\datepicker\behaviors\DateBuddhistBehavior;
 use andahrm\setting\models\Helper;
 use andahrm\structure\models\FiscalYear;
+use andahrm\leave\models\LeavePermissionTransection;
 
 // function behaviors()
 //     {
@@ -94,6 +96,7 @@ class Leave extends ActiveRecord {
 
     const SCENA_UPDATE_VACATION = 'update-vacation';
     const SCENA_UPDATE_SICK = 'update-sick';
+    const SCENARIO_DIRECTOR = 'director';
 
     public function scenarios() {
         $scenarios = parent::scenarios();
@@ -108,7 +111,7 @@ class Leave extends ActiveRecord {
 
         $scenarios['inspector'] = ['status', 'inspector_status', 'inspector_at', 'inspector_comment', 'date_start', 'date_end'];
         $scenarios['commander'] = ['status', 'commander_status', 'commander_at', 'commander_comment', 'date_start', 'date_end'];
-        $scenarios['director'] = ['status', 'director_status', 'director_at', 'director_comment', 'date_start', 'date_end'];
+        $scenarios[self::SCENARIO_DIRECTOR] = ['status', 'director_status', 'director_at', 'director_comment', 'date_start', 'date_end'];
 
         return $scenarios;
     }
@@ -654,6 +657,37 @@ class Leave extends ActiveRecord {
                     'status' => self::STATUS_ALLOW,
                     'leave_type_id' => $leave_type_id
                 ])->orderBy(['created_at' => SORT_DESC])->one();
+    }
+
+    public function afterSave($insert, $changedAttributes) {
+        if ($insert) {
+            //echo $this->user_id;
+        }
+
+        switch ($this->scenario) {
+            case self::SCENARIO_DIRECTOR:
+                if ($this->status == self::STATUS_ALLOW) {
+                    $model = new LeavePermissionTransection(['user_id' => $this->user_id, 'year' => $this->year]);
+                    $model->amount = $this->number_day;
+                    $model->trans_time = time();
+                    $model->trans_type = LeavePermissionTransection::TYPE_MINUS;
+                    $model->leave_id = $this->id;
+                    //$model->trans_by = Yii::$app->user->identity->id;
+                    if (!$model->save()) {
+                        print_r($model);
+                        exit();
+                    }
+                }
+//                print_r($this->attributes);
+//                exit();
+//                break;
+        }
+
+
+        //LeavePermission::updateBalance($this->user_id, $this->year);
+        if (parent::afterSave($insert, $changedAttributes)) {
+            return true; // do some otherthings
+        }
     }
 
 }
