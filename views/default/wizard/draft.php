@@ -1,18 +1,19 @@
 <?php
+
 use yii\helpers\Html;
 //use yii\widgets\ActiveForm;
-
 use andahrm\leave\models\LeaveType;
 use andahrm\structure\models\FiscalYear;
 use yii\bootstrap\ActiveForm;
 use backend\widgets\WizardMenu;
+
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
 $this->title = Yii::t('andahrm/leave', 'Draft Form');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Create New'), 'url' => ['create','step'=>'reset']];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Select Type'), 'url' => ['create','step'=>'select']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Create New'), 'url' => ['create', 'step' => 'reset']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Select Type'), 'url' => ['create', 'step' => 'select']];
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -23,74 +24,74 @@ $modelSelect = $event->sender->read('select')[0];
 //print_r($modelSelect);
 ?>
 
-<?php echo WizardMenu::widget([
-      'currentStepCssClass' => 'selected',
-      'step' => $event->step,
-      'wizard' => $event->sender,
-      'options' => ['class'=>'wizard_steps anchor']
-    ]);?>
+<?php
+echo WizardMenu::widget([
+    'currentStepCssClass' => 'selected',
+    'step' => $event->step,
+    'wizard' => $event->sender,
+    'options' => ['class' => 'wizard_steps anchor']
+]);
+?>
 
 <div class="row">
     <div class="col-sm-12">
-       
-        <?php $form = ActiveForm::begin(); 
-         #ข้อมูลประเภทการลา
+
+        <?php
+        $form = ActiveForm::begin();
+        #ข้อมูลประเภทการลา
         $model->leave_type_id = $modelSelect->leave_type_id;
-	    $leaveType = LeaveType::findOne($model->leave_type_id);
+        $leaveType = LeaveType::findOne($model->leave_type_id);
         echo $form->field($model, 'leave_type_id')->hiddenInput()->label(false);
-        
+
         #ปีงบประมาณ
         $model->year = FiscalYear::currentYear();
         echo $form->field($model, 'year')->hiddenInput()->label(false);
-        
+
         //echo $model->scenario;
-         //echo 'ปีงบประมาณ '.FiscalYear::currentYear();
+        //echo 'ปีงบประมาณ '.FiscalYear::currentYear();
         ?>
-       
-       <div class="x_panel">
+
+        <div class="x_panel">
             <div class="x_title">
-               <?=Html::tag('h2',$this->title.$leaveType->title)?>
+                <?= Html::tag('h2', $this->title . $leaveType->title) ?>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                
-                  <?php 
-                  if($model->hasErrors()):?>
+
+                <?php if ($model->hasErrors()): ?>
                     <div class="alert alert-warning alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
                         </button>
                         <strong>คำเดือน</strong> พบข้อผิดพลาด
                     </div>
-                  <?php  endif;?>
+                <?php endif; ?>
                 <?php
-                    
-                     
-                     if($modelSelect->leave_type_id==1){
-                         echo $this->render('_form-vacation',['form'=>$form,'model'=>$model,'event'=>$event,'leaveType'=>$leaveType]);
-                     }else{
-                         echo $this->render('_form-sick',['form'=>$form,'model'=>$model,'event'=>$event,'leaveType'=>$leaveType]);
-                     }
+                $template_no = $modelSelect->leaveType->template_no;
+                echo $this->render('_draft-' . $template_no, ['form' => $form, 'model' => $model, 'event' => $event, 'leaveType' => $leaveType]);
+//                     if($modelSelect->leave_type_id==1){
+//                         echo $this->render('_form-vacation',['form'=>$form,'model'=>$model,'event'=>$event,'leaveType'=>$leaveType]);
+//                     }else{
+//                         echo $this->render('_form-sick',['form'=>$form,'model'=>$model,'event'=>$event,'leaveType'=>$leaveType]);
+//                     }
                 ?>
-                
-                 
-                  <?=$this->render('button',['event'=>$event]);?>
-                  
-                   <div class="clearfix"></div>
-           </div>
-       </div>
-       
-    
-        
-         
+
+
+                <?= $this->render('button', ['event' => $event]); ?>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+
+
+
         <?php ActiveForm::end(); ?>
-    
+
     </div>
 </div>
 
 
 <?php
-
-
 $inputStartId = Html::getInputId($model, 'date_start');
 $inputEndId = Html::getInputId($model, 'date_end');
 // $datesDisabled = \yii\helpers\Json::encode($datesDisabledGl);

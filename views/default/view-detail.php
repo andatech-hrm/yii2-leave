@@ -10,7 +10,6 @@ use andahrm\leave\models\PersonLeave;
 ?>
 
 
-
 <?php
 
 # Candidate
@@ -58,6 +57,9 @@ $items['model'] = $model;
 
 
 
-<?= $this->render('wizard/_template-' . (($model->leave_type_id == Leave::TYPE_VACATION) ? 'vacation' : 'sick'), $items) ?>
-
+<?php #echo $this->render('wizard/_template-' . (($model->leave_type_id == Leave::TYPE_VACATION) ? 'vacation' : 'sick'), $items) ?>
+<?php
+$template_no = $model->leaveType->template_no;
+echo $this->render('wizard/_template-' . $template_no, $items);
+?>
 
