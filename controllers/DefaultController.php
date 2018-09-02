@@ -305,10 +305,13 @@ class DefaultController extends Controller {
 
         $model = $this->findModel($id);
         $modelCancel = new LeaveCancel([
+            'leave_id' => $model->id,
             'date_start' => $model->date_start,
             'date_end' => $model->date_end,
             'start_part' => $model->start_part,
             'end_part' => $model->end_part,
+            'commander_by' => $model->commander_by,
+            'director_by' => $model->director_by
         ]);
         //$model->scenario
         //print_r($model->getscenarios());
@@ -327,9 +330,9 @@ class DefaultController extends Controller {
             }
         }
 
-        $confirm = 'cancel-form';
+        //$confirm = 'cancel-form';
 
-        return $this->render($confirm, [
+        return $this->render('cancel-form', [
                     'model' => $model,
                     'modelCancel' => $modelCancel
         ]);

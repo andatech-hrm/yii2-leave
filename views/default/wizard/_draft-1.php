@@ -139,9 +139,7 @@ echo Html::hiddenInput(Html::getInputName($model, 'user_id'), Yii::$app->user->i
         </div>
 
         <div class="col-sm-4">
-
             <?= $form->field($model, 'director_by')->dropdownList($personLeave->directors); ?>
-
         </div>
     </div>
 

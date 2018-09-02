@@ -92,16 +92,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'reason:ntext',
                         // 'acting_user_id',
                         [
-                            'attribute' => 'commander_status',
-                            'format' => 'html',
-                            'filter' => Leave::getItemCommanderStatus(),
-                            //'value'=>'commanderStatusLabel',
-                            'value' => function($model) {
-                                $str = $model->commanderStatusLabel;
-                                return $str . $model->getLeaveCancelByField('commanderStatusLabel');
-                            },
-                        ],
-                        [
                             'attribute' => 'inspector_status',
                             'format' => 'html',
                             'filter' => Leave::getItemInspactorStatus(),
@@ -110,6 +100,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         //	$str = $model->inspactorStatusLabel;
                         //	return $str.$model->getLeaveCancelByField('inspactorStatusLabel');
                         //},
+                        ],
+                        [
+                            'attribute' => 'commander_status',
+                            'format' => 'html',
+                            'filter' => Leave::getItemCommanderStatus(),
+                            //'value'=>'commanderStatusLabel',
+                            'value' => function($model) {
+                                $str = $model->commanderStatusLabel;
+                                return $str . $model->getLeaveCancelByField('commanderStatusLabel');
+                            },
                         ],
                         [
                             'label' => Yii::t('andahrm/leave', 'Directors'),
