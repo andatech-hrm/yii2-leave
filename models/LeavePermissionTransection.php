@@ -13,16 +13,16 @@ use yii\helpers\ArrayHelper;
  * @property int $user_id
  * @property string $year
  * @property int $trans_time
+ * @property int $leave_trans_cate_id
  * @property int $trans_type
  * @property string $amount
  * @property int $created_at
  * @property int $created_by
  * @property int $updated_at
  * @property int $updated_by
- * @property int $leave_type
  * @property int $leave_id
  *
- * @property LeaveCondition $leaveCondition
+ * @property LeaveTransCate $leaveTransCate
  */
 class LeavePermissionTransection extends \yii\db\ActiveRecord {
 
@@ -49,11 +49,12 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['user_id', 'year', 'trans_time', 'trans_type'], 'required'],
-            [['user_id', 'trans_time', 'trans_type', 'leave_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['user_id', 'year', 'trans_time', 'leave_trans_cate_id', 'trans_type'], 'required'],
+            [['user_id', 'trans_time', 'leave_trans_cate_id', 'trans_type', 'leave_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['amount'], 'number'],
             [['year'], 'safe'],
-            [['user_id', 'trans_time', 'trans_type'], 'unique', 'targetAttribute' => ['user_id', 'trans_time', 'trans_type']],
+            [['user_id', 'year', 'trans_time', 'leave_trans_cate_id', 'trans_type'], 'unique', 'targetAttribute' => ['user_id', 'year', 'trans_time', 'leave_trans_cate_id', 'trans_type']],
+            [['leave_trans_cate_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveTransCate::className(), 'targetAttribute' => ['leave_trans_cate_id' => 'id']],
         ];
     }
 
@@ -65,9 +66,11 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
             'user_id' => Yii::t('andahrm/leave', 'User ID'),
             'year' => Yii::t('andahrm/leave', 'Year'),
             'trans_time' => Yii::t('andahrm/leave', 'Trans Time'),
+            'leave_trans_cate_id' => Yii::t('andahrm/leave', 'Leave Trans Cate ID'),
             'trans_type' => Yii::t('andahrm/leave', 'Trans Type'),
             'amount' => Yii::t('andahrm/leave', 'Amount'),
-            'leave_type' => Yii::t('andahrm/leave', 'Leave Type'),
+            'sumRow' => Yii::t('andahrm/leave', 'Balance'),
+//            'leave_type' => Yii::t('andahrm/leave', 'Leave Type'),
             'leave_id' => Yii::t('andahrm/leave', 'Leave ID'),
             'created_at' => Yii::t('andahrm/leave', 'Created At'),
             'created_by' => Yii::t('andahrm/leave', 'Created By'),
@@ -76,21 +79,33 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
         ];
     }
 
+    public $sumRow;
+
     /**
-     * @const Add
+     * @const Type
      */
     const TYPE_ADD = 1; #เพิ่มโควต้า
     const TYPE_MINUS = 2; #ใช้ไป
-    const TYPE_CARRY = 3; #ยกยอด
-    const TYPE_RESTORE = 4; #ยกเลิก
+//    const TYPE_CARRY = 3; #ยกยอด
+//    const TYPE_RESTORE = 4; #ยกเลิก
+
+    /**
+     * @const Type
+     */
+    const CATE_YEARLY = 1; #เพิ่มโควต้า
+    const CATE_CARRY = 2; #วันลาสะสม
+    const CATE_EXTRA = 3; #วันลาพิเศษ
+    const CATE_USE = 4; #ใช้ไป
+    const CATE_CANCEL = 5; #ยกเลิก
+    const CATE_RESTORE = 6; #คืนวันลา
 
     public static function itemsAlias($key) {
         $items = [
             'type' => [
                 self::TYPE_ADD => Yii::t('andahrm/leave', 'Add'),
                 self::TYPE_MINUS => Yii::t('andahrm/leave', 'Minus'),
-                self::TYPE_CARRY => Yii::t('andahrm/leave', 'Carry'),
-                self::TYPE_RESTORE => Yii::t('andahrm/leave', 'Restore'),
+//                self::TYPE_CARRY => Yii::t('andahrm/leave', 'Carry'),
+//                self::TYPE_RESTORE => Yii::t('andahrm/leave', 'Restore'),
             ],
         ];
         return ArrayHelper::getValue($items, $key, []);
@@ -103,9 +118,16 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getLeaveCondition() {
-        return $this->hasOne(LeaveCondition::className(), ['id' => 'leave_condition_id']);
+    public function getLeaveTransCate() {
+        return $this->hasOne(LeaveTransCate::className(), ['id' => 'leave_trans_cate_id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+//    public function getLeaveCondition() {
+//        return $this->hasOne(LeaveCondition::className(), ['id' => 'leave_condition_id']);
+//    }
 
     public function afterSave($insert, $changedAttributes) {
         if ($insert) {
@@ -161,7 +183,8 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
             }
             $data['balance'] = $data['credit'] - $data['debit'];
             if ($data['balance']) {
-                $options = ['user_id' => $user_id, 'year' => $year, 'trans_type' => LeavePermissionTransection::TYPE_CARRY];
+                //$options = ['user_id' => $user_id, 'year' => $year, 'trans_type' => LeavePermissionTransection::TYPE_CARRY];
+                $options = ['user_id' => $user_id, 'year' => $year, 'trans_type' => LeavePermissionTransection::TYPE_ADD, 'leave_trans_cate_id' => LeavePermissionTransection::CATE_CARRY];
                 if (!$model = self::findOne($options)) {
                     $model = new self($options);
                     $model->amount = $data['balance'];
@@ -176,6 +199,23 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
             }
         }
         return null;
+    }
+
+    public function getReference($route = null) {
+        $requestForm = 'andahrm\leave\models\Leave';
+        $route = '/leave/default/view';
+        $topic = 'ใบลาเลขที่ ';
+        if ($requestForm) {
+            $model = $requestForm::find()->where(['id' => $this->leave_id])->one();
+
+            if (isset($model->id) && $route)
+                return $topic . \yii\helpers\Html::a($model->id, [$route, 'id' => $model->id]);
+            if (isset($this->request_id))
+                return $topic . $this->request_id;
+            return null;
+        } else {
+            return ($topic ? $topic : '') . $this->request_id;
+        }
     }
 
 }

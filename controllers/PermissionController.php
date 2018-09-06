@@ -79,6 +79,16 @@ class PermissionController extends Controller {
         $modelPerson = PersonLeave::findOne($id);
 
         $modelTrans = LeavePermissionTransection::findAll($options);
+
+        foreach ($modelTrans as $key => $tran) {
+            if ($tran->trans_type == LeavePermissionTransection::TYPE_MINUS) {
+                $sumRow -= $tran->amount;
+            } else {
+                $sumRow += $tran->amount;
+            }
+            $modelTrans[$key]['sumRow'] = $sumRow;
+        }
+
         $dataProvider = new ArrayDataProvider([
             'allModels' => $modelTrans
         ]);

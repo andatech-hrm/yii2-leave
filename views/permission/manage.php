@@ -3,12 +3,14 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
-use yii\grid\GridView;
+//use yii\grid\GridView;
+use kartik\grid\GridView;
 use kartik\export\ExportMenu;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
 use yii\widgets\ActiveForm;
 use andahrm\structure\models\FiscalYear;
+use andahrm\leave\models\LeavePermissionTransection;
 
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeavePermission */
@@ -23,6 +25,8 @@ $modals['add'] = Modal::begin([
         ]);
 //echo Yii::$app->runAction('/leave/permission/assign', ['id' => $model->user_id, 'formAction' => '/leave/permission/assign']);
 Modal::end();
+
+Yii::$app->formatter->nullDisplay = '';
 ?>
 
 <?php
@@ -132,28 +136,54 @@ $fullExportMenu = ExportMenu::widget([
         <?=
         GridView::widget([
             'dataProvider' => $dataProvider,
+            'showPageSummary' => true,
             'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-                [
-                    'attribute' => 'trans_type',
-                    'value'=> 'typeLabel',
-                ],
+                ['class' => 'kartik\grid\SerialColumn'],
+//                [
+//                    'attribute' => 'trans_type',
+//                    'value' => 'typeLabel',
+//                ],
                 'trans_time:datetime',
                 [
-                    //'label' => 'ได้รับ',
+                    'attribute' => 'leave_trans_cate_id',
+                    'value' => 'leaveTransCate.title',
+                ],
+                [
+                    'label' => 'ได้รับ',
                     'attribute' => 'amount',
                     'format' => ['decimal', 1],
                     'contentOptions' => ['class' => 'text-right'],
-//                    'value'=>function($model){
-//                        return 
-//                    }
+                    'value' => function($model) {
+                        return $model->trans_type != LeavePermissionTransection::TYPE_MINUS ? $model->amount : null;
+                    }
+                ],
+                [
+                    'label' => 'ใช้ไป',
+                    'attribute' => 'amount',
+                    'format' => ['decimal', 1],
+                    'contentOptions' => ['class' => 'text-right'],
+                    'value' => function($model) {
+                        return $model->trans_type == LeavePermissionTransection::TYPE_MINUS ? $model->amount : null;
+                    }
+                ],
+                [
+                    'attribute' => 'sumRow',
+                    'format' => ['decimal', 2],
+                    'contentOptions' => ['class' => 'text-right'],
+                    'pageSummary' => Yii::$app->formatter->asDecimal($model->balance, 2),
+                    'pageSummaryOptions' => ['class' => 'text-right'],
+                ],
+                [
+                    'attribute' => 'reference',
+                    'format' => 'html',
                 ],
                 [
                     'format' => 'html',
+                    'visible' => Yii::$app->user->can('admin'),
                     'value' => function($model) {
                         return Html::a('ลบ', ['del', 'id' => $model->user_id, 'time' => $model->trans_time], ['class' => '']);
                     }
-                ]
+                ],
 //                'created_at:datetime',
 //                [
 //                    'attribute' => 'created_by',

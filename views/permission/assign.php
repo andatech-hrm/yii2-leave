@@ -6,6 +6,7 @@ use kartik\grid\GridView;
 use kartik\export\ExportMenu;
 use yii\widgets\ActiveForm;
 use andahrm\structure\models\FiscalYear;
+use andahrm\leave\models\LeaveTransCate;
 
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\LeavePermission */
@@ -28,7 +29,11 @@ use andahrm\structure\models\FiscalYear;
     $form = ActiveForm::begin();
     echo Html::activeHiddenInput($model, 'year');
     ?>    
-    <?= $form->field($model, 'amount')->textInput(['autocomplate' => 'off']) ?>
+    <div class="row">
+        <?= $form->field($model, 'leave_trans_cate_id', ['options' => ['class' => 'form-group col-sm-4']])->dropDownList(LeaveTransCate::getList(1)) ?>
+
+        <?= $form->field($model, 'amount', ['options' => ['class' => 'form-group col-sm-8']])->textInput(['autocomplate' => 'off']) ?>
+    </div>
 
     <div class="form-group">
         <?=
