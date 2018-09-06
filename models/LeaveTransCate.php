@@ -37,9 +37,9 @@ class LeaveTransCate extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'id' => Yii::t('andahrm/leave', 'ID'),
-            'title' => Yii::t('andahrm/leave', 'Title'),
-            'type' => Yii::t('andahrm/leave', 'Type'),
+            'id' => Yii::t('andahrm/leave', 'Leave Trans Cate ID'),
+            'title' => Yii::t('andahrm/leave', 'Leave Tran Cate Title'),
+            'type' => Yii::t('andahrm/leave', 'Leave Tran Cate Type'),
         ];
     }
 

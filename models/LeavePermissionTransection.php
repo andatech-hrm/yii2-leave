@@ -72,6 +72,7 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
             'sumRow' => Yii::t('andahrm/leave', 'Balance'),
 //            'leave_type' => Yii::t('andahrm/leave', 'Leave Type'),
             'leave_id' => Yii::t('andahrm/leave', 'Leave ID'),
+            'reference' => Yii::t('andahrm/leave', 'Reference'),
             'created_at' => Yii::t('andahrm/leave', 'Created At'),
             'created_by' => Yii::t('andahrm/leave', 'Created By'),
             'updated_at' => Yii::t('andahrm/leave', 'Updated At'),
