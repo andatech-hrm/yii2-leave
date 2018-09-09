@@ -16,8 +16,9 @@ $actingUser = PersonLeave::findOne($model->acting_user_id);
 $leaveType = LeaveType::findOne($model->leave_type_id);
 
 #ข้อมูลโควต้า
-$permisTrans = LeavePermissionTransection::getAmountOnType($user_id, $model->year);
-
+$permisTrans = LeavePermissionTransection::getDataForForm($user_id, $model->year);
+//print_r($permisTrans);
+//exit();
 #ผู้ตรวจสอบ
 $inspectorBy = PersonLeave::findOne($model->inspector_by);
 $inspector['status'] = Leave::getWidgetStatus($model->inspector_status, Leave::getItemInspactorStatus());
@@ -78,15 +79,15 @@ $director['at'] = $model->director_at ? $model->directorAt : '';
     ข้าพเจ้า <span class="text-dashed"><?= $user->fullname ?></span>
     ตำแหน่ง <span class="text-dashed"><?= $user->position->title ?></span>
     สังกัด <span class="text-dashed"><?= $user->position->section->title ?></span>
-    วันลาพักผ่อนสะสม <span class="text-dashed"><?= $permisTrans[LeavePermissionTransection::TYPE_CARRY] ?></span> วัน 
+    วันลาพักผ่อนสะสม <span class="text-dashed"><?= $permisTrans[LeavePermissionTransection::CATE_CARRY] ?></span> วัน 
     มีสิทธิลาพักผ่อนประจำปีนี้อีก 
     <span class="text-dashed">
-        <?= $permisTrans[LeavePermissionTransection::TYPE_ADD] ?>
+        <?= $permisTrans[LeavePermissionTransection::CATE_YEARLY] ?>
     </span> 
     วันทำการ
     รวมเป็น
     <span class="text-dashed">
-        <?= $permisTrans[LeavePermissionTransection::TYPE_ADD] + $permisTrans[LeavePermissionTransection::TYPE_CARRY] ?>
+        <?= $permisTrans[LeavePermissionTransection::TOTAL] ?>
     </span> 
     วันทำการ ขอลาพักผ่อน
     <?= (isset($date_range_input) ? "<br/>" . $date_range_input . "<br/>" : 'ตั้งแต่วันที่' . $date_range) ?>

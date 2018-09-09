@@ -99,6 +99,7 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
     const CATE_USE = 4; #ใช้ไป
     const CATE_CANCEL = 5; #ยกเลิก
     const CATE_RESTORE = 6; #คืนวันลา
+    const TOTAL = 'total'; #รวมทั้งหมด
 
     public static function itemsAlias($key) {
         $items = [
@@ -159,6 +160,34 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
                 $data[$tran->trans_type] += $tran->amount;
             }
         }
+        return $data;
+    }
+
+    /**
+     * Func สำหรับดึงยอดตามประเภทต่างๆ
+     * @param type $user_id
+     * @param type $year
+     * @return boolean
+     */
+    public static function getAmountOnCate($user_id, $year) {
+        $options = ['user_id' => $user_id, 'year' => $year];
+        $trans = self::find()->where($options)
+                ->select(['leave_trans_cate_id', 'amount' => 'SUM(amount)'])
+                ->groupBy('leave_trans_cate_id')
+                ->asArray()
+                ->all();
+        $data = ArrayHelper::map($trans, 'leave_trans_cate_id', 'amount');
+    }
+
+    /**
+     * Func สำหรับใช้ใน Form
+     */
+    public function getDataForForm($user_id, $year) {
+        $data = self::getAmountOnCate($user_id, $year);
+        #มีสิทธิลาพักผ่อนประจำปีนี้อีก
+        $data[self::CATE_YEARLY] = $data[self::CATE_YEARLY] - $data[self::CATE_USE];
+        #รวมเป็น
+        $data[self::TOTAL] = $data[self::CATE_YEARLY] + $data[self::CATE_CARRY];
         return $data;
     }
 
