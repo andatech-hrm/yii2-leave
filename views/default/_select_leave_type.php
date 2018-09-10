@@ -38,7 +38,7 @@ $this->registerCss(@implode('', $css));
             <tr>
                 <td>
                     <?php
-                    $type->title = str_replace(' ', '<br/>', $type->title);
+                    //$type->title = str_replace(' ', '<br/>', $type->title);
                     echo Html::a($type->title, ['draft', 'type' => $type->id], ['class' => 'btn btn-success btn-block btn-leave-type'])
                     ?>
 
