@@ -23,37 +23,38 @@ CSS;
 $this->registerCss(@implode('', $css));
 ?>
 <table class="table">
-<!--    <thead> 
+    <thead> 
         <tr>
             <th width="250"><?= Yii::t('andahrm/leave', 'Title') ?></th>
             <th width="100"><?= Yii::t('andahrm/leave', 'Limit') ?></th>
-            <th ><?= Yii::t('andahrm/leave', 'Detail') ?></th>
+<!--            <th ><?= Yii::t('andahrm/leave', 'Detail') ?></th>-->
         </tr>
-    </thead>-->
-    <?php
-//$model->leave_type_id = 1;
-    foreach (LeaveType::find()->all() as $type):
-        //$model->leave_type_id = null;
-        ?>
-        <tr>
-            <td width="300">
-                <?php
-                $type->title = str_replace(' ', '<br/>', $type->title);
-                echo Html::a($type->title, ['draft', 'type' => $type->id], ['class' => 'btn btn-success btn-block btn-leave-type'])
-                ?>
-
-            </td>
-            <td>
-                <?php #= $type->detail ?>
-                <?= $type->limit ? '<span class="red">' . Yii::t('andahrm/leave', 'Limit') . ' ' . $type->limit . " " . Yii::t('andahrm', 'Day') . "</span><br/>" : '' ?>
-                <?= Html::a('<i class="fa fa-info"></i> ' . Yii::t('andahrm/leave', 'Detail'), ['/leave/type', 'id' => $type->id]) ?>
-            </td>
-        </tr>
-
+    </thead>
+    <tbody>
         <?php
-    endforeach;
-    ?>
+//$model->leave_type_id = 1;
+        foreach (LeaveType::find()->all() as $type):
+            //$model->leave_type_id = null;
+            ?>
+            <tr>
+                <td width="300">
+                    <?php
+                    $type->title = str_replace(' ', '<br/>', $type->title);
+                    echo Html::a($type->title, ['draft', 'type' => $type->id], ['class' => 'btn btn-success btn-block btn-leave-type'])
+                    ?>
 
+                </td>
+                <td>
+                    <?php #= $type->detail ?>
+                    <?= $type->limit ? '<span class="red">' . Yii::t('andahrm/leave', 'Limit') . ' ' . $type->limit . " " . Yii::t('andahrm', 'Day') . "</span><br/>" : '' ?>
+                    <?= Html::a('<i class="fa fa-info"></i> ' . Yii::t('andahrm/leave', 'Detail'), ['/leave/type', 'id' => $type->id]) ?>
+                </td>
+            </tr>
+
+            <?php
+        endforeach;
+        ?>
+    </tbody>
 </table>
 
 <?php
