@@ -12,7 +12,10 @@ use yii\bootstrap\Modal;
 /* @var $model andahrm\leave\models\LeaveSearch */
 /* @var $form yii\widgets\ActiveForm */
 
-$modals['select'] = Modal::begin(['size' => Modal::SIZE_LARGE]);
+$modals['select'] = Modal::begin([
+            'header' => Yii::t('andahrm/leave', 'Select Type'),
+            'size' => Modal::SIZE_LARGE
+        ]);
 echo $this->render('_select_leave_type');
 Modal::end();
 ?>

@@ -14,27 +14,35 @@ use andahrm\leave\models\PersonLeave;
 //$personLeave = PersonLeave::findOne(Yii::$app->user->identity->id);
 //$personLeave = $personLeave->position->section->leaveRelatedSection;
 //if ($personLeave) {
+$css[] = <<< CSS
+.btn-leave-type{
+    white-space: normal;
+    width: 250px;
+}
+CSS;
+$this->registerCss(@implode('', $css));
 ?>
 <table class="table">
     <thead> 
         <tr>
-            <th width="300"><?= Yii::t('andahrm/leave', 'Title') ?></th>
+            <th width="250"><?= Yii::t('andahrm/leave', 'Title') ?></th>
             <!--<th width="100"><?= Yii::t('andahrm/leave', 'Limit') ?></th>-->
             <th ><?= Yii::t('andahrm/leave', 'Detail') ?></th>
             <th width="200">หมายเหตุ</th>
         </tr>
     </thead>
-    <?php
-    //$model->leave_type_id = 1;
-    foreach (LeaveType::find()->all() as $type):
-        //$model->leave_type_id = null;
-        ?>
+<?php
+//$model->leave_type_id = 1;
+foreach (LeaveType::find()->all() as $type):
+    //$model->leave_type_id = null;
+    ?>
 
         <tr>
             <td>
-                <?php 
-                $type->title = str_replace(' ', '<br/>', $type->title);       
-                echo Html::a($type->title, ['draft', 'type' => $type->id], ['class' => 'btn btn-success btn-block']) ?>
+    <?php
+    $type->title = str_replace(' ', '<br/>', $type->title);
+    echo Html::a($type->title, ['draft', 'type' => $type->id], ['class' => 'btn btn-success btn-block btn-leave-type'])
+    ?>
 
                 <?php
 //                echo $form->field($model, 'leave_type_id')->radio([
