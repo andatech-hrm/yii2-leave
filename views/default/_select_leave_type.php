@@ -20,8 +20,8 @@ use andahrm\leave\models\PersonLeave;
         <tr>
             <th width="300"><?= Yii::t('andahrm/leave', 'Title') ?></th>
             <!--<th width="100"><?= Yii::t('andahrm/leave', 'Limit') ?></th>-->
-            <th width="250"><?= Yii::t('andahrm/leave', 'Detail') ?></th>
-            <th>หมายเหตุ</th>
+            <th ><?= Yii::t('andahrm/leave', 'Detail') ?></th>
+            <th width="200">หมายเหตุ</th>
         </tr>
     </thead>
     <?php
