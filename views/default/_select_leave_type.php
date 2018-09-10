@@ -28,40 +28,27 @@ $this->registerCss(@implode('', $css));
             <th width="250"><?= Yii::t('andahrm/leave', 'Title') ?></th>
             <!--<th width="100"><?= Yii::t('andahrm/leave', 'Limit') ?></th>-->
             <th ><?= Yii::t('andahrm/leave', 'Detail') ?></th>
-            <th width="200">หมายเหตุ</th>
         </tr>
     </thead>
-<?php
+    <?php
 //$model->leave_type_id = 1;
-foreach (LeaveType::find()->all() as $type):
-    //$model->leave_type_id = null;
-    ?>
+    foreach (LeaveType::find()->all() as $type):
+        //$model->leave_type_id = null;
+        ?>
 
         <tr>
             <td>
-    <?php
-    $type->title = str_replace(' ', '<br/>', $type->title);
-    echo Html::a($type->title, ['draft', 'type' => $type->id], ['class' => 'btn btn-success btn-block btn-leave-type'])
-    ?>
-
                 <?php
-//                echo $form->field($model, 'leave_type_id')->radio([
-//                    'uncheck' => null,
-//                    'checked' => ($model->leave_type_id == $type->id),
-//                    'label' => '&nbsp; ' . $type->title,
-//                    'value' => $type->id,
-//                        //'options'=>['value'=>$type->id,]
-//                ])->label(false)
+                $type->title = str_replace(' ', '<br/>', $type->title);
+                echo Html::a($type->title, ['draft', 'type' => $type->id], ['class' => 'btn btn-success btn-block btn-leave-type'])
                 ?>
+
             </td>
-            <!--<td>-->
-            <!--    <?php /* echo$type->limit?$type->limit." ".Yii::t('andahrm','Day'):'-' */ ?>-->
-            <!--</td>-->
             <td>
-                <?= $type->detail ?>
-                <?= $type->limit ? '<br/><span class="red">' . Yii::t('andahrm/leave', 'Limit') . ' ' . $type->limit . " " . Yii::t('andahrm', 'Day') . "</span>" : '-' ?>
+                <?php #= $type->detail ?>
+                <?= $type->limit ? '<span class="red">' . Yii::t('andahrm/leave', 'Limit') . ' ' . $type->limit . " " . Yii::t('andahrm', 'Day') . "</span><br/>" : '' ?>
+                <?= Html::a('<i class="fa fa-info"> ' . Yii::t('andahrm/leave', 'Detail'), ['/leave/type', 'id' => $type->id]) ?>
             </td>
-            <td>&nbsp;</td>
         </tr>
 
         <?php
