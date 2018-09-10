@@ -25,9 +25,9 @@ $this->registerCss(@implode('', $css));
 <table class="table">
     <thead> 
         <tr>
-            <th width="300"><?= Yii::t('andahrm/leave', 'Title') ?></th>
-            <th width="100"><?= Yii::t('andahrm/leave', 'Limit') ?></th>
-<!--            <th ><?= Yii::t('andahrm/leave', 'Detail') ?></th>-->
+            <th width="300"><?= Yii::t('andahrm/leave', 'Title Type') ?></th>
+            <th ><?= Yii::t('andahrm/leave', 'Limit') ?></th>
+            <th width="100"><?= Yii::t('andahrm/leave', 'Detail') ?></th>
         </tr>
     </thead>
     <tbody>
