@@ -565,8 +565,9 @@ class DefaultController extends Controller {
     public function actionConfirm($id) {
 
         $modelDraft = LeaveDraft::findOne($id);
-        $model = new Leave();
+        $model = new Leave();        
         $model->attributes = $modelDraft->data;
+        $model->checkScenario();
         $model->leave_draft_id = $id;
         //$model->scenario = 'confirm';
         //$model->scenario
@@ -584,7 +585,7 @@ class DefaultController extends Controller {
                 ]);
                 return $this->redirect(['complete']);
             } else {
-                print_r($model->getErrors());
+                print_r($model->getErrors());                
             }
         }
         return $this->render('confirm', [
