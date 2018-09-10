@@ -32,7 +32,9 @@ use andahrm\leave\models\PersonLeave;
 
         <tr>
             <td>
-                <?php echo Html::a($type->title, ['draft', 'type' => $type->id], ['class' => 'btn btn-success btn-block']) ?>
+                <?php 
+                $type->title = str_replace(' ', '<br/>', $type->title);       
+                echo Html::a($type->title, ['draft', 'type' => $type->id], ['class' => 'btn btn-success btn-block']) ?>
 
                 <?php
 //                echo $form->field($model, 'leave_type_id')->radio([
