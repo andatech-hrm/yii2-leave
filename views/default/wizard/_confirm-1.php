@@ -22,7 +22,8 @@ $items['user'] = $personLeave;
 // print_r($items['user']->leavePermission->number_day);
 // exit();
 
-$modelDraft = $event->sender->read('draft')[0];
+//$modelDraft = $event->sender->read('draft')[0];
+$modelDraft = $model;
 //$modelSelect$modelSelect->leave_type_id;
 //print_r($modelSelect);
 //print_r($modelDraft);

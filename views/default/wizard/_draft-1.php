@@ -31,7 +31,7 @@ if ($model->isNewRecord) {
     $model->to = $personLeave->toDirector;
 }
 
-$permisTrans = LeavePermissionTransection::getAmountOnType(Yii::$app->user->id, $model->year);
+$permisTrans = LeavePermissionTransection::getDataForForm(Yii::$app->user->id, $model->year);
 
 //print_r($personLeave->inspectors);
 echo Html::hiddenInput(Html::getInputName($model, 'user_id'), Yii::$app->user->id);
@@ -59,15 +59,15 @@ echo Html::hiddenInput(Html::getInputName($model, 'user_id'), Yii::$app->user->i
     <div class="row">
         <div class="col-sm-12">
             <label >
-                วันลาพักผ่อนสะสม <span class="text-dashed"><?= $permisTrans[LeavePermissionTransection::TYPE_CARRY] ?></span> วัน 
+                วันลาพักผ่อนสะสม <span class="text-dashed"><?= $permisTrans[LeavePermissionTransection::CATE_CARRY] ?></span> วัน 
                 มีสิทธิลาพักผ่อนประจำปีนี้อีก 
                 <span class="text-dashed">
-                    <?= $permisTrans[LeavePermissionTransection::TYPE_ADD] ?>
+                    <?= $permisTrans[LeavePermissionTransection::CATE_YEARLY] ?>
                 </span> 
                 วัน
                 รวมเป็น
                 <span class="text-dashed">
-                    <?= $permisTrans[LeavePermissionTransection::TYPE_ADD] + $permisTrans[LeavePermissionTransection::TYPE_CARRY] ?>
+                    <?= $permisTrans[LeavePermissionTransection::TOTAL] ?>
                 </span> 
                 วัน
             </label>

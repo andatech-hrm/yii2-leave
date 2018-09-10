@@ -19,6 +19,8 @@ use andahrm\leave\models\LeaveSearch;
 use andahrm\leave\models\LeavePermission;
 use andahrm\structure\models\FiscalYear;
 use andahrm\leave\models\PersonLeave;
+use andahrm\leave\models\Draft;
+use andahrm\leave\models\LeaveDraft;
 
 /**
  * DefaultController implements the CRUD actions for Leave model.
@@ -63,7 +65,7 @@ class DefaultController extends Controller {
 
             case 'resume':
                 $config = ['steps' => []]; // force attachment of WizardBehavior
-
+                break;
             default:
                 break;
         }
@@ -106,38 +108,6 @@ class DefaultController extends Controller {
         $model = $this->findModel($id);
 
         return $this->render('view', [
-                    'model' => $model,
-        ]);
-    }
-
-    /**
-     * Displays a single Leave model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionConfirm($id) {
-
-        $model = $this->findModel($id);
-        $model->scenario = 'confirm';
-        //$model->scenario
-        //print_r($model->getscenarios());
-        //exit();
-        if ($model->load(Yii::$app->request->post())) {
-            $model->status = Leave::STATUS_OFFER;
-            if ($model->save()) {
-                Yii::$app->getSession()->setFlash('saved', [
-                    'type' => 'success',
-                    'msg' => Yii::t('andahrm/leave', 'The system successfully sent.')
-                ]);
-                return $this->redirect(['index']);
-            } else {
-                print_r($model->getErrors());
-            }
-        }
-
-        $confirm = $model->leave_type_id == 4 ? 'confirm' : 'confirm-sick';
-
-        return $this->render($confirm, [
                     'model' => $model,
         ]);
     }
@@ -556,6 +526,83 @@ class DefaultController extends Controller {
         } else {
             return $this->render('wizard/notResumed');
         }
+    }
+
+    public function actionDraft($type = null, $id = null) {
+        $type = $type === null ? 1 : $type;
+
+        $model = new Leave(['leave_type_id' => $type]);
+        if ($id) {
+            $modelDraft = LeaveDraft::findOne($id);
+            $model->attributes = $modelDraft->data;
+            $model->leave_draft_id = $id;
+        } else {
+            $modelDraft = new LeaveDraft();
+        }
+
+        $post = Yii::$app->request->post();
+        if ($model->load($post)) {
+//            print_r($post);
+//            
+//            exit();
+            $model->number_day = Leave::calCountDays(Helper::dateUi2Db($model->date_start), Helper::dateUi2Db($model->date_end), $model->start_part, $model->end_part);
+            $modelDraft->draft_time = time();
+            $modelDraft->user_id = Yii::$app->user->identity->id;
+            $modelDraft->status = LeaveDraft::STATUS_DRAFT;
+            $modelDraft->data = $model->attributes;
+            if ($modelDraft->save()) {
+                return $this->redirect(['confirm', 'id' => $modelDraft->id]);
+            } else {
+                print_r($modelDraft->getErrors());
+                exit();
+            }
+        }
+
+        return $this->render('draft', ['model' => $model]);
+    }
+
+    /**
+     * Displays a single Leave model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionConfirm($id) {
+
+        $modelDraft = LeaveDraft::findOne($id);
+        $model = new Leave();
+        $model->attributes = $modelDraft->data;
+        $model->leave_draft_id = $id;
+        //$model->scenario = 'confirm';
+        //$model->scenario
+        //print_r($model->getscenarios());
+        //exit();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->load(['Leave' => $modelDraft->data]);
+
+
+            $model->status = Leave::STATUS_OFFER;
+            $modelDraft->status = LeaveDraft::STATUS_USED;
+            if ($model->save()) {
+                $modelDraft->save();
+                Yii::$app->getSession()->setFlash('saved', [
+                    'type' => 'success',
+                    'msg' => Yii::t('andahrm/leave', 'The system successfully sent.')
+                ]);
+                return $this->redirect(['complete']);
+            } else {
+                print_r($model->getErrors());
+            }
+        }
+
+        $confirm = $model->leave_type_id == 4 ? 'confirm' : 'confirm-sick';
+
+        return $this->render('confirm', [
+                    'model' => $model,
+        ]);
+    }
+
+    public function actionComplete() {
+        return $this->render('complete');
     }
 
 }

@@ -78,7 +78,7 @@ class Leave extends ActiveRecord {
     public function rules() {
         return [
             [['user_id', 'leave_type_id', 'start_part', 'end_part', 'acting_user_id', 'status', 'inspector_status', 'inspector_by', 'inspector_at', 'commander_status', 'commander_by', 'commander_at', 'director_status', 'director_by', 'director_at', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['to', 'acting_user_id', 'inspector_by', 'director_by', 'date_start', 'date_end', 'contact'], 'required'],
+            [['to', 'acting_user_id', 'inspector_by', 'director_by', 'date_start', 'date_end', 'contact', 'leave_draft_id'], 'required'],
             [['year', 'date_start', 'date_end'], 'safe'],
             [['reason', 'contact'], 'string'],
             [['number_day'], 'number'],
@@ -98,8 +98,10 @@ class Leave extends ActiveRecord {
     const SCENA_UPDATE_SICK = 'update-sick';
     const SCENARIO_DIRECTOR = 'director';
 
+    public $leave_draft_id;
+
     public function scenarios() {
-        $scenarios = parent::scenarios();
+       // $scenarios = parent::scenarios();
 
         $scenarios['create-vacation'] = ['to', 'year', 'user_id', 'leave_type_id', 'acting_user_id', 'contact', 'date_start', 'date_end', 'status', 'inspector_by', 'director_by', 'commander_by', 'start_part', 'end_part', 'contact', 'number_day', 'year'];
         $scenarios['create-sick'] = ['to', 'year', 'user_id', 'leave_type_id', 'reason', 'contact', 'date_start', 'date_end', 'status', 'inspector_by', 'director_by', 'commander_by', 'contact', 'number_day', 'year'];
@@ -113,7 +115,7 @@ class Leave extends ActiveRecord {
         $scenarios['commander'] = ['status', 'commander_status', 'commander_at', 'commander_comment', 'date_start', 'date_end'];
         $scenarios[self::SCENARIO_DIRECTOR] = ['status', 'director_status', 'director_at', 'director_comment', 'date_start', 'date_end'];
 
-        return $scenarios;
+        return array_merge(parent::scenarios(), $scenarios);
     }
 
     function behaviors() {

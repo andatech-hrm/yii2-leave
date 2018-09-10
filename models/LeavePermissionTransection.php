@@ -176,14 +176,15 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
                 ->groupBy('leave_trans_cate_id')
                 ->asArray()
                 ->all();
-        $data = ArrayHelper::map($trans, 'leave_trans_cate_id', 'amount');
+        return ArrayHelper::map($trans, 'leave_trans_cate_id', 'amount');
     }
 
     /**
      * Func สำหรับใช้ใน Form
      */
-    public function getDataForForm($user_id, $year) {
+    public static function getDataForForm($user_id, $year) {
         $data = self::getAmountOnCate($user_id, $year);
+        $data[self::CATE_CARRY] = $data[self::CATE_CARRY] ? $data[self::CATE_CARRY] : 0;
         #มีสิทธิลาพักผ่อนประจำปีนี้อีก
         $data[self::CATE_YEARLY] = $data[self::CATE_YEARLY] - $data[self::CATE_USE];
         #รวมเป็น
