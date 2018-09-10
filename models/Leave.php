@@ -382,6 +382,14 @@ class Leave extends ActiveRecord {
 //         return $this->hasOne(Person::className(), ['user_id' => 'user_id']);
         return $this->hasOne(Yii::$app->user->identityClass, ['id' => 'user_id']);
     }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPerson() {
+//         return $this->hasOne(Person::className(), ['user_id' => 'user_id']);
+        return $this->hasOne(PersonLeave::className(), ['user_id' => 'user_id']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery

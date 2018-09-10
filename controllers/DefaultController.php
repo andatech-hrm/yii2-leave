@@ -542,9 +542,6 @@ class DefaultController extends Controller {
 
         $post = Yii::$app->request->post();
         if ($model->load($post)) {
-//            print_r($post);
-//            
-//            exit();
             $model->number_day = Leave::calCountDays(Helper::dateUi2Db($model->date_start), Helper::dateUi2Db($model->date_end), $model->start_part, $model->end_part);
             $modelDraft->draft_time = time();
             $modelDraft->user_id = Yii::$app->user->identity->id;
@@ -557,7 +554,6 @@ class DefaultController extends Controller {
                 exit();
             }
         }
-
         return $this->render('draft', ['model' => $model]);
     }
 
@@ -578,8 +574,6 @@ class DefaultController extends Controller {
         //exit();
         if ($model->load(Yii::$app->request->post())) {
             $model->load(['Leave' => $modelDraft->data]);
-
-
             $model->status = Leave::STATUS_OFFER;
             $modelDraft->status = LeaveDraft::STATUS_USED;
             if ($model->save()) {
@@ -593,9 +587,6 @@ class DefaultController extends Controller {
                 print_r($model->getErrors());
             }
         }
-
-        $confirm = $model->leave_type_id == 4 ? 'confirm' : 'confirm-sick';
-
         return $this->render('confirm', [
                     'model' => $model,
         ]);

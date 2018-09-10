@@ -67,20 +67,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php endif; ?>
                 <?php
                 $template_no = $model->leaveType->template_no;
-                echo $this->render('wizard/_draft-' . $template_no, ['form' => $form, 'model' => $model, 'event' => $event, 'leaveType' => $leaveType]);
-//                     if($modelSelect->leave_type_id==1){
-//                         echo $this->render('_form-vacation',['form'=>$form,'model'=>$model,'event'=>$event,'leaveType'=>$leaveType]);
-//                     }else{
-//                         echo $this->render('_form-sick',['form'=>$form,'model'=>$model,'event'=>$event,'leaveType'=>$leaveType]);
-//                     }
+                echo $this->render('templates/_form-' . $template_no, ['form' => $form, 'model' => $model, 'event' => $event, 'leaveType' => $leaveType]);
+
+
+
+                echo $this->render('_button', ['model' => $model]);
                 ?>
 
 
-                <?php #= $this->render('wizard/button', ['event' => $event]); ?>
-
-                <div class="form-group">
-                    <?= Html::submitButton($model->isNewRecord ? Yii::t('andahrm', 'Create') : Yii::t('andahrm', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-                </div>
 
                 <div class="clearfix"></div>
             </div>

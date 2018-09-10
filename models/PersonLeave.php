@@ -12,6 +12,10 @@ use andahrm\structure\models\Section; #mad
 
 class PersonLeave extends \andahrm\person\models\Person {
 
+    public static function getList($id = null) {
+        return ArrayHelper::map(self::find()->filterWhere(['user_id' => $id])->limit(20)->all(), 'user_id', 'fullname', 'positionTitle');
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -41,7 +45,6 @@ class PersonLeave extends \andahrm\person\models\Person {
 //    public function getLeavePermission() {
 //        return $this->hasOne(LeavePermission::className(), ['user_id' => 'user_id']);
 //    }
-
 //   public function getInspectors()
 //   {
 //       return ArrayHelper::map($this->leaveRelatedPerson->leaveRelated->leaveRelatedInspectors,'user_id','user.fullname','user.positionTitle');
