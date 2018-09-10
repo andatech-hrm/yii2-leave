@@ -46,7 +46,7 @@ $this->registerCss(@implode('', $css));
                 <td>
                     <?php #= $type->detail ?>
                     <?= $type->limit ? '<span class="red">' . Yii::t('andahrm/leave', 'Limit') . ' ' . $type->limit . " " . Yii::t('andahrm', 'Day') . "</span><br/>" : '' ?>
-                    <?= Html::a('<i class="fa fa-info"></i> ' . Yii::t('andahrm/leave', 'Detail'), ['/leave/type/view', 'id' => $type->id]) ?>
+                    <?= Html::a('<i class="fa fa-info"></i> ' . Yii::t('andahrm/leave', 'Detail'), ['/leave/type/view', 'id' => $type->id],['target'=>'_blank']) ?>
                 </td>
             </tr>
 

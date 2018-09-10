@@ -2,8 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
 use andahrm\person\models\Person;
+
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
@@ -12,18 +12,26 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-    <p>        
-        <?= Html::a(Yii::t('andahrm', 'Cancel'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('andahrm', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-  <?= $this->render('view-detail', [
-        'model' => $model,
-    ]) ?>
+<p>        
+    <?=
+    Html::a(Yii::t('andahrm', 'Cancel'), ['delete', 'id' => $model->id], [
+        'class' => 'btn btn-danger',
+        'data' => [
+            'confirm' => Yii::t('andahrm', 'Are you sure you want to delete this item?'),
+            'method' => 'post',
+        ],
+    ])
+    ?>
 
 
+    <?= Html::button('<i class="fa fa-print"></i>',['class'=>'btn btn-default','onclick'=>'window.print();']) ?>
+</p>
+
+
+
+
+<?=
+$this->render('view-detail', [
+    'model' => $model,
+])
+?>
