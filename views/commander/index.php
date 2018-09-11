@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{consider} {view}',
                 'buttons' => [
                   'consider' => function($url,$model,$key){
-                        return $model->inspector_status==null?Html::a('พิจารณา',$url,['class'=>'btn btn-primary btn-xs']):null;
+                        return $model->inspector_status==1?Html::a('พิจารณา',$url,['class'=>'btn btn-primary btn-xs']):null;
                       }
                   ]
   

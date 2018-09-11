@@ -10,13 +10,12 @@ use andahrm\leave\models\Leave;
 /**
  * LeaveDirectorSearch represents the model behind the search form about `andahrm\leave\models\Leave`.
  */
-class LeaveCommanderSearch extends Leave
-{
+class LeaveCommanderSearch extends Leave {
+
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id', 'user_id', 'leave_type_id', 'start_part', 'end_part', 'acting_user_id', 'status', 'inspector_status', 'inspector_by', 'inspector_at', 'commander_status', 'commander_by', 'commander_at', 'director_status', 'director_by', 'director_at', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['to', 'contact', 'date_start', 'date_end', 'reason', 'inspector_comment', 'commander_comment', 'director_comment'], 'safe'],
@@ -26,8 +25,7 @@ class LeaveCommanderSearch extends Leave
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -39,15 +37,24 @@ class LeaveCommanderSearch extends Leave
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = Leave::find();
-      
+
+//        $query->where([
+//          'commander_by'=>Yii::$app->user->id,
+//          'commander_at'=>null,
+//          'status' => [Leave::STATUS_OFFER]
+//        ]);
+
         $query->where([
-          'commander_by'=>Yii::$app->user->id,
-          'commander_at'=>null,
-          'status' => [Leave::STATUS_OFFER]
+            'commander_by' => Yii::$app->user->id,
+            'commander_at' => null,
+            'commander_status' => null,
+            'inspector_status' => 1,
+            'status' => [Leave::STATUS_CONSIDER],
         ]);
+        
+        
 
         // add conditions that should always apply here
 
@@ -90,12 +97,16 @@ class LeaveCommanderSearch extends Leave
         ]);
 
         $query->andFilterWhere(['like', 'to', $this->to])
-            ->andFilterWhere(['like', 'contact', $this->contact])
-            ->andFilterWhere(['like', 'reason', $this->reason])
-            ->andFilterWhere(['like', 'inspector_comment', $this->inspector_comment])
-            ->andFilterWhere(['like', 'commander_comment', $this->commander_comment])
-            ->andFilterWhere(['like', 'director_comment', $this->director_comment]);
+                ->andFilterWhere(['like', 'contact', $this->contact])
+                ->andFilterWhere(['like', 'reason', $this->reason])
+                ->andFilterWhere(['like', 'inspector_comment', $this->inspector_comment])
+                ->andFilterWhere(['like', 'commander_comment', $this->commander_comment])
+                ->andFilterWhere(['like', 'director_comment', $this->director_comment]);
+        
+//        echo $query->createCommand()->getRawSql();
+//        exit();
 
         return $dataProvider;
     }
+
 }
