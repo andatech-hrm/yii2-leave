@@ -96,7 +96,7 @@ class Leave extends ActiveRecord {
 
     const SCENARIO_CREATE_VACATION = "create-type-1"; #create-vacation
     const SCENARIO_CREATE_SICK = "create-type-2"; #create-sick
-    const SCENARIO_CREATE_OTHER = "create-type-other"; #create-other
+    const SCENARIO_CREATE_OTHER = "create-type"; #create-other
     const SCENA_UPDATE_VACATION = 'update-vacation';
     const SCENA_UPDATE_SICK = 'update-sick';
     const SCENARIO_DIRECTOR = 'director';
@@ -124,7 +124,7 @@ class Leave extends ActiveRecord {
 
     public function checkScenario() {
         $scenarios = $this->scenarios();
-        $type = isset($scenarios['create-type-'.$this->leave_type_id])?$scenarios['create-type-'.$this->leave_type_id]:self::SCENARIO_CREATE_OTHER;
+        $type = isset($scenarios[self::SCENARIO_CREATE_OTHER . '-' . $this->leave_type_id]) ? self::SCENARIO_CREATE_OTHER . '-' . $this->leave_type_id : self::SCENARIO_CREATE_OTHER;
         $this->scenario = $type;
     }
 
@@ -686,14 +686,22 @@ class Leave extends ActiveRecord {
 
         switch ($this->scenario) {
             case self::SCENARIO_DIRECTOR:
-                if ($this->status == self::STATUS_ALLOW) {
+                if ($this->status == self::STATUS_ALLOW && $this->leave_type_id == Leave::TYPE_VACATION) {
+                    $permisTrans = LeavePermissionTransection::getDataForForm($this->user_id, $this->year);
                     $model = new LeavePermissionTransection(['user_id' => $this->user_id, 'year' => $this->year]);
                     $model->amount = $this->number_day;
                     $model->trans_time = time();
                     $model->trans_type = LeavePermissionTransection::TYPE_MINUS;
+                    $model->leave_trans_cate_id = LeavePermissionTransection::CATE_USE;
                     $model->leave_id = $this->id;
                     //$model->trans_by = Yii::$app->user->identity->id;
-                    if (!$model->save()) {
+                    if ($model->save()) {
+                        $modelVacation = new LeaveVacationDetail(['leave_id' => $this->id]);
+                        $modelVacation->amount_carry = $permisTrans[LeavePermissionTransection::CATE_CARRY];
+                        $modelVacation->amount_yearly = $permisTrans[LeavePermissionTransection::CATE_YEARLY];
+                        $modelVacation->amount_total = $permisTrans[LeavePermissionTransection::TOTAL];
+                        $modelVacation->save();
+                    } else {
                         print_r($model);
                         exit();
                     }

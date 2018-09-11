@@ -51,7 +51,8 @@ class LeaveSearch extends Leave
             'query' => $query,
         ]);
       
-        $query->where(['created_by'=>Yii::$app->user->id]);
+        //$query->where(['created_by'=>Yii::$app->user->id]);
+        $query->where(['user_id'=>Yii::$app->user->id]);
 
         $this->load($params);
 

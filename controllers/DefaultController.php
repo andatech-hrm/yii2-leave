@@ -531,7 +531,8 @@ class DefaultController extends Controller {
     public function actionDraft($type = null, $id = null) {
         $type = $type === null ? 1 : $type;
 
-        $model = new Leave(['leave_type_id' => $type]);
+        $model = new Leave(['leave_type_id' => $type, 'user_id' => Yii::$app->user->identity->id]);
+        $model->checkScenario();
         if ($id) {
             $modelDraft = LeaveDraft::findOne($id);
             $model->attributes = $modelDraft->data;
@@ -543,6 +544,7 @@ class DefaultController extends Controller {
         $post = Yii::$app->request->post();
         if ($model->load($post)) {
             $model->number_day = Leave::calCountDays(Helper::dateUi2Db($model->date_start), Helper::dateUi2Db($model->date_end), $model->start_part, $model->end_part);
+            $model->user_id = Yii::$app->user->identity->id;
             $modelDraft->draft_time = time();
             $modelDraft->user_id = Yii::$app->user->identity->id;
             $modelDraft->status = LeaveDraft::STATUS_DRAFT;
@@ -565,7 +567,10 @@ class DefaultController extends Controller {
     public function actionConfirm($id) {
 
         $modelDraft = LeaveDraft::findOne($id);
-        $model = new Leave();        
+        $model = new Leave();
+
+//        print_r( $modelDraft->data);
+//        exit();
         $model->attributes = $modelDraft->data;
         $model->checkScenario();
         $model->leave_draft_id = $id;
@@ -585,7 +590,7 @@ class DefaultController extends Controller {
                 ]);
                 return $this->redirect(['complete']);
             } else {
-                print_r($model->getErrors());                
+                print_r($model->getErrors());
             }
         }
         return $this->render('confirm', [
