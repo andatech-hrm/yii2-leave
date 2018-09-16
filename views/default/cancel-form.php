@@ -15,7 +15,7 @@ use yii\web\JsExpression;
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
 
-$this->title = Yii::t('andahrm/leave', 'Create Leave Vacation');
+$this->title = 'แบบฟอร์มใบขอยกเลิกวันลา';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -39,15 +39,21 @@ if ($model->isNewRecord) {
 $items = [];
 $items['model'] = $model;
 $items['user'] = PersonLeave::findOne(Yii::$app->user->identity->id);
+$items['personLeave'] = $personLeave;
+
+#ข้อมูลประเภทการลา
+$items['leaveType'] = $model->leaveType;
+//$model= $model->leave;
 ?>
 
 <div class="leave-form">
-    <?php #= 'ปีงบประมาณ ' . FiscalYear::currentYear() ?>
+    <?php #= 'ปีงบประมาณ ' . FiscalYear::currentYear()  ?>
     <?php
     $form = ActiveForm::begin();
     //$modelCancel->leave_id = $model->id;
     //echo $form->field($modelCancel, 'leave_id')->hiddenInput(['placeholder' => 'เรียน']);
 
+    $items['form'] = $form;
     $items['created_at'] = $modelCancel->isNewRecord ? 'วันที่ ' . Yii::$app->formatter->asDate('now', 'd') . ' เดือน ' . Yii::$app->formatter->asDate('now', 'MMMM') . ' พ.ศ ' . Yii::$app->formatter->asDate('now', 'yyyy') : 'วันที่ ' . Yii::$app->formatter->asDate($model->created_at, 'd') . ' เดือน ' . Yii::$app->formatter->asDate($model->created_at, 'MMMM') . ' พ.ศ. ' . Yii::$app->formatter->asDate($model->created_at, 'yyyy');
 
     $modelCancel->to = $model->to;
@@ -179,9 +185,6 @@ JS;
     /////////end set date range///////////////////////////////////////
 
 
-
-    $items['contact'] = $form->field($model, 'contact')->textInput(['placeholder' => 'ติดต่อข้าพเจ้าได้ที่']);
-
     $items['pastDay'] = Leave::getPastDay();
 
     $items['reason'] = $form->field($modelCancel, 'reason')->textInput(['placeholder' => 'เนื่องจาก'])->label(false);
@@ -189,33 +192,42 @@ JS;
 
 
     $items['commanders'] = $form->field($modelCancel, 'commander_by')->dropdownList($personLeave->commanders, ['prompt' => 'เลือกผู้บังคับบัญชา']);
-    $items['commander_status'] = Leave::getWidgetStatus($modelCancel->commander_status, Leave::getItemCommanderStatus());
-    $items['commander_comment'] = $model->commander_comment ? $modelCancel->commander_comment : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-    $items['commander_at'] = $modelCancel->commander_at ? $modelCancel->commanderAt : 'วันที่............./............................/................ ';
 
-
-    $items['director_status'] = Leave::getWidgetStatus($modelCancel->director_status, Leave::getItemDirectorStatus());
     $items['directors'] = $form->field($modelCancel, 'director_by')->dropdownList($personLeave->directors, ['prompt' => 'เลือกผู้ออกคำสั่ง']);
-    $items['director_comment'] = $modelCancel->director_comment ? $modelCancel->director_comment : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-    $items['director_at'] = $modelCancel->director_at ? $modelCancel->directorAt : 'วันที่............./............................/................ ';
-    
-    
     ?>
 
-    <?php if ($model->hasErrors()): ?>
-        <div class="alert alert-warning alert-dismissible fade in" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-            </button>
-            <strong>คำเดือน</strong> <?= $model->getAttributeLabel('end_part') . ":" . $model->getFirstError('end_part') ?>
+
+    <div class="x_panel">
+        <div class="x_title">
+            <?= Html::tag('h2', $this->title . $leaveType->title) ?>
+            <div class="clearfix"></div>
         </div>
-    <?php endif; ?>
+        <div class="x_content">
 
-    <?= $this->render('template-cancel', $items) ?>
+            <?php if ($model->hasErrors()): ?>
+                <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                    </button>
+                    <strong>คำเดือน</strong> พบข้อผิดพลาด
+                </div>
+            <?php endif; ?>
+            <?= $this->render('templates/_form-cancel', $items) ?>
 
 
-    <div class="form-group">
-        <?= Html::submitButton($modelCancel->isNewRecord ? Yii::t('andahrm', 'Create') : Yii::t('andahrm', 'Update'), ['class' => $modelCancel->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+
+
+
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_footer">
+            <?php
+            echo $this->render('_button-cancel', $items);
+            ?>
+        </div>
     </div>
+
+
+
 
     <?php ActiveForm::end(); ?>
 

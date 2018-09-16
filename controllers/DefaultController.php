@@ -271,43 +271,6 @@ class DefaultController extends Controller {
         return $this->redirect(['index']);
     }
 
-    public function actionCancel($id) {
-
-        $model = $this->findModel($id);
-        $modelCancel = new LeaveCancel([
-            'leave_id' => $model->id,
-            'date_start' => $model->date_start,
-            'date_end' => $model->date_end,
-            'start_part' => $model->start_part,
-            'end_part' => $model->end_part,
-            'commander_by' => $model->commander_by,
-            'director_by' => $model->director_by
-        ]);
-        //$model->scenario
-        //print_r($model->getscenarios());
-        //exit();
-        if ($modelCancel->load(Yii::$app->request->post())) {
-            $modelCancel->status = LeaveCancel::STATUS_OFFER;
-            $modelCancel->number_day = Leave::calCountDays($modelCancel->date_start, $modelCancel->date_end, $modelCancel->start_part, $modelCancel->end_part);
-            if ($modelCancel->save()) {
-                Yii::$app->getSession()->setFlash('saved', [
-                    'type' => 'success',
-                    'msg' => Yii::t('andahrm/leave', 'The system successfully sent.')
-                ]);
-                return $this->redirect(['index']);
-            } else {
-                print_r($modelCancel->getErrors());
-            }
-        }
-
-        //$confirm = 'cancel-form';
-
-        return $this->render('cancel-form', [
-                    'model' => $model,
-                    'modelCancel' => $modelCancel
-        ]);
-    }
-
     /**
      * Finds the Leave model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -528,6 +491,8 @@ class DefaultController extends Controller {
         }
     }
 
+    ### New Leave
+
     public function actionDraft($type = null, $id = null) {
         $type = $type === null ? 1 : $type;
 
@@ -600,6 +565,89 @@ class DefaultController extends Controller {
 
     public function actionComplete() {
         return $this->render('complete');
+    }
+
+    ### Cancel
+
+    public function actionDraftCancel($id = null, $draft_id = null) {
+
+        $modelCancel = new LeaveCancel();
+        $modelDraft = new LeaveDraft();
+        if ($draft_id) {
+            $modelDraft = LeaveDraft::findOne($draft_id);
+            $model = Leave::findOne($modelDraft->data['leave_id']);
+            $modelCancel->attributes = $modelDraft->data;
+        } else {
+            $model = $this->findModel($id);
+            $modelCancel = new LeaveCancel([
+                'leave_id' => $model->id,
+//                'date_start' => $model->date_start,
+//                'date_end' => $model->date_end,
+//                'start_part' => $model->start_part,
+//                'end_part' => $model->end_part,
+//                'commander_by' => $model->commander_by,
+//                'director_by' => $model->director_by
+            ]);
+        }
+
+
+        //$model->scenario
+        //print_r($model->getscenarios());
+        //exit();
+        if ($modelCancel->load(Yii::$app->request->post())) {
+            
+            $modelCancel->status = LeaveCancel::STATUS_OFFER;
+            $modelCancel->number_day = Leave::calCountDays($modelCancel->date_start, $modelCancel->date_end, $modelCancel->start_part, $modelCancel->end_part);
+            
+            $modelDraft->draft_time = time();
+            $modelDraft->user_id = Yii::$app->user->identity->id;
+            $modelDraft->status = LeaveDraft::STATUS_DRAFT;
+//            echo "<pre>";
+//            print_r(Yii::$app->request->post());
+//            print_r($modelCancel->attributes);
+//            exit();
+            $modelDraft->data = $modelCancel->attributes;
+            if ($modelDraft->save()) {
+
+                return $this->redirect(['confirm-cancel', 'id' => $modelDraft->id]);
+            } else {
+                print_r($modelCancel->getErrors());
+                exit();
+            }
+        }
+
+        //$confirm = 'cancel-form';
+
+        return $this->render('cancel-form', [
+                    'model' => $model,
+                    'modelCancel' => $modelCancel
+        ]);
+    }
+
+    public function actionConfirmCancel($id) {
+
+        $modelDraft = LeaveDraft::findOne($id);
+        $model = new LeaveCancel();
+        $model->attributes = $modelDraft->data;
+        if ($model->load(Yii::$app->request->post())) {
+            $model->load(['LeaveCancel' => $modelDraft->data]);
+            $model->status = LeaveCancel::STATUS_OFFER;
+            $modelDraft->status = LeaveDraft::STATUS_USED;
+            if ($model->save()) {
+                $modelDraft->save();
+                Yii::$app->getSession()->setFlash('saved', [
+                    'type' => 'success',
+                    'msg' => Yii::t('andahrm/leave', 'The system successfully sent.')
+                ]);
+                return $this->redirect(['complete']);
+            } else {
+                print_r($model->getErrors());
+            }
+        }
+        return $this->render('cancel-confirm', [
+                    'model' => $model,
+                    'modelDraft' => $modelDraft
+        ]);
     }
 
 }
