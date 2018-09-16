@@ -128,7 +128,7 @@ class DirectorController extends Controller {
      */
     public function actionCancelConsider($id) {
         $model = $this->findCancleModel($id);
-        $model->scenario = 'director';
+        $model->scenario = LeaveCancel::SCENARIO_DIRECTOR;
 
         if ($model->load(Yii::$app->request->post())) {
             $post = Yii::$app->request->post();

@@ -67,13 +67,13 @@ $director['at'] = $model->director_at ? $model->directorAt : '';
     ได้รับอนุญาตให้ลา 
 <?= $leaveType->title ?>
 <?php #$date_range_old ?> 
-    รวม <span class="text-dashed"><?= $number_day ?></spa> วัน      นั้น
+    รวม <span class="text-dashed"><?= $number_day ?></span> วัน      นั้น
 </p>
 
 <p class="p-form-indent">เนื่องจาก <span class="text-dashed"><?= $reason ?></span>
     จึงขอยกเลิกวันลา 
     <span class="text-dashed"><?= $leaveType->title ?></span>
-    จำนวน ……………วัน
+    จำนวน  <span class="text-dashed"><?= $number_day_cancel ?></span> วัน
 <?= $date_range ?>
 </p>
 

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use andahrm\leave\models\Leave;
+use andahrm\datepicker\components\ThaiYearFormatter;
 
 /* @var $this yii\web\View */
 /* @var $model andahrm\leave\models\Leave */
@@ -29,6 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
         $items['model'] = $model->leave;
         $items['user'] = $model->createdBy;
 
+        $model->updated_at = time();
+
         $items['created_at'] = 'วันที่ ' . Yii::$app->formatter->asDate($model->updated_at, 'd') . ' เดือน ' . Yii::$app->formatter->asDate($model->updated_at, 'MMMM') . ' พ.ศ. ' . Yii::$app->formatter->asDate($model->updated_at, 'yyyy');
 
         $items['user_id'] = $model->created_by;
@@ -36,15 +39,16 @@ $this->params['breadcrumbs'][] = $this->title;
         $items['to'] = 'เรียน <span class="text-dashed">' . $model->to . '</span>';
 
 //$items['leave_type_id']=$model->leave_type_id;
-
+        //$model->date_end = 
         $items['date_range'] = '<span class="text-dashed">' . Yii::$app->formatter->asDate($model->date_start) . '</span> '
                 . '<span class="text-dashed">' . $model->startPartLabel . '</span> ถึง '
                 . '<span class="text-dashed">' . Yii::$app->formatter->asDate($model->date_end) . '</span> '
                 . '<span class="text-dashed">' . $model->endPartLabel . '</span>';
 
-        $items['number_day'] = $model->number_day;
+        $items['number_day'] = Leave::calCountDays($modelLeave->date_start, $modelLeave->date_end, $modelLeave->start_part, $modelLeave->end_part);
+        $items['number_day_cancel'] = Leave::calCountDays($model->date_start, $model->date_end, $model->start_part, $model->end_part);
 
-        $items['collect'] = Leave::getCollect($model->createdBy, $model->leave->year);
+        // $items['collect'] = Leave::getCollect($model->createdBy, $model->leave->year);
 
         $items['total'] = $items['collect'] + $items['user']->leavePermission->number_day;
 
@@ -86,4 +90,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
-        <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>

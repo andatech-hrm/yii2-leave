@@ -136,13 +136,20 @@ class LeaveCancel extends \yii\db\ActiveRecord {
         ];
     }
 
+    const SCENARIO_CREATE_VACATION = "create-type-1"; #create-vacation
+    const SCENARIO_CREATE_SICK = "create-type-2"; #create-sick
+    const SCENARIO_CREATE_OTHER = "create-type"; #create-other
+    const SCENA_UPDATE_VACATION = 'update-vacation';
+    const SCENA_UPDATE_SICK = 'update-sick';
+    const SCENARIO_DIRECTOR = 'director';
+
     public function scenarios() {
         $scenarios = parent::scenarios();
 
         $scenarios['insert'] = ['to', 'leave_id', 'date_start', 'date_end', 'status', 'start_part', 'end_part', 'contact', 'number_day', 'reason'];
 
         $scenarios['commander'] = ['date_start', 'date_end', 'status', 'commander_status', 'commander_at', 'commander_comment', 'updated_at', 'updated_by'];
-        $scenarios['director'] = ['date_start', 'date_end', 'status', 'director_status', 'director_at', 'director_comment', 'updated_at', 'updated_by'];
+        $scenarios[self::SCENARIO_DIRECTOR] = ['date_start', 'date_end', 'status', 'director_status', 'director_at', 'director_comment', 'updated_at', 'updated_by'];
 
         return $scenarios;
     }
@@ -349,6 +356,47 @@ class LeaveCancel extends \yii\db\ActiveRecord {
 
     public function getDirectorAt() {
         return $this->director_at ? 'วันที่ <span class="text-dashed">' . Yii::$app->formatter->asDate($this->director_at, 'd') . ' / ' . Yii::$app->formatter->asDate($this->director_at, 'MMMM') . ' / ' . Yii::$app->formatter->asDate($this->director_at, 'yyyy') . '</span>' : null;
+    }
+
+    public function afterSave($insert, $changedAttributes) {
+        if ($insert) {
+            //echo $this->user_id;
+        }
+
+        switch ($this->scenario) {
+            case self::SCENARIO_DIRECTOR:
+                $modelLeave = Leave::findOne($this->leave_id);
+
+                if ($this->status == self::STATUS_ALLOW && $modelLeave->leave_type_id == Leave::TYPE_VACATION) {
+                    //$permisTrans = LeavePermissionTransection::getDataForForm($modelLeave->user_id, $modelLeave->year);
+
+
+
+                    $model = new LeavePermissionTransection(['user_id' => $modelLeave->user_id, 'year' => $modelLeave->year]);
+                    $model->amount = $this->number_day;
+                    $model->trans_time = time();
+                    $model->trans_type = LeavePermissionTransection::TYPE_ADD;
+                    $model->leave_trans_cate_id = LeavePermissionTransection::CATE_CANCEL;
+                    $model->leave_form = self::className();
+                    $model->leave_id = $modelLeave->id;
+                    //$model->trans_by = Yii::$app->user->identity->id;
+                    if ($model->save()) {
+                        echo "Success";
+                        //LeavePermission::updateBalance($modelLeave->user_id, $modelLeave->year);
+                    } else {
+                        print_r($model);
+                        exit();
+                    }
+                }
+
+                break;
+        }
+
+
+        //LeavePermission::updateBalance($this->user_id, $this->year);
+        if (parent::afterSave($insert, $changedAttributes)) {
+            return true; // do some otherthings
+        }
     }
 
 }

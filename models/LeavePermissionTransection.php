@@ -20,6 +20,7 @@ use yii\helpers\ArrayHelper;
  * @property int $created_by
  * @property int $updated_at
  * @property int $updated_by
+ * @property int $leave_form
  * @property int $leave_id
  *
  * @property LeaveTransCate $leaveTransCate
@@ -52,7 +53,7 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
             [['user_id', 'year', 'trans_time', 'leave_trans_cate_id', 'trans_type'], 'required'],
             [['user_id', 'trans_time', 'leave_trans_cate_id', 'trans_type', 'leave_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['amount'], 'number'],
-            [['year'], 'safe'],
+            [['year','leave_form'], 'safe'],
             [['user_id', 'year', 'trans_time', 'leave_trans_cate_id', 'trans_type'], 'unique', 'targetAttribute' => ['user_id', 'year', 'trans_time', 'leave_trans_cate_id', 'trans_type']],
             [['leave_trans_cate_id'], 'exist', 'skipOnError' => true, 'targetClass' => LeaveTransCate::className(), 'targetAttribute' => ['leave_trans_cate_id' => 'id']],
         ];
@@ -70,7 +71,7 @@ class LeavePermissionTransection extends \yii\db\ActiveRecord {
             'trans_type' => Yii::t('andahrm/leave', 'Trans Type'),
             'amount' => Yii::t('andahrm/leave', 'Amount'),
             'sumRow' => Yii::t('andahrm/leave', 'Balance'),
-//            'leave_type' => Yii::t('andahrm/leave', 'Leave Type'),
+            'leave_form' => Yii::t('andahrm/leave', 'Leave Form'),
             'leave_id' => Yii::t('andahrm/leave', 'Leave ID'),
             'reference' => Yii::t('andahrm/leave', 'Reference'),
             'created_at' => Yii::t('andahrm/leave', 'Created At'),

@@ -12,6 +12,7 @@ use yii\helpers\Json;
 use andahrm\setting\models\Helper;
 use beastbytes\wizard\WizardBehavior;
 ###
+use andahrm\datepicker\components\ThaiYearFormatter;
 use andahrm\leave\models\Leave;
 use andahrm\leave\models\LeaveCancel;
 use andahrm\leave\models\LeaveType;
@@ -595,20 +596,21 @@ class DefaultController extends Controller {
         //print_r($model->getscenarios());
         //exit();
         if ($modelCancel->load(Yii::$app->request->post())) {
-            
+
             $modelCancel->status = LeaveCancel::STATUS_OFFER;
             $modelCancel->number_day = Leave::calCountDays($modelCancel->date_start, $modelCancel->date_end, $modelCancel->start_part, $modelCancel->end_part);
-            
+
             $modelDraft->draft_time = time();
             $modelDraft->user_id = Yii::$app->user->identity->id;
             $modelDraft->status = LeaveDraft::STATUS_DRAFT;
+
+
 //            echo "<pre>";
 //            print_r(Yii::$app->request->post());
 //            print_r($modelCancel->attributes);
 //            exit();
             $modelDraft->data = $modelCancel->attributes;
             if ($modelDraft->save()) {
-
                 return $this->redirect(['confirm-cancel', 'id' => $modelDraft->id]);
             } else {
                 print_r($modelCancel->getErrors());
@@ -629,9 +631,16 @@ class DefaultController extends Controller {
         $modelDraft = LeaveDraft::findOne($id);
         $model = new LeaveCancel();
         $model->attributes = $modelDraft->data;
+        $modelLeave = Leave::findOne($model->leave_id);
+
+        $model->number_day = Leave::calCountDays($model->date_start, $model->date_end, $model->start_part, $model->end_part);
+//        print_r( $model->attributes);
+//        exit();
         if ($model->load(Yii::$app->request->post())) {
             $model->load(['LeaveCancel' => $modelDraft->data]);
             $model->status = LeaveCancel::STATUS_OFFER;
+           
+
             $modelDraft->status = LeaveDraft::STATUS_USED;
             if ($model->save()) {
                 $modelDraft->save();
@@ -644,9 +653,13 @@ class DefaultController extends Controller {
                 print_r($model->getErrors());
             }
         }
+
+        $model->date_start = ThaiYearFormatter::toDb($model->date_start);
+        $model->date_end = ThaiYearFormatter::toDb($model->date_end);
         return $this->render('cancel-confirm', [
                     'model' => $model,
-                    'modelDraft' => $modelDraft
+                    'modelDraft' => $modelDraft,
+                    'modelLeave' => $modelLeave
         ]);
     }
 

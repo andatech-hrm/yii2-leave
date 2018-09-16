@@ -137,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'kartik\grid\ActionColumn',
                             'buttonOptions' => ['class' => 'btn btn-default'],
                             //'template'=>'{cancel}{update}{delete}{view}{cancel-view}',
-                            'template' => '{cancel}{update}{delete}{cancel-view}',
+                            'template' => '{draft-cancel}{update}{delete}{cancel-view}',
                             'hAlign' => 'right',
                             'headerOptions' => [
                                 'style' => "width:10%"
@@ -147,7 +147,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style' => "width:10%"
                             ],
                             'buttons' => [
-                                'cancel' => function($url, $model, $key) {
+                                'draft-cancel' => function($url, $model, $key) {
                                     if ($model->numberDayTotal) {
                                         return $model->status == Leave::STATUS_ALLOW ? Html::a(Yii::t('andahrm/leave', 'Cancel leave'), $url, ['class' => 'btn btn-xs btn-warning', 'data-pjax' => 0]) : '';
                                     }
@@ -281,7 +281,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'kartik\grid\ActionColumn',
                             'buttonOptions' => ['class' => 'btn btn-default'],
-                            'template' => '{cancel}{update}{delete}{cancel-view}',
+                            'template' => '{draft-cancel}{update}{delete}{cancel-view}',
                             'hAlign' => 'right',
                             'headerOptions' => [
                                 'style' => "width:10%"
@@ -291,7 +291,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'style' => "width:10%"
                             ],
                             'buttons' => [
-                                'cancel' => function($url, $model, $key) {
+                                'draft-cancel' => function($url, $model, $key) {
                                     //return $model->numberDayTotal;
                                     if ($model->numberDayTotal) {
                                         return $model->status == Leave::STATUS_ALLOW ? Html::a(Yii::t('andahrm/leave', 'Cancel leave'), $url, ['class' => 'btn btn-xs btn-warning', 'data-pjax' => 0]) : '';

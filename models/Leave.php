@@ -693,6 +693,7 @@ class Leave extends ActiveRecord {
                     $model->trans_time = time();
                     $model->trans_type = LeavePermissionTransection::TYPE_MINUS;
                     $model->leave_trans_cate_id = LeavePermissionTransection::CATE_USE;
+                    $model->leave_form = self::className();
                     $model->leave_id = $this->id;
                     //$model->trans_by = Yii::$app->user->identity->id;
                     if ($model->save()) {
