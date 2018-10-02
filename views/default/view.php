@@ -12,20 +12,22 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('andahrm/leave', 'Leaves'), 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<p>        
-    <?=
-    Html::a(Yii::t('andahrm', 'Cancel'), ['delete', 'id' => $model->id], [
-        'class' => 'btn btn-danger',
-        'data' => [
-            'confirm' => Yii::t('andahrm', 'Are you sure you want to delete this item?'),
-            'method' => 'post',
-        ],
-    ])
-    ?>
-
-
-    <?= Html::button('<i class="fa fa-print"></i>',['class'=>'btn btn-default','onclick'=>'window.print();']) ?>
-</p>
+<div class="hidden-print">     
+    <div class="pull-left">
+        <?=
+        Html::a(Yii::t('andahrm', 'Cancel'), ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => Yii::t('andahrm', 'Are you sure you want to delete this item?'),
+                'method' => 'post',
+            ],
+        ])
+        ?>
+    </div>
+    <div class="pull-right">
+        <?= Html::button('<i class="fa fa-print"></i>', ['class' => 'btn btn-default', 'onclick' => 'window.print();']) ?>
+    </div>
+</div>
 
 
 

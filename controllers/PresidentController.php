@@ -9,13 +9,13 @@ use yii\filters\VerbFilter;
 ###
 use andahrm\leave\models\Leave;
 use andahrm\leave\models\LeaveCancel;
-use andahrm\leave\models\LeaveDirectorSearch;
+use andahrm\leave\models\LeavePresidentSearch;
 use andahrm\leave\models\LeaveDirectorCancelSearch;
 
 /**
  * DirectorController implements the CRUD actions for Leave model.
  */
-class LeavePresidentSearch extends Controller {
+class PresidentController extends Controller {
 
     /**
      * @inheritdoc
@@ -32,7 +32,7 @@ class LeavePresidentSearch extends Controller {
     }
 
     public function actions() {
-        $this->layout = 'menu-top';
+        $this->layout = 'main_president';
     }
 
     /**
@@ -40,7 +40,7 @@ class LeavePresidentSearch extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $searchModel = new LeaveDirectorSearch();
+        $searchModel = new LeavePresidentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 
