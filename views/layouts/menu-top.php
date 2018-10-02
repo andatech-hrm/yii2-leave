@@ -65,6 +65,12 @@ $menuItems[] = [
     'icon' => 'check'
 ];
 
+$menuItems[] = [
+    'label' => Yii::t('andahrm/leave', 'President'),
+    'url' => ["/{$module}/president/"],
+    'icon' => 'check'
+];
+
 $menuItems = Helper::filter($menuItems);
 $newMenu = [];
 foreach ($menuItems as $k => $menu) {
