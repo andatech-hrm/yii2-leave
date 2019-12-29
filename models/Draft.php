@@ -98,13 +98,13 @@ class Draft extends Leave {
     public static function getReasonList() {
         $model = self::find()->select('reason')->distinct()->where([
                     'created_by' => Yii::$app->user->id
-                ])->groupBy('reason')->limit(20)->all();
-        return $model ? ArrayHelper::getColumn($model, 'reason') : [];
+                ])->groupBy('reason')->limit(20)->asArray()->all();
+        return $model ? ArrayHelper::getColumn($model, 'reason') : [''];
     }
 
     public static function getContactList() {
-        $model = self::find()->select('contact')->distinct()->where(['created_by' => Yii::$app->user->id])->groupBy('contact')->limit(20)->all();
-        return $model ? ArrayHelper::getColumn($model, 'contact') : [];
+        $model = self::find()->select('contact')->distinct()->where(['created_by' => Yii::$app->user->id])->groupBy('contact')->limit(20)->asArray()->all();
+        return $model ? ArrayHelper::getColumn($model, 'contact') : [''];
     }
 
 }

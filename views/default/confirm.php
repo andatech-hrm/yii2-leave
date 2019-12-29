@@ -33,6 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="x_content">
 
         <?php
+        
+//        print_r($model);
+//        exit();
         $form = ActiveForm::begin();
 //$model->status = 1;
         echo $form->field($model, 'status')->hiddenInput()->label(false);
@@ -78,9 +81,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
         $items['reason'] = $model->reason;
 
-        $items['contact'] = '<span class="text-dashed">' . $model->contact . '</span>';
+        $items['contact'] =  $model->contact;
 
         $items['actingUser'] = $model->actingUser;
+        $items['wife_name'] = $model->wife_name;
         #################################################
         #ผู้ตรวจสอบ
         $inspectorBy = PersonLeave::findOne($model->inspector_by);

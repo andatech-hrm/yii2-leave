@@ -58,6 +58,7 @@ use andahrm\leave\models\LeavePermissionTransection;
  * @property integer $created_by
  * @property integer $updated_at
  * @property integer $updated_by
+ * @property string $wife_name
  *
  * @property Person $user
  * @property LeaveType $leaveType
@@ -65,6 +66,8 @@ use andahrm\leave\models\LeavePermissionTransection;
  */
 class Leave extends ActiveRecord {
 
+    
+   
     /**
      * @inheritdoc
      */
@@ -79,7 +82,7 @@ class Leave extends ActiveRecord {
         return [
             [['user_id', 'leave_type_id', 'start_part', 'end_part', 'acting_user_id', 'status', 'inspector_status', 'inspector_by', 'inspector_at', 'commander_status', 'commander_by', 'commander_at', 'director_status', 'director_by', 'director_at', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['to', 'acting_user_id', 'inspector_by', 'director_by', 'date_start', 'date_end', 'contact', 'leave_draft_id'], 'required'],
-            [['year', 'date_start', 'date_end'], 'safe'],
+            [['year', 'date_start', 'date_end', 'child_birthday', 'contact_me', 'wife_name'], 'safe'],
             [['reason', 'contact'], 'string'],
             [['number_day'], 'number'],
             [['to', 'inspector_comment', 'commander_comment', 'director_comment'], 'string', 'max' => 255],
@@ -94,20 +97,32 @@ class Leave extends ActiveRecord {
         ];
     }
 
-    const SCENARIO_CREATE_VACATION = "create-type-1"; #create-vacation
-    const SCENARIO_CREATE_SICK = "create-type-2"; #create-sick
-    const SCENARIO_CREATE_OTHER = "create-type"; #create-other
+    ### Template Form
+
+    const SCENARIO_CREATE_VACATION = "create_type_1"; #create-vacation
+    const SCENARIO_CREATE_SICK = "create_type_2"; #create-sick
+    const SCENARIO_CREATE_HELP_WIFE = "create_type_3"; #create-sick
+    const SCENARIO_CREATE_OTHER = "create_type"; #create-other
+    ###
     const SCENA_UPDATE_VACATION = 'update-vacation';
     const SCENA_UPDATE_SICK = 'update-sick';
     const SCENARIO_DIRECTOR = 'director';
 
     public $leave_draft_id;
+     #For Form 3
+    public $wife_name;
+    public $child_birthday;
+//    public $contact_me;
+    
 
     public function scenarios() {
-        // $scenarios = parent::scenarios();
+        //$scenarios = parent::scenarios();
 
         $scenarios[self::SCENARIO_CREATE_VACATION] = ['to', 'year', 'user_id', 'leave_type_id', 'acting_user_id', 'contact', 'date_start', 'date_end', 'status', 'inspector_by', 'director_by', 'commander_by', 'start_part', 'end_part', 'contact', 'number_day', 'year'];
         $scenarios[self::SCENARIO_CREATE_SICK] = ['to', 'year', 'user_id', 'leave_type_id', 'reason', 'contact', 'date_start', 'date_end', 'status', 'inspector_by', 'director_by', 'commander_by', 'contact', 'number_day', 'year'];
+        $scenarios[self::SCENARIO_CREATE_HELP_WIFE] = ['wife_name', 'child_birthday', 'contact_me'];
+
+
         $scenarios[self::SCENARIO_CREATE_OTHER] = ['to', 'year', 'user_id', 'leave_type_id', 'reason', 'contact', 'date_start', 'date_end', 'status', 'inspector_by', 'director_by', 'commander_by', 'contact', 'number_day', 'year'];
 
         $scenarios[self::SCENA_UPDATE_VACATION] = ['to', 'contact', 'date_start', 'date_end', 'end_part', 'status', 'inspector_by', 'director_by', 'commander_by', 'start_part', 'end_part', 'contact', 'number_day'];
@@ -119,12 +134,16 @@ class Leave extends ActiveRecord {
         $scenarios['commander'] = ['status', 'commander_status', 'commander_at', 'commander_comment', 'date_start', 'date_end'];
         $scenarios[self::SCENARIO_DIRECTOR] = ['status', 'director_status', 'director_at', 'director_comment', 'date_start', 'date_end'];
 
-        return array_merge(parent::scenarios(), $scenarios);
+        //return $scenarios;
+        return array_merge(parent::scenarios(),$scenarios);
     }
 
     public function checkScenario() {
         $scenarios = $this->scenarios();
-        $type = isset($scenarios[self::SCENARIO_CREATE_OTHER . '-' . $this->leave_type_id]) ? self::SCENARIO_CREATE_OTHER . '-' . $this->leave_type_id : self::SCENARIO_CREATE_OTHER;
+        $template_no = $this->leaveType->template_no;
+
+        $type = isset($scenarios[self::SCENARIO_CREATE_OTHER . '_' . $template_no]) ? self::SCENARIO_CREATE_OTHER . '_' . $template_no : self::SCENARIO_CREATE_OTHER;
+        //echo $type;
         $this->scenario = $type;
     }
 
@@ -143,6 +162,10 @@ class Leave extends ActiveRecord {
             'date_end' => [
                 'class' => DateBuddhistBehavior::className(),
                 'dateAttribute' => 'date_end',
+            ],
+            'child_birthday' => [
+                'class' => DateBuddhistBehavior::className(),
+                'dateAttribute' => 'child_birthday',
             ],
         ];
     }
@@ -183,6 +206,8 @@ class Leave extends ActiveRecord {
             'created_by' => Yii::t('andahrm', 'Created By'),
             'updated_at' => Yii::t('andahrm', 'Updated At'),
             'updated_by' => Yii::t('andahrm', 'Updated By'),
+            ###
+            'wife_name' => Yii::t('andahrm/leave', 'Wife Name'),
         ];
     }
 

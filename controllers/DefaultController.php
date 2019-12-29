@@ -498,7 +498,8 @@ class DefaultController extends Controller {
         $type = $type === null ? 1 : $type;
 
         $model = new Leave(['leave_type_id' => $type, 'user_id' => Yii::$app->user->identity->id]);
-        $model->checkScenario();
+        //$model->scenario = "create-type-3";
+        
         if ($id) {
             $modelDraft = LeaveDraft::findOne($id);
             $model->attributes = $modelDraft->data;
@@ -506,16 +507,30 @@ class DefaultController extends Controller {
         } else {
             $modelDraft = new LeaveDraft();
         }
+        
+        $model->checkScenario();
 
         $post = Yii::$app->request->post();
         if ($model->load($post)) {
+            echo "<pre>";
+            echo $model->scenario;
+            print_r($post);
+            print_r($model->getAttributes());
+            echo $model->wife_name;
+            //exit();
+
             $model->number_day = Leave::calCountDays(Helper::dateUi2Db($model->date_start), Helper::dateUi2Db($model->date_end), $model->start_part, $model->end_part);
             $model->user_id = Yii::$app->user->identity->id;
             $modelDraft->draft_time = time();
             $modelDraft->user_id = Yii::$app->user->identity->id;
             $modelDraft->status = LeaveDraft::STATUS_DRAFT;
-            $modelDraft->data = $model->attributes;
+            $data = $post['Leave'];
+            
+            //$data['child_birthday'] = $model->touch('child_birthday');
+            $modelDraft->data = $data;
+            //$modelDraft->data = $model->attributes;
             if ($modelDraft->save()) {
+               
                 return $this->redirect(['confirm', 'id' => $modelDraft->id]);
             } else {
                 print_r($modelDraft->getErrors());
@@ -542,8 +557,10 @@ class DefaultController extends Controller {
         $model->leave_draft_id = $id;
         //$model->scenario = 'confirm';
         //$model->scenario
-        //print_r($model->getscenarios());
-        //exit();
+//        echo "<pre>";
+//        print_r($model->attributes);
+//        echo $model->child_birthday;
+//        exit();
         if ($model->load(Yii::$app->request->post())) {
             $model->load(['Leave' => $modelDraft->data]);
             $model->status = Leave::STATUS_OFFER;
@@ -639,7 +656,7 @@ class DefaultController extends Controller {
         if ($model->load(Yii::$app->request->post())) {
             $model->load(['LeaveCancel' => $modelDraft->data]);
             $model->status = LeaveCancel::STATUS_OFFER;
-           
+
 
             $modelDraft->status = LeaveDraft::STATUS_USED;
             if ($model->save()) {

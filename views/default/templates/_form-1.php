@@ -130,15 +130,37 @@ echo Html::hiddenInput(Html::getInputName($model, 'user_id'), Yii::$app->user->i
     <?= Html::tag('h4', Yii::t('andahrm/leave', 'Leave Relateds')) ?>
     <div class="row">
         <div class="col-sm-4">
-            <?= $form->field($model, 'inspector_by')->dropdownList($personLeave->inspectors); ?>
+            <?=
+            $form->field($model, 'inspector_by')->widget(Select2::classname(), [
+                //'initValueText' => $cityDesc, // set the initial display text
+                //'data' => PersonLeave::getList(),
+                'data' => $model->inspector_by ? PersonLeave::getList($model->acting_user_id) : [],
+                'options' => ['placeholder' => 'ค้นหาบุคคล'],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'minimumInputLength' => 2,
+                    'language' => [
+                        'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                    ],
+                    'ajax' => [
+                        'url' => Url::to(['person-list']),
+                        'dataType' => 'json',
+                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                    ],
+                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'templateResult' => new JsExpression('function(city) { return city.text; }'),
+                    'templateSelection' => new JsExpression('function (city) { return city.text; }'),
+                ],
+            ]);
+            ?>
         </div>
 
         <div class="col-sm-4">
-            <?= $form->field($model, 'commander_by')->dropdownList($personLeave->commanders); ?>
+<?= $form->field($model, 'commander_by')->dropdownList($personLeave->commanders); ?>
         </div>
 
         <div class="col-sm-4">
-            <?= $form->field($model, 'director_by')->dropdownList($personLeave->directors); ?>
+<?= $form->field($model, 'director_by')->dropdownList($personLeave->directors); ?>
         </div>
     </div>
 
